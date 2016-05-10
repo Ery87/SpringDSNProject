@@ -69,7 +69,8 @@
                       </thead>
                       <tbody>
                           <tr>
-                          		<td><img ng-src="ctrl.image"></td>
+                          <td><div id="foo"></div></td>
+								
                               <td><span ng-bind="ctrl.user.firstName"></span></td>
                               <td><span ng-bind="ctrl.user.lastName"></span></td>
                               <td><span ng-bind="ctrl.user.birth_day"></span></td>
@@ -89,7 +90,7 @@
                       <tbody>
 						  
                           <tr ng-repeat="u in ctrl.users">
-                              <td></td>
+                              <td><a ng-href="/Spring4MVCAngularJSExample/user/{{u.id}}"><img ng-src="u.photo"></a></td>
                               <td><span ng-bind="u.firstName"></span></td>
                               <td><span ng-bind="u.lastName"></span></td>
                               <td><span ng-bind="u.city"></span></td>

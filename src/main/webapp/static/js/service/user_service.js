@@ -23,7 +23,6 @@ App.service('UserService', ['$http','$q',function ($http,$q) {
 		   
 		    uploadPhoto:function(id,file){
 		    	
-		    	
 		    	var utente={id:id,photo:file};
 		    	
 		    	console.log(utente);

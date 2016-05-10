@@ -15,10 +15,18 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
              var id_utente = url.substring(url.lastIndexOf('/') + 1);
              ProfileService.getUser(id_utente)
              .then(
-            		 function(d){
+            		 function(data){
             			 
-            			 self.user=d;
-            			 self.image=self.arrayBufferToBase64(self.user.photo);
+            			 	self.user=data;
+     					self.image=self.user.photo;
+     					var prova="data:image/png;base64,";
+     					var str=prova+self.image
+     					var img = document.createElement("img");
+     					  img.src = str;
+     					 img.width="50";
+     					img.height="50";
+     					  document.getElementById("foo").appendChild(img);
+     					
             			
             		 },
             		 function(errResponse){
@@ -28,18 +36,9 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
              	
         	
         	
-        }
-       
-        self.arrayBufferToBase64=function(photo) {
-			  var binary = '';
-			  var bytes = new Uint8Array(photo);
-			  var len = bytes.byteLength;
-			  for (var i = 0; i < len; i++) {
-			    binary += String.fromCharCode( bytes[ i ] );
-			  }
-			  return window.btoa( binary );
-			},
-			
+        },
+  
+        
 		self.searchFriend=function(){
 			var id=self.user.id;
 			var search=self.friend;

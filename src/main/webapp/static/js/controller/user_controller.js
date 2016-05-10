@@ -7,11 +7,7 @@ App.controller('UserController',['UserService','$window','$scope',function (User
          
          
          
-         function readID(){
-             var url = window.location.pathname;
-             var id_utente = url.substring(url.lastIndexOf('/') + 1);
-             return id_utente;
-             }
+        
          
          
        self.createUser=function(){
@@ -35,21 +31,8 @@ App.controller('UserController',['UserService','$window','$scope',function (User
                  );
          };
 
-         self.uploadPhoto=function(){
-        	 var file=$scope.myFile;
-        	 var id=readID();
-        	console.log(id);
-        	UserService.uploadPhoto(id,file)
-        		.then(
-        				function(){
-	            			$window.location.href='http://localhost:8080/Spring4MVCAngularJSExample/';
-;
-        				},
-        				 function(errResponse){
-				               console.error('Error while creating User.');
-
-			              }	);
-         };
+        
+        
          
          self.reset=function(){
         	 $scope.user.email='';

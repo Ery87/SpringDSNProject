@@ -36,11 +36,14 @@ public class UserServiceImpl implements UserService{
 	 * It will be updated in db once transaction ends. 
 	 */
 	public void updateUser(int id,byte[] photo) {
+		
 		User entity = dao.findById(id);
 		if(entity!=null){
+			
 			entity.setPhoto(photo);
 		}
 		dao.savePhoto(entity);
+		
 	}
 
 	

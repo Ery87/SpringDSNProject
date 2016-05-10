@@ -33,7 +33,7 @@ public class Album{
 	
 
 
-	/*@ManyToOne(fetch=FetchType.LAZY) prova*/
+	
 	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name = "id_user")
 	private User user;

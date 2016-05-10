@@ -2,10 +2,15 @@ package com.websystique.springmvc.controller;
  
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.Base64;
 import java.io.IOException;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -13,13 +18,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,12 +37,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.mysql.jdbc.util.Base64Decoder;
 import com.websystique.springmvc.model.Album;
 import com.websystique.springmvc.model.User;
 import com.websystique.springmvc.service.AlbumService;
 import com.websystique.springmvc.service.UserService;
 import com.websystique.springmvc.util.FileValidator;
  
+@Controller
 @RestController
 public class HelloWorldRestController {
  
@@ -66,13 +73,14 @@ public class HelloWorldRestController {
     //-------------------Retrieve Single User--------------------------------------------------------
      
 	@RequestMapping(value = { "/profile/" }, method = RequestMethod.POST)
-    public ResponseEntity<User> getUser(@RequestBody int id) {
+    public ResponseEntity<User> getUser(@RequestBody int id) throws UnsupportedEncodingException {
 		User user=userService.findById(id);
 		if (user == null) {
             System.out.println("User not found");
             return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
         }    
 		
+	
 		return new ResponseEntity<User>(user, HttpStatus.OK);
     }
  
@@ -180,29 +188,15 @@ public class HelloWorldRestController {
     //------------------- Upload Profile Photo User --------------------------------------------------------
      
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public ResponseEntity<User> upload(@RequestBody Map<String,Object> utente) throws IOException {
-    	int id=Integer.valueOf((String) utente.get("id"));
-    	User user=userService.findById(id);
-    	if(user==null){
+    public ResponseEntity<User> upload(@RequestBody User user) throws IOException {
+    	
+    	User u=userService.findById(user.getId());
+    	if(u==null){
             return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
     	}else{
-    	
-	    	ByteArrayOutputStream bos = new ByteArrayOutputStream();
-	    	ObjectOutput out = null;
-	    	
-				out = new ObjectOutputStream(bos);
-			
-				out.writeObject(utente.get("photo"));
-			
-	    	  byte[] yourBytes = bos.toByteArray();
-	    	 if (out != null) {
-	    	      out.close();
-	    	    }
-	    	 
-	    	    bos.close();
-	    	   userService.updateUser(user.getId(), yourBytes);
-	    	 
-        return new ResponseEntity<User>(user,HttpStatus.OK);
+    		
+	    	userService.updateUser(user.getId(), user.getPhoto());
+	    	return new ResponseEntity<User>(user,HttpStatus.OK);
     	}
     }
    

@@ -19,7 +19,7 @@
 		})
 		
 		.when('/uploadPhoto/{id}',{
-				controller:'LoginController',
+				controller:'UploadController',
 				templateUrl: 'WEB-INF/views/uploadPhoto.jsp'
 			
 		})

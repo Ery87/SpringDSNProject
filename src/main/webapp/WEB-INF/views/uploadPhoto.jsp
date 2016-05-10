@@ -30,23 +30,30 @@
       
   </head>
   <body ng-app="myApp" class="ng-cloak">
-   <div class="generic-container" ng-controller="UserController as ctrl">
+   <div class="generic-container" ng-controller="UploadController as ctrl">
           <div class="panel panel-default">
               <div class="panel-heading"><span class="lead">Upload Photo </span></div>
               <div class="formcontainer">
                   <form name="myForm"  class="form-horizontal" enctype="multipart/form-data">
               
-                           <script type="text/javascript">
-         
-        </script>
+                           
                  
                      <div class="row">
                           <div class="form-group col-md-12">
-                              <label class="col-md-2 control-lable" for="photo">Photo</label>
+        <label for="filePicker">Choose or drag a photo:</label><br>
                               <div class="col-md-7">  
-                                               
-                                 <input type="file" file-model="myFile"  class="photo form-control input-sm" placeholder="Enter your photo" />
- 							 <div class="has-error" ng-show="myForm.$dirty">
+
+        <input type="file" id="filePicker">
+    </div>
+    <br>
+   <div class="row">
+                          <div class="form-actions floatRight">
+                              <input type="submit" ng-click="ctrl.uploadPhoto()"  class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid">
+                             
+                              <button type="button" ng-click="ctrl.reset()" class="btn btn-warning btn-sm" ng-disabled="myForm.$pristine">Reset Form</button>
+                          </div>
+                                <!--   <input type="file" file-model="myFile"  class="photo form-control input-sm" placeholder="Enter your photo" />
+ 							<div class="has-error" ng-show="myForm.$dirty">
                                       <span ng-show="myForm.myFile.$invalid">This field is invalid </span>
                                   </div>
                               </div>
@@ -55,12 +62,12 @@
 						
                       <div class="row">
                           <div class="form-actions floatRight">
-                              <input type="submit" ng-click="ctrl.uploadPhoto()"  class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid">
+                              <input type="submit" ng-click="ctrl.loadImageFileAsURL()"  class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid">
                              
                               <button type="button" ng-click="ctrl.reset()" class="btn btn-warning btn-sm" ng-disabled="myForm.$pristine">Reset Form</button>
                           </div>
                    
-                   
+                   -->
                       </div>
                   
                   
@@ -79,6 +86,7 @@
       <script src="<c:url value='/static/js/controller/login_controller.js' />"></script>
   	   <script src="<c:url value='/static/js/service/user_service.js' />"></script>
       <script src="<c:url value='/static/js/controller/user_controller.js' />"></script>
+  	      <script src="<c:url value='/static/js/controller/uploadController.js' />"></script>
   	
   </body>
 </html>
