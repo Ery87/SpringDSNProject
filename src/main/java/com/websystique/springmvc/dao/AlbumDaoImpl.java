@@ -1,5 +1,6 @@
 package com.websystique.springmvc.dao;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.websystique.springmvc.model.Album;
 
-@Repository("userDocumentDao")
+@Repository("AlbumDao")
 public class AlbumDaoImpl extends AbstractDao<Integer, Album> implements AlbumDao{
 
 	@SuppressWarnings("unchecked")
@@ -22,12 +23,12 @@ public class AlbumDaoImpl extends AbstractDao<Integer, Album> implements AlbumDa
 	}
 
 	
-	public Album findById(int id) {
+	public Album findById(BigInteger id) {
 		return getByKey(id);
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Album> findAllByUserId(int userId){
+	public List<Album> findAllByUserId(BigInteger userId){
 		Criteria crit = createEntityCriteria();
 		Criteria userCriteria = crit.createCriteria("user");
 		userCriteria.add(Restrictions.eq("id", userId));
@@ -35,7 +36,7 @@ public class AlbumDaoImpl extends AbstractDao<Integer, Album> implements AlbumDa
 	}
 
 	
-	public void deleteById(int id) {
+	public void deleteById(BigInteger id) {
 		Album document =  getByKey(id);
 		delete(document);
 	}
@@ -47,4 +48,5 @@ public class AlbumDaoImpl extends AbstractDao<Integer, Album> implements AlbumDa
 		return albums;
 	}
 
+	
 }

@@ -1,23 +1,13 @@
 'use strict';
 
 App.factory('LoginService',['$http','$q',function($http,$q){
-		
+	var path='http://localhost:8080/OSN';
 	
 	return{
-		getUser:function(email){
-			return $http.post('http://localhost:8080/Spring4MVCAngularJSExample/profile/',email)
-			.then(
-					function(response){
-				return response.data;
-			},
-			function(errResponse){
-				console.error('Error while search user');
-				return $q.reject(errResponse);
-			});
-		},
+
 			
 		    login:function(user){
-				return $http.post('http://localhost:8080/Spring4MVCAngularJSExample/login/',user)
+				return $http.post(path+'/login/',user)
 				
 				.then(
 						function(response){
@@ -29,7 +19,7 @@ App.factory('LoginService',['$http','$q',function($http,$q){
 						});
 		    },
 		    updateUser: function(user, id){
-				return $http.put('http://localhost:8080/Spring4MVCAngularJSExample/user/'+id, user)
+				return $http.put(path+'/user/'+id, user)
 						.then(
 								function(response){
 									return response.data;
@@ -42,7 +32,7 @@ App.factory('LoginService',['$http','$q',function($http,$q){
 		},
 	    
 		deleteUser: function(id){
-				return $http.del('http://localhost:8080/Spring4MVCAngularJSExample/user/'+id)
+				return $http.del(path+'/user/'+id)
 						.then(
 								function(response){
 									return response.data;

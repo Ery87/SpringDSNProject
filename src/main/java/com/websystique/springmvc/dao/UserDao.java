@@ -1,5 +1,6 @@
 package com.websystique.springmvc.dao;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import com.websystique.springmvc.model.User;
@@ -8,7 +9,7 @@ import com.websystique.springmvc.model.User;
 public interface UserDao {
 
 
-	User findById(int id);
+	User findById(BigInteger id);
 	
 	User findByEmail(String email);
 	

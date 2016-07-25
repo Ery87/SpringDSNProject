@@ -3,12 +3,14 @@
 
 
 App.service('UserService', ['$http','$q',function ($http,$q) {
+	var path='http://localhost:8080/OSN';
+
 	return{
 		
 		
 		 saveUser:function(utente){
 		     
-		       return  $http.post('http://localhost:8080/Spring4MVCAngularJSExample/user/',utente).then(
+		       return  $http.post(path+'/user/',utente).then(
 						function(response){
 							return response.data;
 						}, 
@@ -27,7 +29,7 @@ App.service('UserService', ['$http','$q',function ($http,$q) {
 		    	
 		    	console.log(utente);
 		    	return $http({
-		    		  url: 'http://localhost:8080/Spring4MVCAngularJSExample/upload/',
+		    		  url: path+'/upload/',
 		    		  method: "POST",
 		    		  data: utente,
 		    		  headers: {

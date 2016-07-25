@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -42,7 +43,6 @@ import com.websystique.springmvc.model.Album;
 import com.websystique.springmvc.model.User;
 import com.websystique.springmvc.service.AlbumService;
 import com.websystique.springmvc.service.UserService;
-import com.websystique.springmvc.util.FileValidator;
  
 @Controller
 @RestController
@@ -58,13 +58,6 @@ public class HelloWorldRestController {
 	@Autowired
 	MessageSource messageSource;
 
-	@Autowired
-	FileValidator fileValidator;
-	
-	@InitBinder("fileBucket")
-	protected void initBinder(WebDataBinder binder) {
-	   binder.setValidator(fileValidator);
-	}
 	
  
     
@@ -73,7 +66,7 @@ public class HelloWorldRestController {
     //-------------------Retrieve Single User--------------------------------------------------------
      
 	@RequestMapping(value = { "/profile/" }, method = RequestMethod.POST)
-    public ResponseEntity<User> getUser(@RequestBody int id) throws UnsupportedEncodingException {
+    public ResponseEntity<User> getUser(@RequestBody BigInteger id) throws UnsupportedEncodingException {
 		User user=userService.findById(id);
 		if (user == null) {
             System.out.println("User not found");
@@ -92,10 +85,11 @@ public class HelloWorldRestController {
     	User u=userService.findByEmail(user.getEmail());
     	if(!(u==null)){
     		
-    		return new ResponseEntity<User>(u, HttpStatus.OK);
+    		return new ResponseEntity<User>(u, HttpStatus.OK); 
+
     	}else{
     		
-    		return new ResponseEntity<User>(u, HttpStatus.NOT_FOUND); 
+    		return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
     	}
 		
     }
@@ -111,7 +105,6 @@ public class HelloWorldRestController {
         }
         userService.saveUser(user);
         
-        HttpHeaders headers = new HttpHeaders();
         return new ResponseEntity<User>(user,HttpStatus.CREATED);
     }
  
@@ -164,14 +157,28 @@ public class HelloWorldRestController {
         	}
 	}
 
+    	//------------------- Search Album--------------------------------------------------------
 
+    	@RequestMapping(value="/album",method=RequestMethod.POST)
+    	public ResponseEntity<List<Album>> getAlbum(@RequestBody BigInteger id){
+    		System.out.println("Search album user");
+    		User user=userService.findById(id);
+    		if(!(user==null)){
+        		List<Album> albums=new ArrayList<Album>();
+        		albums=albumService.findAllByUserId(id);
+        		return new ResponseEntity<List<Album>>(albums,HttpStatus.OK);
+    		}else
+    			return new ResponseEntity<List<Album>>(HttpStatus.NOT_FOUND);
+    		
+    		
+    	}
 
 
 
 	//------------------- Delete a User --------------------------------------------------------
      
     @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<User> deleteUser(@PathVariable("id") int id) {
+    public ResponseEntity<User> deleteUser(@PathVariable("id") BigInteger id) {
         System.out.println("Fetching & Deleting User with id " + id);
  
         User user = userService.findById(id);

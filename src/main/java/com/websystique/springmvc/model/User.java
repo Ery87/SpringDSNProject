@@ -1,12 +1,10 @@
  package com.websystique.springmvc.model;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+
+
+import java.math.BigInteger;
 
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,7 +12,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 
@@ -26,7 +23,7 @@ public class User {
 
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id_user")
-	private Integer id_user;
+	private BigInteger id_user;
 
 	
 	
@@ -60,11 +57,11 @@ public class User {
 	
 	
 	public User(){}
-	public Integer getId() {
+	public BigInteger getId() {
 		return id_user;
 	}
 
-	public void setId(Integer id) {
+	public void setId(BigInteger id) {
 		this.id_user = id;
 	}
 

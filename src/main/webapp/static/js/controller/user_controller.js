@@ -3,7 +3,7 @@ App.controller('UserController',['UserService','$window','$scope',function (User
 		var self=this;
          self.user={id:null,birth_day:'',city:'',email:'',firstName:'',lastName:'',photo:null,pw:''};
          var message='';    
-        
+         var url='http://localhost:8080/OSN'
          
          
          
@@ -21,7 +21,7 @@ App.controller('UserController',['UserService','$window','$scope',function (User
 		            		  function(d){
 		            			  self.id=d.id;
 		            			  
-		            			$window.location.href='http://localhost:8080/Spring4MVCAngularJSExample/uploadPhoto/'+self.id;
+		            			$window.location.href=url+'/uploadPhoto/'+self.id;
 		            			
 		            		  },
 				              function(errResponse){
@@ -35,13 +35,8 @@ App.controller('UserController',['UserService','$window','$scope',function (User
         
          
          self.reset=function(){
-        	 $scope.user.email='';
-        	 $scope.user.pw='';
-        	 $scope.user.birth_day='';
-        	 $scope.user.city='';
-        	 $scope.user.firstName='';
-        	 $scope.user.lastName='';
-        	 $scope.user.photo=';'
+             self.user={id:null,birth_day:'',city:'',email:'',firstName:'',lastName:'',photo:null,pw:''};
+
              $scope.myForm.$setPristine(); //reset Form
          };
 

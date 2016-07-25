@@ -1,16 +1,14 @@
 package com.websystique.springmvc.model;
 
-import javax.persistence.Basic;
+import java.math.BigInteger;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -22,7 +20,7 @@ public class Album{
 
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id_album")
-	private Integer id_album;	
+	private BigInteger id_album;	
 	
 	@NotEmpty
 	@Column(name="metaTag", length=100, nullable=false)
@@ -42,11 +40,11 @@ public class Album{
 	
 	
 	
-	public Integer getId() {
+	public BigInteger getId() {
 		return id_album;
 	}
 
-	public void setId(Integer id) {
+	public void setId(BigInteger id) {
 		this.id_album = id;
 	}
 

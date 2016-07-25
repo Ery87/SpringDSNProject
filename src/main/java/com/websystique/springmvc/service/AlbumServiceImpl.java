@@ -1,5 +1,6 @@
 package com.websystique.springmvc.service;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,19 +10,19 @@ import org.springframework.transaction.annotation.Transactional;
 import com.websystique.springmvc.dao.AlbumDao;
 import com.websystique.springmvc.model.Album;
 
-@Service("userDocumentService")
+@Service("AlbumService")
 @Transactional
 public class AlbumServiceImpl implements AlbumService{
 
 	@Autowired
 	AlbumDao dao;
 
-	public Album findById(int id) {
+	public Album findById(BigInteger id) {
 		return dao.findById(id);
 	}
 
 	
-	public List<Album> findAllByUserId(int userId) {
+	public List<Album> findAllByUserId(BigInteger userId) {
 		return dao.findAllByUserId(userId);
 	}
 	
@@ -29,7 +30,7 @@ public class AlbumServiceImpl implements AlbumService{
 		dao.save(document);
 	}
 
-	public void deleteById(int id){
+	public void deleteById(BigInteger id){
 		dao.deleteById(id);
 	}
 

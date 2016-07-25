@@ -22,10 +22,10 @@ public class IndexController {
 	        return "uploadPhoto";
 	    }
 	  
-	  @RequestMapping(value="/user/{id}",method=RequestMethod.GET)
+	  @RequestMapping(value="/profile/{id}?{lastname}{firstname}", method=RequestMethod.GET)
 	  public String ProfileUser(){
 		  return "profileUser";
 	  }
 	 
-	  
+	
 }

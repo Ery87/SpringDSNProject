@@ -29,7 +29,7 @@ public class HelloWorldInitializer extends AbstractAnnotationConfigDispatcherSer
     	return singleton;
 	}
  
-    @Override
+    /*  @Override
   	protected void customizeRegistration(ServletRegistration.Dynamic registration) {
       	registration.setMultipartConfig(getMultipartConfigElement());
   	}
@@ -39,7 +39,7 @@ public class HelloWorldInitializer extends AbstractAnnotationConfigDispatcherSer
   		return multipartConfigElement;
   	}
       
-      /*Set these variables for your project needs*/ 
+    Set these variables for your project needs 
       
   	private static final String LOCATION = "/Users/Ery/Documents/photoDSN/";
 
@@ -47,5 +47,5 @@ public class HelloWorldInitializer extends AbstractAnnotationConfigDispatcherSer
   	
   	private static final long MAX_REQUEST_SIZE = 1024 * 1024 * 30;//30MB
 
-      private static final int FILE_SIZE_THRESHOLD = 0;
+      private static final int FILE_SIZE_THRESHOLD = 0;*/
   }

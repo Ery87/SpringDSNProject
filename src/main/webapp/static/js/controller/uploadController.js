@@ -2,7 +2,7 @@
 App.controller('UploadController',['UserService','$window','$scope',function (UserService,$window,$scope){
 		var self=this;
          self.user={id:null,birth_day:'',city:'',email:'',firstName:'',lastName:'',photo:null,pw:''};
-        
+        var url='http://localhost:8080/OSN/';
          function readID(){
              var url = window.location.pathname;
              var id_utente = url.substring(url.lastIndexOf('/') + 1);
@@ -25,7 +25,7 @@ App.controller('UploadController',['UserService','$window','$scope',function (Us
         	        	.then(
         				function(){
         					
-	            			$window.location.href='http://localhost:8080/Spring4MVCAngularJSExample/';
+	            			$window.location.href=url;
 
         				},
         				 function(errResponse){

@@ -1,11 +1,12 @@
 'use strict';
 
 App.factory('ProfileService',['$http','$q',function($http,$q){
-		
+	var path='http://localhost:8080/OSN';
+	
 	
 	return{
 		getUser:function(id){
-			return $http.post('http://localhost:8080/Spring4MVCAngularJSExample/profile/',id)
+			return $http.post(path+'/profile/',id)
 			.then(
 					function(response){
 				return response.data;
@@ -20,7 +21,7 @@ App.factory('ProfileService',['$http','$q',function($http,$q){
 			
 			
 			return $http({
-	    		  url: 'http://localhost:8080/Spring4MVCAngularJSExample/searchFriend/',
+	    		  url: path+'/searchFriend/',
 	    		  method: "POST",
 	    		  data: friend,
 	    		  headers: {
@@ -33,11 +34,27 @@ App.factory('ProfileService',['$http','$q',function($http,$q){
 			        });
 		},
 	
+		getAlbum:function(id){
+		 	
+			return $http({
+			 url: path+'/album/',
+   		  method: "POST",
+   		  data: id,
+   		  headers: {
+   		    'Content-Type': 'application/json'
+   		  }}).success(function(response){
+   			 
+   			  return response.data;
+   		  })
+		        .error(function(){
+		        });
+		},
+		
 		searchImage:function(id,image){
 			
 			
 			return $http({
-	    		  url: 'http://localhost:8080/Spring4MVCAngularJSExample/searchImage/',
+	    		  url: path+'/searchImage/',
 	    		  method: "POST",
 	    		  data: image,
 	    		  headers: {

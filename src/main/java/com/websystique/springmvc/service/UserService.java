@@ -1,5 +1,6 @@
 package com.websystique.springmvc.service;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import com.websystique.springmvc.model.User;
@@ -8,7 +9,7 @@ import com.websystique.springmvc.model.User;
 public interface UserService {
 	
 	
-User findById(int id);
+User findById(BigInteger id);
 	
 	User findByEmail(String email);
 	
@@ -23,7 +24,7 @@ User findById(int id);
 	
 	void saveUser(User user);
 	
-	public void updateUser(int id,byte[] photo);
+	public void updateUser(BigInteger id,byte[] photo);
 	
 
 	

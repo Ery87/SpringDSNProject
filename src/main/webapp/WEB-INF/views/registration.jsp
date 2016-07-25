@@ -27,9 +27,6 @@
     </style>
      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
      <link href="<c:url value='/static/css/app.css' />" rel="stylesheet"></link>
-     <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js"></script>
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js"></script>
-     
   </head>
   <body ng-app="myApp" class="ng-cloak">
    <div class="generic-container" ng-controller="UserController as ctrl">
@@ -133,10 +130,10 @@
               </div>
           </div>
       </div>
-      
-
-    
-      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
+      <script src="<c:url value='/static/js/libraries/aes.js' />"></script>
+             <script src="<c:url value='/static/js/libraries/enc-base64-min.js' />"></script>
+       
+       <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
       <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-route.js"></script>
       <script src="<c:url value='/static/js/app.js' />"></script>
       <script src="<c:url value='/static/js/service/login_service.js' />"></script>

@@ -4,6 +4,7 @@ App.controller('LoginController',['$scope','$window','LoginService',function($sc
 	var self=this;
         self.user={id:null,birth_day:'',city:'',email:'',firstname:'',lastname:'',photo:'',pw:''};
      var message;
+     var url='http://localhost:8080/OSN';
      
        self.updateUser=function(user, id){
             LoginService.updateUser(user, id)
@@ -27,22 +28,22 @@ App.controller('LoginController',['$scope','$window','LoginService',function($sc
         };
         
         self.login=function(user){
-        	var key = CryptoJS.enc.Base64.parse("MTIzNDU2NzgxMjM0NTY3OA==");
+         	var key = CryptoJS.enc.Base64.parse("MTIzNDU2NzgxMjM0NTY3OA==");
             var iv  = CryptoJS.enc.Base64.parse("EBESExQVFhcYGRobHB0eHw==");
             var u={id:null,birth_day:'',city:'',email:'',firstname:'',lastname:'',photo:'',pw:''};
            u.email=self.user.email;
              u.pw=self.user.pw;
-            
+           
       	  LoginService.login(u)
       	  	.then(
       	  			function(d){
       	  		 
       	  		  self.user=d;
       	  		 var decrypted = CryptoJS.AES.decrypt(self.user.pw, key, {iv: iv});
-      	  
+      	  		
               if((decrypted.toString(CryptoJS.enc.Utf8))==u.pw){
-            	   
-         			$window.location.href='http://localhost:8080/Spring4MVCAngularJSExample/user/'+self.user.id;
+            	  
+            		$window.location.href=url+'/profile/'+self.user.id+'?'+self.user.lastName+self.user.firstName;
 
                }else {
             	   self.message='Error username or password, please repeat';

@@ -1,5 +1,6 @@
 package com.websystique.springmvc.service;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	private UserDao dao;
 
-	public User findById(int id) {
+	public User findById(BigInteger id) {
 		return dao.findById(id);
 	}
 
@@ -35,7 +36,7 @@ public class UserServiceImpl implements UserService{
 	 * Just fetch the entity from db and update it with proper values within transaction.
 	 * It will be updated in db once transaction ends. 
 	 */
-	public void updateUser(int id,byte[] photo) {
+	public void updateUser(BigInteger id,byte[] photo) {
 		
 		User entity = dao.findById(id);
 		if(entity!=null){
