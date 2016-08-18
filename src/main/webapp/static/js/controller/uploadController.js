@@ -2,7 +2,7 @@
 App.controller('UploadController',['UserService','$window','$scope',function (UserService,$window,$scope){
 		var self=this;
          self.user={id:null,birth_day:'',city:'',email:'',firstName:'',lastName:'',photo:null,pw:''};
-        var url='http://localhost:8080/OSN/';
+        var url='http://193.206.170.142/OSN';
          function readID(){
              var url = window.location.pathname;
              var id_utente = url.substring(url.lastIndexOf('/') + 1);
@@ -26,10 +26,10 @@ App.controller('UploadController',['UserService','$window','$scope',function (Us
         				function(){
         					
 	            			$window.location.href=url;
-
+	            			
         				},
         				 function(errResponse){
-				               console.error('Error while creating User.');
+				               console.error('Error while upload photo User.');
 
 			              }	);
         	        };

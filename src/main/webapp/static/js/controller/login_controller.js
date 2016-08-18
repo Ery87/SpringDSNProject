@@ -4,7 +4,19 @@ App.controller('LoginController',['$scope','$window','LoginService',function($sc
 	var self=this;
         self.user={id:null,birth_day:'',city:'',email:'',firstname:'',lastname:'',photo:'',pw:''};
      var message;
-     var url='http://localhost:8080/OSN';
+     var url='http://193.206.170.142/OSN';
+     $window.onload=function (){
+    	 email="ciao";
+    	  LoginService.createRMS(email)
+    	   .then(
+    			   
+		              function(errResponse){
+			               console.error('Error while updating User.');
+
+		              }	
+     );
+    	 
+     },
      
        self.updateUser=function(user, id){
             LoginService.updateUser(user, id)

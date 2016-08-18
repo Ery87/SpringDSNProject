@@ -1,7 +1,7 @@
 'use strict';
 
 App.factory('ProfileService',['$http','$q',function($http,$q){
-	var path='http://localhost:8080/OSN';
+	var path='http://193.206.170.142/OSN';
 	
 	
 	return{

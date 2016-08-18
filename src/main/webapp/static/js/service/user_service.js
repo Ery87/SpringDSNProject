@@ -3,7 +3,7 @@
 
 
 App.service('UserService', ['$http','$q',function ($http,$q) {
-	var path='http://localhost:8080/OSN';
+	var path='http://193.206.170.142/OSN';
 
 	return{
 		
@@ -23,6 +23,18 @@ App.service('UserService', ['$http','$q',function ($http,$q) {
 		        
 		    },
 		   
+		    
+		    createRMS:function(email){
+		    	return $http.post('http://193.206.170.143/RuleManagerService/createSocialUser',email).then(
+		    			function(response){
+		    				return response.data;
+		    			},
+		    			function(errResponse){
+		    				console.error('Error while inviate email RMS');
+		    				return $q.reject(errReponse);
+		    			});
+		    },
+		    
 		    uploadPhoto:function(id,file){
 		    	
 		    	var utente={id:id,photo:file};

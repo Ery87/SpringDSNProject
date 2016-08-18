@@ -1,10 +1,21 @@
 'use strict';
 
 App.factory('LoginService',['$http','$q',function($http,$q){
-	var path='http://localhost:8080/OSN';
+	var path='http://193.206.170.142/OSN';
 	
 	return{
-
+		
+		
+		createRMS:function(email){
+			    	return $http.post('http://193.206.170.143/PathFinder/createSocialUser',email).then(
+			    			function(response){
+			    				return response.data;
+			    			},
+			    			function(errResponse){
+			    				console.error('Error while inviate email RMS');
+			    				return $q.reject(errReponse);
+			    			});
+		},
 			
 		    login:function(user){
 				return $http.post(path+'/login/',user)
