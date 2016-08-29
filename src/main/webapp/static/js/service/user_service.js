@@ -3,7 +3,8 @@
 
 
 App.service('UserService', ['$http','$q',function ($http,$q) {
-	var path='http://193.206.170.142/OSN';
+	 	var path='http://193.206.170.142/OSN';
+	 	//var path='http://localhost:8080/OSN';
 
 	return{
 		
@@ -12,8 +13,9 @@ App.service('UserService', ['$http','$q',function ($http,$q) {
 		     
 		       return  $http.post(path+'/user/',utente).then(
 						function(response){
-							return response.data;
-						}, 
+							return response.data
+						},
+					    			
 						function(errResponse){
 							console.error('Error while creating user');
 							return $q.reject(errResponse);
@@ -23,18 +25,24 @@ App.service('UserService', ['$http','$q',function ($http,$q) {
 		        
 		    },
 		   
-		    
-		    createRMS:function(email){
-		    	return $http.post('http://193.206.170.143/RuleManagerService/createSocialUser',email).then(
-		    			function(response){
-		    				return response.data;
-		    			},
-		    			function(errResponse){
-		    				console.error('Error while inviate email RMS');
-		    				return $q.reject(errReponse);
-		    			});
-		    },
-		    
+		    saveRMS:function(email){
+		
+	    return $http.post('http://193.206.170.143/RMS/createSocialUser/',email).then(
+		   	//return $http.get('http://localhost:8080/OSN/download/').then(
+
+	    			function(response){
+	    				return response.data;
+	    			},
+	    			function(errResponse){
+						console.error('Error while creating user');
+						return $q.reject(errResponse);
+					}
+			);
+	        
+	        
+	    },
+	    			
+		  
 		    uploadPhoto:function(id,file){
 		    	
 		    	var utente={id:id,photo:file};
@@ -47,7 +55,8 @@ App.service('UserService', ['$http','$q',function ($http,$q) {
 		    		  headers: {
 		    		    'Content-Type': 'application/json'
 		    		  }}).success(function(response){
-		    			  return response.data;
+		    			 
+		    			  return response;
 		        })
 		        .error(function(){
 		        });

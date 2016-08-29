@@ -3,7 +3,7 @@
  xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"  
  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"  
  id="WebApp_ID" version="2.5">
- 	<display-name>Spring4MVCAngularJSExample</display-name>
+ 	<display-name>OSN</display-name>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.htm</welcome-file>
@@ -12,4 +12,12 @@
 		<welcome-file>default.htm</welcome-file>
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
+	<filter>
+  <filter-name>CORSFilter</filter-name>
+  <filter-class>com.websystique.springmvc.configuration.CORSFilter</filter-class>
+</filter>
+<filter-mapping>
+  <filter-name>CORSFilter</filter-name>
+  <url-pattern>/*</url-pattern>
+</filter-mapping>
 </web-app>

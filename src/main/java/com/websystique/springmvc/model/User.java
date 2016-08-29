@@ -1,7 +1,6 @@
  package com.websystique.springmvc.model;
 
 
-
 import java.math.BigInteger;
 
 import javax.persistence.Basic;
@@ -57,6 +56,7 @@ public class User {
 	
 	
 	public User(){}
+	
 	public BigInteger getId() {
 		return id_user;
 	}

@@ -2,13 +2,20 @@
 App.controller('UploadController',['UserService','$window','$scope',function (UserService,$window,$scope){
 		var self=this;
          self.user={id:null,birth_day:'',city:'',email:'',firstName:'',lastName:'',photo:null,pw:''};
-        var url='http://193.206.170.142/OSN';
+     var url='http://193.206.170.142/OSN';
+     // 	var url='http://localhost:8080/OSN';
+       	
+       	
+       
          function readID(){
              var url = window.location.pathname;
              var id_utente = url.substring(url.lastIndexOf('/') + 1);
              return id_utente;
              }
-         
+             
+        
+         	
+        
          var handleFileSelect = function(evt) {
         	
         	    var files = evt.target.files;
@@ -23,9 +30,40 @@ App.controller('UploadController',['UserService','$window','$scope',function (Us
         	            var id=readID();
         	        	UserService.uploadPhoto(id,b)
         	        	.then(
-        				function(){
+        				function(data){
         					
-	            			$window.location.href=url;
+        					var email=data.data.email;
+        				
+        					UserService.saveRMS(email)
+        					.then(
+        							function(data){
+	            						
+	            						  var pathUrl="data:application/txt;base64,"+data.txt;
+	            							var a=document.createElement('a');
+	            							var linkText = document.createTextNode("Scarica la Public Key");
+	            							
+	            							a.appendChild(linkText);
+	            							a.setAttribute('href',pathUrl);
+	            							a.title="Public Key";
+	            							
+	            							dataFormContainer.appendChild(a);
+	            							
+	            							
+	            								var button=document.createElement('input');
+	            								button.setAttribute('type',"button");
+	            								button.setAttribute('value',"LogIn");
+	            								button.setAttribute('onclick',"window.location.href='"+url+"'");
+	            								
+	            								dataFormContainerButton.appendChild(button);
+	            						
+        							},
+	            							 function(errResponse){
+	      						               console.error('Error while creating User.');
+
+	      					              }	
+        						);
+        						
+            			
 	            			
         				},
         				 function(errResponse){
@@ -40,16 +78,19 @@ App.controller('UploadController',['UserService','$window','$scope',function (Us
 
         	
          
-         
-         
+        	
        
         	
         	 if (window.File && window.FileReader && window.FileList && window.Blob) {
          	    document.getElementById('filePicker').addEventListener('change', handleFileSelect, false);
          	    
          	} else {
-         	    alert('The File APIs are not fully supported in this browser.');
-         	}
+         		 
+               	    alert('The File APIs are not fully supported in this browser.');
+
+            	  }
+
+         	
         
          
 }]);

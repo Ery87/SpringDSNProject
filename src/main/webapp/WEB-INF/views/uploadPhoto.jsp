@@ -52,28 +52,22 @@
                              
                               <button type="button" ng-click="ctrl.reset()" class="btn btn-warning btn-sm" ng-disabled="myForm.$pristine">Reset Form</button>
                           </div>
-                                <!--   <input type="file" file-model="myFile"  class="photo form-control input-sm" placeholder="Enter your photo" />
- 							<div class="has-error" ng-show="myForm.$dirty">
-                                      <span ng-show="myForm.myFile.$invalid">This field is invalid </span>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-						
-                      <div class="row">
-                          <div class="form-actions floatRight">
-                              <input type="submit" ng-click="ctrl.loadImageFileAsURL()"  class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid">
-                             
-                              <button type="button" ng-click="ctrl.reset()" class="btn btn-warning btn-sm" ng-disabled="myForm.$pristine">Reset Form</button>
-                          </div>
-                   
-                   -->
+                              
                       </div>
                   
                   
             
                   </form>
-           
+                  
+                  <br><br><br>
+         		  <div class="row">
+                  <div id="dataFormContainer" style="font-size:50px">
+                  &nbsp;
+                  
+                  <div id="dataFormContainerButton" class="form-actions floatRight" >
+                   </div>
+            		
+                  </div> 
           </div>
       </div>
       

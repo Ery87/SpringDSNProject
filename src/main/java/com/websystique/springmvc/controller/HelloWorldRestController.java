@@ -1,11 +1,16 @@
 package com.websystique.springmvc.controller;
  
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.util.Base64;
 import java.io.IOException;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
@@ -19,6 +24,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
@@ -59,9 +67,9 @@ public class HelloWorldRestController {
 	MessageSource messageSource;
 
 	
+	
  
-    
- 
+	
     
     //-------------------Retrieve Single User--------------------------------------------------------
      
@@ -195,16 +203,24 @@ public class HelloWorldRestController {
     //------------------- Upload Profile Photo User --------------------------------------------------------
      
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public ResponseEntity<User> upload(@RequestBody User user) throws IOException {
+    public void upload(@RequestBody User user,HttpServletResponse response) throws IOException {
+    	PrintWriter pw=response.getWriter();
     	
     	User u=userService.findById(user.getId());
+    	
     	if(u==null){
-            return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+    		pw.println("{");
+			pw.println("\"successful\": false,");
+			pw.println("}");
     	}else{
     		
 	    	userService.updateUser(user.getId(), user.getPhoto());
-	    	return new ResponseEntity<User>(user,HttpStatus.OK);
+	    	pw.println("{");
+			pw.println("\"successful\": true,");
+			pw.println("\"email\": \""+u.getEmail()+"\"");
+			pw.println("}");
     	}
+    	return;
     }
    
     

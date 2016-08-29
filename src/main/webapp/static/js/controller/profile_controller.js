@@ -11,7 +11,8 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
         var metaTag;
         var id_utente;
         var url='http://193.206.170.142/OSN';
-       
+        // var url='http://localhost:8080/OSN';
+
         self.generateKeys = function () {
             var sKeySize =1024;
             var keySize = parseInt(sKeySize);
@@ -46,6 +47,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
         
         
         $window.onload=function (){
+        	
         	 var url = window.location.pathname;
              id_utente = url.substring(url.lastIndexOf('/') + 1);
            
@@ -54,6 +56,25 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
             		 function(data){
             			 
             			self.user=data;
+            			var email=self.user.email;
+            			var N = Math.floor((Math.random() * 10) + 1);
+            			var messageProtocol="Login request";
+            			var protocol= new Object();
+            			protocol.email=email;
+            			protocol.N=N;
+            			protocol.messageProtocol=messageProtocol;
+            		 
+            			ProfileService.getLoginMessage(protocol)
+            			.then(
+            					function(data){
+            						
+            						return data;
+            					}, function(errResponse){
+                       			 console.error('Error while inviate protocol RMS...');
+                     			
+                       	 });
+            				
+            			
      					self.image=self.user.photo;
      					var prova="data:image/png;base64,";
      					var str=prova+self.image

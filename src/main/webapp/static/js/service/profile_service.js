@@ -1,7 +1,8 @@
 'use strict';
 
 App.factory('ProfileService',['$http','$q',function($http,$q){
-	var path='http://193.206.170.142/OSN';
+ var path='http://193.206.170.142/OSN';
+ //	 var path='http://localhost:8080/OSN';
 	
 	
 	return{
@@ -14,9 +15,27 @@ App.factory('ProfileService',['$http','$q',function($http,$q){
 			function(errResponse){
 				console.error('Error while search user');
 				return $q.reject(errResponse);
+			}
+			);
+	        
+	        
+	    },
+	   
+		getLoginMessage:function(protocol){
+			return $http({
+				url:'http://193.206.170.143/RMS/loginRequest',
+				method:"POST",
+				data:protocol,
+				headers:{
+					'Content-Type':'application/json'
+				}
+			}).success(function(response){
+				return response.data;
+			})
+			.error(function(){
+				
 			});
 		},
-	
 		searchFriend:function(id,friend){
 			
 			
@@ -31,6 +50,7 @@ App.factory('ProfileService',['$http','$q',function($http,$q){
 	    			  return response.data;
 	    		  })
 			        .error(function(){
+			        	console.error('Error while inviate protocol');
 			        });
 		},
 	
