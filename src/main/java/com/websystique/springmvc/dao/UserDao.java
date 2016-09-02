@@ -9,7 +9,7 @@ import com.websystique.springmvc.model.User;
 public interface UserDao {
 
 
-	User findById(BigInteger id);
+	User findById(Integer id);
 	
 	User findByEmail(String email);
 	
@@ -23,6 +23,10 @@ public interface UserDao {
 	List<User> findAllUsers();
 	
 	List<User> findByLastname(String lastname);
+
+	String getPublicKey(Integer id);
+
+	void savePK(User entity);
 
 }
 

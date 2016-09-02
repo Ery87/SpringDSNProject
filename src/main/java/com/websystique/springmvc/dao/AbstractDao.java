@@ -33,7 +33,7 @@ public abstract class AbstractDao<PK extends Serializable, T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public T getByKey(BigInteger id) {
+	public T getByKey(Integer id) {
 		return (T) getSession().get(persistentClass, id);
 	}
 

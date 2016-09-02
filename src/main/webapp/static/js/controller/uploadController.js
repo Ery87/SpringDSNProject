@@ -2,8 +2,8 @@
 App.controller('UploadController',['UserService','$window','$scope',function (UserService,$window,$scope){
 		var self=this;
          self.user={id:null,birth_day:'',city:'',email:'',firstName:'',lastName:'',photo:null,pw:''};
-     var url='http://193.206.170.142/OSN';
-     // 	var url='http://localhost:8080/OSN';
+       var url='http://193.206.170.142/OSN';
+       // var url='http://localhost:8080/OSN';
        	
        	
        
@@ -32,30 +32,29 @@ App.controller('UploadController',['UserService','$window','$scope',function (Us
         	        	.then(
         				function(data){
         					
-        					var email=data.data.email;
+        					var id=data.data.id;
         				
-        					UserService.saveRMS(email)
+        					UserService.saveRMS(id)
         					.then(
         							function(data){
-	            						
-	            						  var pathUrl="data:application/txt;base64,"+data.txt;
-	            							var a=document.createElement('a');
-	            							var linkText = document.createTextNode("Scarica la Public Key");
-	            							
-	            							a.appendChild(linkText);
-	            							a.setAttribute('href',pathUrl);
-	            							a.title="Public Key";
-	            							
-	            							dataFormContainer.appendChild(a);
-	            							
-	            							
-	            								var button=document.createElement('input');
-	            								button.setAttribute('type',"button");
-	            								button.setAttribute('value',"LogIn");
-	            								button.setAttribute('onclick',"window.location.href='"+url+"'");
-	            								
-	            								dataFormContainerButton.appendChild(button);
-	            						
+	            					//Inviate PKRMS and PKKMS on server
+        								var rms=data.rms;
+        								var kms=data.kms;
+        								var message={"kms": kms,"rms":rms};
+        		
+        								UserService.savePK_KMS_RMS(message)
+        								.then(
+        										function(data){
+        											
+        		      		            			$window.location.href=url+'/generateKey/'+id;
+
+        										},function(errResponse){
+     	      						               console.error('Error while send PK rms and kms.');
+     	      						               	
+        										});
+        							
+        								
+
         							},
 	            							 function(errResponse){
 	      						               console.error('Error while creating User.');

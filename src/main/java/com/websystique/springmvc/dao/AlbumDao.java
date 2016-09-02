@@ -9,12 +9,12 @@ public interface AlbumDao {
 
 	List<Album> findByMetaTag(String meta);
 	
-	Album findById(BigInteger id);
+	Album findById(Integer id);
 	
 	void save(Album album);
 	
-	List<Album> findAllByUserId(BigInteger userId);
+	List<Album> findAllByUserId(Integer userId);
 	
-	void deleteById(BigInteger id);
+	void deleteById(Integer id);
 	
 }

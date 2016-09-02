@@ -20,7 +20,7 @@ public class Album{
 
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id_album")
-	private BigInteger id_album;	
+	private Integer id_album;	
 	
 	@NotEmpty
 	@Column(name="metaTag", length=100, nullable=false)
@@ -40,11 +40,11 @@ public class Album{
 	
 	
 	
-	public BigInteger getId() {
+	public Integer getId() {
 		return id_album;
 	}
 
-	public void setId(BigInteger id) {
+	public void setId(Integer id) {
 		this.id_album = id;
 	}
 

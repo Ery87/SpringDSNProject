@@ -23,12 +23,12 @@ public class AlbumDaoImpl extends AbstractDao<Integer, Album> implements AlbumDa
 	}
 
 	
-	public Album findById(BigInteger id) {
+	public Album findById(Integer id) {
 		return getByKey(id);
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Album> findAllByUserId(BigInteger userId){
+	public List<Album> findAllByUserId(Integer userId){
 		Criteria crit = createEntityCriteria();
 		Criteria userCriteria = crit.createCriteria("user");
 		userCriteria.add(Restrictions.eq("id", userId));
@@ -36,7 +36,7 @@ public class AlbumDaoImpl extends AbstractDao<Integer, Album> implements AlbumDa
 	}
 
 	
-	public void deleteById(BigInteger id) {
+	public void deleteById(Integer id) {
 		Album document =  getByKey(id);
 		delete(document);
 	}

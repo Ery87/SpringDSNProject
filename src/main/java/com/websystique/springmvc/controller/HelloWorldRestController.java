@@ -1,10 +1,12 @@
 package com.websystique.springmvc.controller;
  
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.Base64;
 import java.io.IOException;
@@ -15,6 +17,13 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
@@ -25,8 +34,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.HTTP;
+import org.json.JSONException;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
@@ -51,7 +70,8 @@ import com.websystique.springmvc.model.Album;
 import com.websystique.springmvc.model.User;
 import com.websystique.springmvc.service.AlbumService;
 import com.websystique.springmvc.service.UserService;
- 
+
+
 @Controller
 @RestController
 public class HelloWorldRestController {
@@ -74,7 +94,7 @@ public class HelloWorldRestController {
     //-------------------Retrieve Single User--------------------------------------------------------
      
 	@RequestMapping(value = { "/profile/" }, method = RequestMethod.POST)
-    public ResponseEntity<User> getUser(@RequestBody BigInteger id) throws UnsupportedEncodingException {
+    public ResponseEntity<User> getUser(@RequestBody Integer id) throws UnsupportedEncodingException {
 		User user=userService.findById(id);
 		if (user == null) {
             System.out.println("User not found");
@@ -168,7 +188,7 @@ public class HelloWorldRestController {
     	//------------------- Search Album--------------------------------------------------------
 
     	@RequestMapping(value="/album",method=RequestMethod.POST)
-    	public ResponseEntity<List<Album>> getAlbum(@RequestBody BigInteger id){
+    	public ResponseEntity<List<Album>> getAlbum(@RequestBody Integer id){
     		System.out.println("Search album user");
     		User user=userService.findById(id);
     		if(!(user==null)){
@@ -186,7 +206,7 @@ public class HelloWorldRestController {
 	//------------------- Delete a User --------------------------------------------------------
      
     @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<User> deleteUser(@PathVariable("id") BigInteger id) {
+    public ResponseEntity<User> deleteUser(@PathVariable("id") Integer id) {
         System.out.println("Fetching & Deleting User with id " + id);
  
         User user = userService.findById(id);
@@ -217,7 +237,7 @@ public class HelloWorldRestController {
 	    	userService.updateUser(user.getId(), user.getPhoto());
 	    	pw.println("{");
 			pw.println("\"successful\": true,");
-			pw.println("\"email\": \""+u.getEmail()+"\"");
+			pw.println("\"IDuser\": \""+u.getId()+"\"");
 			pw.println("}");
     	}
     	return;
@@ -233,5 +253,141 @@ public class HelloWorldRestController {
         return user;   
      }
     
-   
+    
+    //------------------- Save PKIClient  and inviate PKRMS --------------------------------------------------------
+
+    @RequestMapping(value = "/insertPKClient", method = RequestMethod.POST)
+    public HttpStatus insertPKClient(@RequestBody String message) throws ParseException{
+    	String pk;
+    	
+		JSONParser parser = new JSONParser();
+		JSONObject json = (JSONObject) parser.parse(message);
+		
+		Integer id=Integer.parseInt((String) json.get("id"));
+		
+		pk = (String) json.get("key");
+		System.out.println(id);
+		System.out.println(pk);
+		User u=userService.findById(id);
+		if(u!=null){
+			userService.insertPK(pk, id);
+			return HttpStatus.OK;
+
+		}else{
+			return HttpStatus.NOT_FOUND;
+
+		}
+    	
+    	
+    }
+    
+    
+    
+    //------------------- Insert PKIRMS and PKKMS --------------------------------------------------------
+
+    @RequestMapping(value = "/savePK", method = RequestMethod.POST) 
+    public void savePk(@RequestBody String message) throws JSONException, ParseException{
+    	try {
+    		File dir = new File("tmp/pk");
+        	dir.mkdirs();
+        	
+    		JSONParser parser = new JSONParser();
+    		JSONObject json = (JSONObject) parser.parse(message);
+    		
+    		File file1=new File(dir,"RMSPublicKey.txt");
+    		file1.createNewFile();
+    		FileWriter w=new FileWriter(file1);
+        	BufferedWriter b=new BufferedWriter(w);
+    		String pkRMS;
+			
+				pkRMS = (String) json.get("rms");
+			
+        	
+			b.write(pkRMS);
+			b.flush();
+			
+			File file2=new File(dir,"KMSPublicKey.txt");
+    		file2.createNewFile();
+			FileWriter writer=new FileWriter(file2);
+        	BufferedWriter buffer=new BufferedWriter(writer);
+    		String pkKMS=(String) json.get("kms");
+        	
+			buffer.write(pkKMS);
+			buffer.flush();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+    }
+    
+    //------------------- search PKRMS --------------------------------------------------------
+    @RequestMapping(value = "/getPKRMS", method = RequestMethod.GET) 
+    public void getPKRMS(HttpServletResponse response){
+    	PrintWriter pw=null;
+    	
+    	try{
+    		FileReader file=new FileReader("tmp/pk/RMSPublicKey.txt");
+    		
+        	BufferedReader bos=new BufferedReader(file);
+        	String PKRMS=bos.readLine();
+        	
+    		
+    		pw=response.getWriter();
+        	pw.println("{");
+        	pw.println("\"successful\":true,");
+        	pw.println("\"PKRMS\":\""+PKRMS+"\"");
+        	pw.println("}");
+        	return;
+    	}catch(IOException ex){
+    		pw.println("{");
+			pw.println("\"successful\": false,");
+			pw.println("\"message\": \""+ex.getMessage()+"\",");
+			pw.println("}");
+			return;
+    	}
+    	
+
+    	
+    }
+    
+    
+    
+    //------------------- search PKKMS --------------------------------------------------------
+    @RequestMapping(value = "/getPKKMS/", method = RequestMethod.GET) 
+    public void getPKKMS(HttpServletResponse response){
+    	PrintWriter pw=null;
+    	try{
+        	File file=new File("tmp/pk/KMSPublic");
+        	FileInputStream in=new FileInputStream(file);
+        	ByteArrayOutputStream bos=new ByteArrayOutputStream();
+        	byte[] buf=new byte[1024];
+        	
+    		for(int readNum;(readNum=in.read(buf))!=-1;){
+    			bos.write(buf,0,readNum);
+    		}
+    		pw=response.getWriter();
+        	pw.println("{");
+        	pw.println("\"successful\":true,");
+        	pw.println("\"PKKMS\":\""+bos+"\"");
+        	pw.println("}");
+        	return;
+    	}catch(IOException ex){
+    		pw.println("{");
+			pw.println("\"successful\": false,");
+			pw.println("\"message\": \""+ex.getMessage()+"\",");
+			pw.println("}");
+			return;
+    	}
+    	
+
+    	
+    }
+  
+         
+    	
+    
+  
+    
 }

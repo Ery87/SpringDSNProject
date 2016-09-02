@@ -10,11 +10,11 @@ public interface AlbumService {
 
 	List<Album> findByMetaTag(String meta);
 	
-	Album findById(BigInteger id);
+	Album findById(Integer id);
 	
-	List<Album> findAllByUserId(BigInteger userId);
+	List<Album> findAllByUserId(Integer id);
 	
-	void deleteById(BigInteger id);
+	void deleteById(Integer id);
 	
 	void saveAlbum(Album document);
 	

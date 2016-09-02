@@ -22,7 +22,7 @@ public class User {
 
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id_user")
-	private BigInteger id_user;
+	private Integer id_user;
 
 	
 	
@@ -54,24 +54,20 @@ public class User {
 	@Column(name="photo", nullable=false)
 	private byte[] photo;
 	
+	@Column(name="pk")
+	private String pk;
 	
 	public User(){}
 	
-	public BigInteger getId() {
+	public Integer getId() {
 		return id_user;
 	}
 
-	public void setId(BigInteger id) {
+	public void setId(Integer id) {
 		this.id_user = id;
 	}
 
-	/*@OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.ALL)
-	private Collection<Album> albums = new LinkedHashSet<Album>();
 	
- @LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-
-    private Set<Album> albums = new HashSet<Album>();*/
 
 	public String getFirstName() {
 		return firstname;
@@ -130,13 +126,13 @@ public class User {
 	}
 
 
-	/*public Collection<Album> getAlbum(){
-		return albums;
+	public void setPK(String key){
+		this.pk=key;
 	}
 	
-	public void setAlbum(Collection<Album> album){
-		this.albums=album;
-	}*/
+	public String getPK(){
+		return pk;
+	}
 	
 	@Override
 	public int hashCode() {

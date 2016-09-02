@@ -3,8 +3,8 @@
 
 
 App.service('UserService', ['$http','$q',function ($http,$q) {
-	 	var path='http://193.206.170.142/OSN';
-	 	//var path='http://localhost:8080/OSN';
+	var path='http://193.206.170.142/OSN';
+//	 	var path='http://localhost:8080/OSN';
 
 	return{
 		
@@ -25,10 +25,10 @@ App.service('UserService', ['$http','$q',function ($http,$q) {
 		        
 		    },
 		   
-		    saveRMS:function(email){
+		    saveRMS:function(id){
 		
-	    return $http.post('http://193.206.170.143/RMS/createSocialUser/',email).then(
-		   	//return $http.get('http://localhost:8080/OSN/download/').then(
+	    return $http.post('http://193.206.170.143/RMS/createSocialUser/',id).then(
+	    		//return $http.get('http://localhost:8080/OSN/download/').then(
 
 	    			function(response){
 	    				return response.data;
@@ -41,7 +41,68 @@ App.service('UserService', ['$http','$q',function ($http,$q) {
 	        
 	        
 	    },
+	    
+	    savePKClient:function(message){
+	    	return $http({
+	    		url:path+'/insertPKClient',
+	    		method:"POST",
+	    		data:message,
+	    		headers:{
+	    			'Content-Type':'application/json'
+	    		}}).success(function(response){
+	    			return response;
+	    		})
+	    		.error(function(){
 	    			
+	    		});
+	    		
+	    	
+	    },
+	    
+	    getPKRMS:function(){
+	    	return $http.get(path+'/getPKRMS').then(
+	    			function(response){
+	    				return response.data;
+	    			},function(errResponse){
+	    				console.error('Error while request keyRMS on Server');
+	    				return $q.reject(errResponse);
+	    			});
+	    },
+	    
+	    sendPKClient:function(message){
+	    	return $http({
+	    		url:'http://193.206.170.143/RMS/getPKClient/',
+	    		method:"POST",
+	    		data:message,
+	    		headers:{
+	    			'Content-Type':'application/json'
+	    		}}).success(function(response){
+	    			return response;
+	    		})
+	    		.error(function(){
+	    			
+	    		});
+	    		
+	    	
+	    },
+	    
+	    savePK_KMS_RMS:function(message){
+	    	return $http({
+	    		url:path+"/savePK",
+	    		method:"POST",
+	    		data:message,
+	    		headers:{
+	    			'Content-Type':'application/json'
+	    		}}).success(function(response){
+	    			return response;
+	    		})
+	    		.error(function(){
+	    			
+	    		});
+	    		
+	    	
+	    },
+	    
 		  
 		    uploadPhoto:function(id,file){
 		    	

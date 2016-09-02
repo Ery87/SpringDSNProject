@@ -29,6 +29,11 @@
 				templateUrl: 'WEB-INF/views/profileUser.jsp'
 			
 		})
+			.when('/generateKey/{id}',{
+				controller:'GenerateController',
+				templateUrl: 'WEB-INF/views/generateKey.jsp'
+			
+		})
 		
 			.otherwise({redirectTo:'/'});
 		}]);

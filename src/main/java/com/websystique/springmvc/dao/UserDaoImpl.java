@@ -15,10 +15,10 @@ import com.websystique.springmvc.model.User;
 
 
 @Repository("userDao")
-public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
+public  class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
 
 	
-	public User findById(BigInteger id) {
+	public User findById(Integer id) {
 		User user = getByKey(id);
 		if(user!=null){
 			Hibernate.initialize(user.getId());
@@ -63,6 +63,17 @@ public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
 	public void savePhoto(User user) {
 		getSession().update(user);
 		
+	}
+
+	public String getPublicKey(Integer id) {
+		Criteria criteria=createEntityCriteria();
+		criteria.add(Restrictions.eq("id",id));
+		String pk=(String)criteria.uniqueResult();
+		return pk;
+	}
+
+	public void savePK(User entity) {
+		getSession().update(entity);
 	}
 
 }

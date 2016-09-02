@@ -9,11 +9,13 @@ import com.websystique.springmvc.model.User;
 public interface UserService {
 	
 	
-User findById(BigInteger id);
+User findById(Integer id);
 	
 	User findByEmail(String email);
 	
-
+	String getPublicKey(Integer id);
+	
+	void insertPK(String pk,Integer id);
 	
 	void deleteByEmail(String email);
 	
@@ -24,7 +26,7 @@ User findById(BigInteger id);
 	
 	void saveUser(User user);
 	
-	public void updateUser(BigInteger id,byte[] photo);
+	public void updateUser(Integer id,byte[] photo);
 	
 
 	

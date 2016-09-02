@@ -26,6 +26,9 @@ public class IndexController {
 	  public String ProfileUser(){
 		  return "profileUser";
 	  }
-	 
+	  @RequestMapping(value="/generateKey/{id}", method=RequestMethod.GET)
+	  public String GenerateKey(){
+		  return "generateKey";
+	  }
 	
 }
