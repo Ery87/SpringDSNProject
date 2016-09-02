@@ -43,8 +43,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.HTTP;
 import org.json.JSONException;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import org.json.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -257,15 +256,19 @@ public class HelloWorldRestController {
     //------------------- Save PKIClient  and inviate PKRMS --------------------------------------------------------
 
     @RequestMapping(value = "/insertPKClient", method = RequestMethod.POST)
-    public HttpStatus insertPKClient(@RequestBody String message) throws ParseException{
+    public HttpStatus insertPKClient(HttpServletRequest request, HttpServletResponse response) throws ParseException, IOException, JSONException{
     	String pk;
+    	StringBuilder sb = new StringBuilder();
+        BufferedReader br = request.getReader();
+        String str = null;
+        while ((str = br.readLine()) != null) {
+            sb.append(str);
+        }
+        JSONObject messaggio = new JSONObject(sb.toString());
     	
-		JSONParser parser = new JSONParser();
-		JSONObject json = (JSONObject) parser.parse(message);
+		Integer id=messaggio.getInt("id");
 		
-		Integer id=Integer.parseInt((String) json.get("id"));
-		
-		pk = (String) json.get("key");
+		pk=messaggio.getString("key");
 		System.out.println(id);
 		System.out.println(pk);
 		User u=userService.findById(id);
@@ -284,35 +287,39 @@ public class HelloWorldRestController {
     
     
     //------------------- Insert PKIRMS and PKKMS --------------------------------------------------------
-
+//DA MODIFICARE
     @RequestMapping(value = "/savePK", method = RequestMethod.POST) 
-    public void savePk(@RequestBody String message) throws JSONException, ParseException{
+    public void savePk(HttpServletRequest request, HttpServletResponse response) throws JSONException, ParseException{
     	try {
     		File dir = new File("tmp/pk");
         	dir.mkdirs();
         	
-    		JSONParser parser = new JSONParser();
-    		JSONObject json = (JSONObject) parser.parse(message);
-    		
-    		File file1=new File(dir,"RMSPublicKey.txt");
+        	StringBuilder sb = new StringBuilder();
+            BufferedReader br = request.getReader();
+            String str = null;
+            while ((str = br.readLine()) != null) {
+                sb.append(str);
+            }
+            JSONObject messaggio = new JSONObject(sb.toString());
+        
+    		File file1=new File(dir,"RMS_modulo.txt");
     		file1.createNewFile();
     		FileWriter w=new FileWriter(file1);
         	BufferedWriter b=new BufferedWriter(w);
-    		String pkRMS;
-			
-				pkRMS = (String) json.get("rms");
-			
+    		
+				String modulo =messaggio.getString("modulo");
+				
         	
-			b.write(pkRMS);
+			b.write(modulo);
 			b.flush();
 			
-			File file2=new File(dir,"KMSPublicKey.txt");
+			File file2=new File(dir,"RMS_esponente.txt");
     		file2.createNewFile();
 			FileWriter writer=new FileWriter(file2);
         	BufferedWriter buffer=new BufferedWriter(writer);
-    		String pkKMS=(String) json.get("kms");
+    		String esponente=messaggio.getString("esponente_pubblico");;
         	
-			buffer.write(pkKMS);
+			buffer.write(esponente);
 			buffer.flush();
 			
 		} catch (IOException e) {
@@ -328,16 +335,21 @@ public class HelloWorldRestController {
     	PrintWriter pw=null;
     	
     	try{
-    		FileReader file=new FileReader("tmp/pk/RMSPublicKey.txt");
+    		FileReader file=new FileReader("tmp/pk/RMS_modulo.txt");
     		
         	BufferedReader bos=new BufferedReader(file);
-        	String PKRMS=bos.readLine();
+        	String modulo=bos.readLine();
+        	FileReader file2=new FileReader("tmp/pk/RMS_esponente.txt");
+    		
+        	BufferedReader bos2=new BufferedReader(file2);
+        	String esponente=bos2.readLine();
         	
     		
     		pw=response.getWriter();
         	pw.println("{");
         	pw.println("\"successful\":true,");
-        	pw.println("\"PKRMS\":\""+PKRMS+"\"");
+        	pw.println("\"modulo\":\""+modulo+"\"");
+        	pw.println("\"esponente\":\""+esponente+"\"");
         	pw.println("}");
         	return;
     	}catch(IOException ex){

@@ -70,18 +70,18 @@ App.service('UserService', ['$http','$q',function ($http,$q) {
 	    },
 	    
 	    sendPKClient:function(message){
-	    	return $http({
-	    		url:'http://193.206.170.143/RMS/getPKClient/',
-	    		method:"POST",
-	    		data:message,
-	    		headers:{
-	    			'Content-Type':'application/json'
-	    		}}).success(function(response){
-	    			return response;
-	    		})
-	    		.error(function(){
-	    			
-	    		});
+		    return $http.post('http://193.206.170.143/RMS/getPKClient/',message).then(
+
+		    		function(response){
+	    				return response.data;
+	    			},
+	    			function(errResponse){
+						console.error('Error while creating user');
+						return $q.reject(errResponse);
+					}
+			);
+	        
+	        
 	    		
 	    	
 	    },

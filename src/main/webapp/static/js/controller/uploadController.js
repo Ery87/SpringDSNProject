@@ -38,9 +38,9 @@ App.controller('UploadController',['UserService','$window','$scope',function (Us
         					.then(
         							function(data){
 	            					//Inviate PKRMS and PKKMS on server
-        								var rms=data.rms;
-        								var kms=data.kms;
-        								var message={"kms": kms,"rms":rms};
+        								var modulo=data.modulo;
+        								var esponente_pubblico=data.esponente_pubblico;
+        								var message={"modulo": modulo,"esponente_pubblico":esponente_pubblico};
         		
         								UserService.savePK_KMS_RMS(message)
         								.then(

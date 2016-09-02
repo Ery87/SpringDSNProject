@@ -38,14 +38,15 @@ App.controller('GenerateController',['$scope','$window','UserService',function($
 						.then(
 								function(data){
 									
-									var pkRMS=data.PKRMS;
-									console.log(pkRMS);
-									var encrypted=cryptico.encrypt(keyPublic,pkRMS);
-									var cipher=encrypted.cipher;
+									var modulo=data.modulo;
+									var esponente=data.esponente;
 									
-									var message={"id":id,"message":cipher};
-									
-								UserService.sendPKClient(message)
+									var message={"id":id,"key":clientPublicKey};
+									var jsontoStringMessaggio=JSON.stringify(message);
+									var rsa=new RSAKey();
+									rsa.setPublic(modulo,esponente);
+									var messaggioCifrato=rsa.encrypt(jsontoStringMessaggio);
+								UserService.sendPKClient(messaggioCifrato)
 							.then(
 									function(data){
 										console.log("ok");//key inviata correttamente
