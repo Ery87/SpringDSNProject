@@ -15,7 +15,7 @@ User findById(Integer id);
 	
 	String getPublicKey(Integer id);
 	
-	void insertPK(String pk,Integer id);
+	void insertPK(String m,String e,Integer id);
 	
 	void deleteByEmail(String email);
 	

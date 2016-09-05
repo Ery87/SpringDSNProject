@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.websystique.springmvc.dao.AlbumDao;
 import com.websystique.springmvc.model.Album;
+import com.websystique.springmvc.service.AlbumService;
 
 @Service("AlbumService")
 @Transactional

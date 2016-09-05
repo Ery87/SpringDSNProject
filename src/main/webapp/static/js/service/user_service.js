@@ -3,9 +3,9 @@
 
 
 App.service('UserService', ['$http','$q',function ($http,$q) {
-	var path='http://193.206.170.142/OSN';
-//	 	var path='http://localhost:8080/OSN';
-
+			var path='http://193.206.170.142/OSN';
+			//	var path='http://localhost:8080/OSN';
+		var urlRMS='http://193.206.170.143/RMS';
 	return{
 		
 		
@@ -27,8 +27,8 @@ App.service('UserService', ['$http','$q',function ($http,$q) {
 		   
 		    saveRMS:function(id){
 		
-	    return $http.post('http://193.206.170.143/RMS/createSocialUser/',id).then(
-	    		//return $http.get('http://localhost:8080/OSN/download/').then(
+	return $http.post(urlRMS+'/createSocialUser/',id).then(
+		    //		    	return $http.post(path+'/createSocialUser/',id).then(
 
 	    			function(response){
 	    				return response.data;
@@ -59,51 +59,45 @@ App.service('UserService', ['$http','$q',function ($http,$q) {
 	    	
 	    },
 	    
-	    getPKRMS:function(){
-	    	return $http.get(path+'/getPKRMS').then(
-	    			function(response){
-	    				return response.data;
-	    			},function(errResponse){
-	    				console.error('Error while request keyRMS on Server');
-	    				return $q.reject(errResponse);
-	    			});
-	    },
 	    
-	    sendPKClient:function(message){
-		    return $http.post('http://193.206.170.143/RMS/getPKClient/',message).then(
+	    
+	  
+		getPK_KMS:function(name){
+			return $http.post(path+'/getKMS',name).then(
 
-		    		function(response){
-	    				return response.data;
-	    			},
-	    			function(errResponse){
-						console.error('Error while creating user');
+		    			function(response){
+		    				return response.data;
+		    			},
+		    			function(errResponse){
+							console.error('Error while receive pk kms');
+							return $q.reject(errResponse);
+						});
+		},
+		
+		getPK_RMS:function(name){
+			return $http.post(path+'/getRMS',name).then(
+
+		    			function(response){
+		    				return response.data;
+		    			},
+		    			function(errResponse){
+							console.error('Error while inviate key RMS');
+							return $q.reject(errResponse);
+						});
+		},
+		
+		clientKeys:function(messageCripted){
+		
+			return $http.post(urlRMS+'/clientKeys/',messageCripted).then(
+					function(response){
+						return response.data;
+						
+					},
+					function(errResponse){
+						console.error('Error while inviate message to RMS');
 						return $q.reject(errResponse);
-					}
-			);
-	        
-	        
-	    		
-	    	
-	    },
-	    
-	    savePK_KMS_RMS:function(message){
-	    	return $http({
-	    		url:path+"/savePK",
-	    		method:"POST",
-	    		data:message,
-	    		headers:{
-	    			'Content-Type':'application/json'
-	    		}}).success(function(response){
-	    			return response;
-	    		})
-	    		.error(function(){
-	    			
-	    		});
-	    		
-	    	
-	    },
-	    
-		  
+					});
+		},
 		    uploadPhoto:function(id,file){
 		    	
 		    	var utente={id:id,photo:file};

@@ -11,7 +11,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
         var metaTag;
         var id_utente;
        var url='http://193.206.170.142/OSN';
-       //  var url='http://localhost:8080/OSN';
+       //       var url='http://localhost:8080/OSN';
 
         self.generateKeys = function () {
             var sKeySize =1024;

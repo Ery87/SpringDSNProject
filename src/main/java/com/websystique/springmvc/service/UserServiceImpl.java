@@ -46,10 +46,11 @@ public class UserServiceImpl implements UserService{
 		dao.savePhoto(entity);
 		
 	}
-	public void insertPK(String pk, Integer id) {
+	public void insertPK(String modulus,String exponent, Integer id) {
 		User entity=dao.findById(id);
 		if(entity!=null){
-			entity.setPK(pk);
+			entity.setModulus(modulus);
+			entity.setExponent(exponent);
 		}
 		dao.savePK(entity);
 		

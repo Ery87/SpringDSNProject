@@ -54,8 +54,12 @@ public class User {
 	@Column(name="photo", nullable=false)
 	private byte[] photo;
 	
-	@Column(name="pk")
-	private String pk;
+	@Column(name="modulus")
+	private String modulus;
+	
+	@Column(name="exponent")
+	private String exponent;
+	
 	
 	public User(){}
 	
@@ -126,12 +130,20 @@ public class User {
 	}
 
 
-	public void setPK(String key){
-		this.pk=key;
+	public void setModulus(String modulus){
+		this.modulus=modulus;
 	}
 	
-	public String getPK(){
-		return pk;
+	public String getModulus(){
+		return modulus;
+	}
+	
+	public void setExponent(String e){
+		this.exponent=e;
+	}
+	
+	public String getExponent(){
+		return exponent;
 	}
 	
 	@Override

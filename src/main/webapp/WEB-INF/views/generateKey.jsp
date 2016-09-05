@@ -24,18 +24,12 @@
           background-color: yellow;
       }
     </style>
-     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
      <link href="<c:url value='/static/css/app.css' />" rel="stylesheet"></link>
-      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
+       <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
       <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-route.js"></script>
       
-     <script src="<c:url value='/static/js/libraries/jsbn.js'/>"></script>
-     <script  src="<c:url value='/static/js/libraries/random.js'/>"></script>
-     <script src="<c:url value='/static/js/libraries/hash.js'/>"></script> 
-   	 <script src="<c:url value='/static/js/libraries/rsa.js'/>"></script>
-   	 <script src="<c:url value='/static/js/libraries/aes.js' />"></script>
-   	<script src="<c:url value='/static/js/libraries/api.js'/>"></script>
-  
+     
   </head>
   <body ng-app="myApp" class="ng-cloak">
  
@@ -68,13 +62,21 @@
             
               
           </div>
-        <script src="http://www-cs-students.stanford.edu/~tjw/jsbn/prng4.js"></script>
+        <script   src="<c:url value='/static/js/libraries/excluded/jquery-2.1.3.min.js' />"></script>
+	         <script   src="<c:url value='/static/js/libraries/rollups/aes.js' />"></script>
+	                 <script   src="<c:url value='/static/js/libraries/rollups/pbkdf2.js' />"></script>
+	         
+  <script src="<c:url value='/static/js/libraries/AesUtil.js'/>"></script>
+   	     	  
+     	 
+
+	  <script src="http://www-cs-students.stanford.edu/~tjw/jsbn/prng4.js"></script>
 	  <script src="http://www-cs-students.stanford.edu/~tjw/jsbn/rng.js"></script>	  
 	  <script src="http://www-cs-students.stanford.edu/~tjw/jsbn/jsbn.js"></script>	
 	  <script src="http://www-cs-students.stanford.edu/~tjw/jsbn/jsbn2.js"></script>		  
 	  <script src="http://www-cs-students.stanford.edu/~tjw/jsbn/rsa.js"></script>
-	  <script src="http://www-cs-students.stanford.edu/~tjw/jsbn/rsa2.js"></script>	 
-        
+	  <script src="http://www-cs-students.stanford.edu/~tjw/jsbn/rsa2.js"></script>	  
+      
       <script src="<c:url value='/static/js/app.js' />"></script>
       <script src="<c:url value='/static/js/service/user_service.js' />"></script>
       <script src="<c:url value='/static/js/controller/generate_controller.js' />"></script>

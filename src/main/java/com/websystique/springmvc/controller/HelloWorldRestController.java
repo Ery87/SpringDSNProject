@@ -66,8 +66,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.mysql.jdbc.util.Base64Decoder;
 import com.websystique.springmvc.model.Album;
+import com.websystique.springmvc.model.Public_Key;
 import com.websystique.springmvc.model.User;
 import com.websystique.springmvc.service.AlbumService;
+import com.websystique.springmvc.service.Public_KeyService;
 import com.websystique.springmvc.service.UserService;
 
 
@@ -85,6 +87,8 @@ public class HelloWorldRestController {
 	@Autowired
 	MessageSource messageSource;
 
+	@Autowired 
+	Public_KeyService pkService;
 	
 	
  
@@ -257,7 +261,7 @@ public class HelloWorldRestController {
 
     @RequestMapping(value = "/insertPKClient", method = RequestMethod.POST)
     public HttpStatus insertPKClient(HttpServletRequest request, HttpServletResponse response) throws ParseException, IOException, JSONException{
-    	String pk;
+    	
     	StringBuilder sb = new StringBuilder();
         BufferedReader br = request.getReader();
         String str = null;
@@ -268,12 +272,12 @@ public class HelloWorldRestController {
     	
 		Integer id=messaggio.getInt("id");
 		
-		pk=messaggio.getString("key");
-		System.out.println(id);
-		System.out.println(pk);
+		String modulus=messaggio.getString("modulus");
+		String exponent=messaggio.getString("exponent");
+
 		User u=userService.findById(id);
 		if(u!=null){
-			userService.insertPK(pk, id);
+			userService.insertPK(modulus,exponent, id);
 			return HttpStatus.OK;
 
 		}else{
@@ -285,121 +289,49 @@ public class HelloWorldRestController {
     }
     
     
-    
-    //------------------- Insert PKIRMS and PKKMS --------------------------------------------------------
-//DA MODIFICARE
-    @RequestMapping(value = "/savePK", method = RequestMethod.POST) 
-    public void savePk(HttpServletRequest request, HttpServletResponse response) throws JSONException, ParseException{
-    	try {
-    		File dir = new File("tmp/pk");
-        	dir.mkdirs();
-        	
-        	StringBuilder sb = new StringBuilder();
-            BufferedReader br = request.getReader();
-            String str = null;
-            while ((str = br.readLine()) != null) {
-                sb.append(str);
-            }
-            JSONObject messaggio = new JSONObject(sb.toString());
-        
-    		File file1=new File(dir,"RMS_modulo.txt");
-    		file1.createNewFile();
-    		FileWriter w=new FileWriter(file1);
-        	BufferedWriter b=new BufferedWriter(w);
-    		
-				String modulo =messaggio.getString("modulo");
-				
-        	
-			b.write(modulo);
-			b.flush();
-			
-			File file2=new File(dir,"RMS_esponente.txt");
-    		file2.createNewFile();
-			FileWriter writer=new FileWriter(file2);
-        	BufferedWriter buffer=new BufferedWriter(writer);
-    		String esponente=messaggio.getString("esponente_pubblico");;
-        	
-			buffer.write(esponente);
-			buffer.flush();
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-    }
-    
-    //------------------- search PKRMS --------------------------------------------------------
-    @RequestMapping(value = "/getPKRMS", method = RequestMethod.GET) 
-    public void getPKRMS(HttpServletResponse response){
-    	PrintWriter pw=null;
-    	
-    	try{
-    		FileReader file=new FileReader("tmp/pk/RMS_modulo.txt");
-    		
-        	BufferedReader bos=new BufferedReader(file);
-        	String modulo=bos.readLine();
-        	FileReader file2=new FileReader("tmp/pk/RMS_esponente.txt");
-    		
-        	BufferedReader bos2=new BufferedReader(file2);
-        	String esponente=bos2.readLine();
-        	
-    		
-    		pw=response.getWriter();
-        	pw.println("{");
-        	pw.println("\"successful\":true,");
-        	pw.println("\"modulo\":\""+modulo+"\"");
-        	pw.println("\"esponente\":\""+esponente+"\"");
-        	pw.println("}");
-        	return;
-    	}catch(IOException ex){
-    		pw.println("{");
-			pw.println("\"successful\": false,");
-			pw.println("\"message\": \""+ex.getMessage()+"\",");
-			pw.println("}");
-			return;
-    	}
-    	
+    //------------------- Save PKI  --------------------------------------------------------
 
-    	
-    }
-    
-    
-    
-    //------------------- search PKKMS --------------------------------------------------------
-    @RequestMapping(value = "/getPKKMS/", method = RequestMethod.GET) 
-    public void getPKKMS(HttpServletResponse response){
-    	PrintWriter pw=null;
-    	try{
-        	File file=new File("tmp/pk/KMSPublic");
-        	FileInputStream in=new FileInputStream(file);
-        	ByteArrayOutputStream bos=new ByteArrayOutputStream();
-        	byte[] buf=new byte[1024];
-        	
-    		for(int readNum;(readNum=in.read(buf))!=-1;){
-    			bos.write(buf,0,readNum);
-    		}
-    		pw=response.getWriter();
-        	pw.println("{");
-        	pw.println("\"successful\":true,");
-        	pw.println("\"PKKMS\":\""+bos+"\"");
-        	pw.println("}");
-        	return;
-    	}catch(IOException ex){
-    		pw.println("{");
-			pw.println("\"successful\": false,");
-			pw.println("\"message\": \""+ex.getMessage()+"\",");
-			pw.println("}");
-			return;
-    	}
-    	
-
-    	
-    }
   
-         
+   
+    //------------------- GET PK_RMS  --------------------------------------------------------
+
+  
+    @RequestMapping(value = "/getRMS", method = RequestMethod.POST)
+    public ResponseEntity<Public_Key> getRMS(@RequestBody String nameService) {
+    	Public_Key pk_RMS=pkService.getKey(nameService);
+    	if(pk_RMS!=null){
+            return new ResponseEntity<Public_Key>(pk_RMS,HttpStatus.OK);
+
+    	}else{
+            return new ResponseEntity<Public_Key>(HttpStatus.NOT_FOUND);
+
+    	}
+    }
+    	
+    
+    
+    
+
     	
     
   
+    	  
+        //-------------------GET PK_KMS --------------------------------------------------------
+
+      
+        @RequestMapping(value = "/getKMS", method = RequestMethod.POST)
+        public ResponseEntity<Public_Key> getKMS(@RequestBody String nameService) {
+        	Public_Key pk_KMS=pkService.getKey(nameService);
+        	if(pk_KMS!=null){
+                return new ResponseEntity<Public_Key>(pk_KMS,HttpStatus.OK);
+
+        	}else{
+                return new ResponseEntity<Public_Key>(HttpStatus.NOT_FOUND);
+
+        	}
+        }
+       
+    	
+      
     
 }

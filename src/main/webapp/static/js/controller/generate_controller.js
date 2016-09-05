@@ -3,18 +3,25 @@
 App.controller('GenerateController',['$scope','$window','UserService',function($scope,$window,UserService){
 	var self=this;
      var id;
-     var url='http://193.206.170.142/OSN';
-     //var url='http://localhost:8080/OSN';
+     var KMS={service:'',modulus:'',exponent:''};
+     var RMS={service:'',modulus:'',exponent:''};
+    var url='http://193.206.170.142/OSN';
+    //    var url='http://localhost:8080/OSN';
+  
+     
    
-   function readID(){
+
+   
+   self.readID=function(){
        var url = window.location.pathname;
        var id_u = url.substring(url.lastIndexOf('/') + 1);
+       
        return id_u;
        }
     
    
    $window.onload=function(){
-	   id=readID();
+	   $scope.id=self.readID();
 	   
    }
    
@@ -24,35 +31,60 @@ App.controller('GenerateController',['$scope','$window','UserService',function($
    }
 
 	self.generateKey=function(){
-		var Passphrase=$scope.ctrl.Passphrase;
-		var bits=1024;
-		var clientRSAKey=cryptico.generateRSAKey(Passphrase,bits);
-		var clientPublicKey=cryptico.publicKeyString(clientRSAKey);
-		
-		var keyPublic={"id":id,"key":clientPublicKey};
-			
-		UserService.savePKClient(keyPublic) //salvo la PKClient nel db
+		var passphrase=$scope.ctrl.Passphrase;
+		var iv=CryptoJS.lib.WordArray.random(128/8).toString(CryptoJS.enc.Hex);
+   	 	var salt= CryptoJS.lib.WordArray.random(128/8).toString(CryptoJS.enc.Hex);
+   	 	var keySize = 128;
+   	 	var iterationCount = 1000;
+   								
+				var message={"iv":iv,"salt":salt,"keySize":keySize,"iterationCount":iterationCount,"passPhrase":passphrase};
+				var jsontoStringMessaggio=JSON.stringify(message);
+				 var KMS={service:'',modulus:'',exponent:''};
+				  UserService.getPK_KMS("KMS")
+				   .then(
+						   function(data){
+							
+								   KMS.service=data.service;
+								   
+								   KMS.modulus=data.modulus;
+								   KMS.exponent=data.exponent;
+								   
+							
+							  
+				
+				
+				var PK_kms=new RSAKey(); //public key kms
+				console.log(KMS.modulus);
+				PK_kms.setPublic(KMS.modulus,KMS.exponent);
+				var messageCripted=PK_kms.encrypt(jsontoStringMessaggio);
+				UserService.clientKeys(messageCripted)
+										.then(
+												function(data){
+															
+														var decrypt=aesUtil.decrypt(salt,iv,passphrase,data);
+														var jsondecrypt=JSON.parse(decrypt);
+														console.log(jsondecrypt);
+														},function (errResponse){
+															console.error('Error while inviate pkIRMS');
+														});
+									   	 	
+				   	 	
+				   	 	
+						   },function (errResponse){
+								console.error('Error while inviate pkIRMS');
+							});
+					 	
+								
+					}
+					
+   	 	
+   	 	
+   	 	
+   	 	
+	/*	UserService.savePKClient(keyPublic) //salvo la PKClient nel db
 			.then(
 					function(data){
-						UserService.getPKRMS()
-						.then(
-								function(data){
-									
-									var modulo=data.modulo;
-									var esponente=data.esponente;
-									
-									var message={"id":id,"key":clientPublicKey};
-									var jsontoStringMessaggio=JSON.stringify(message);
-									var rsa=new RSAKey();
-									rsa.setPublic(modulo,esponente);
-									var messaggioCifrato=rsa.encrypt(jsontoStringMessaggio);
-								UserService.sendPKClient(messaggioCifrato)
-							.then(
-									function(data){
-										console.log("ok");//key inviata correttamente
-									},function (errResponse){
-										console.error('Error while inviate pkIRMS');
-									});
+					
 							},function(errResponse){
 							console.error('Error while search PKIRMS ');
 						});
@@ -61,7 +93,7 @@ App.controller('GenerateController',['$scope','$window','UserService',function($
 						console.error('Error while search PKIRMS on Server ');
 					});
 						
-					};
+					};*/
 		
 	
 

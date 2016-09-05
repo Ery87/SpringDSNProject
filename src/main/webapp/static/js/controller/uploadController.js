@@ -2,8 +2,8 @@
 App.controller('UploadController',['UserService','$window','$scope',function (UserService,$window,$scope){
 		var self=this;
          self.user={id:null,birth_day:'',city:'',email:'',firstName:'',lastName:'',photo:null,pw:''};
-       var url='http://193.206.170.142/OSN';
-       // var url='http://localhost:8080/OSN';
+         var url='http://193.206.170.142/OSN';
+         //     var url='http://localhost:8080/OSN';
        	
        	
        
@@ -31,29 +31,15 @@ App.controller('UploadController',['UserService','$window','$scope',function (Us
         	        	UserService.uploadPhoto(id,b)
         	        	.then(
         				function(data){
-        					
-        					var id=data.data.id;
         				
+        					var id=data.data.IDuser;
+        					console.log(id);
         					UserService.saveRMS(id)
         					.then(
         							function(data){
-	            					//Inviate PKRMS and PKKMS on server
-        								var modulo=data.modulo;
-        								var esponente_pubblico=data.esponente_pubblico;
-        								var message={"modulo": modulo,"esponente_pubblico":esponente_pubblico};
-        		
-        								UserService.savePK_KMS_RMS(message)
-        								.then(
-        										function(data){
-        											
+	            						
         		      		            			$window.location.href=url+'/generateKey/'+id;
 
-        										},function(errResponse){
-     	      						               console.error('Error while send PK rms and kms.');
-     	      						               	
-        										});
-        							
-        								
 
         							},
 	            							 function(errResponse){
