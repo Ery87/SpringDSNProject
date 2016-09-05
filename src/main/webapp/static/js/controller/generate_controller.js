@@ -40,7 +40,7 @@ App.controller('GenerateController',['$scope','$window','UserService',function($
 				var message={"iv":iv,"salt":salt,"keySize":keySize,"iterationCount":iterationCount,"passPhrase":passphrase};
 				var jsontoStringMessaggio=JSON.stringify(message);
 				 var KMS={service:'',modulus:'',exponent:''};
-				  UserService.getPK_KMS("KMS")
+				  UserService.getPK_KMS('RMS') //MODIFICARE
 				   .then(
 						   function(data){
 							

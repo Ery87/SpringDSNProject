@@ -321,7 +321,9 @@ public class HelloWorldRestController {
       
         @RequestMapping(value = "/getKMS", method = RequestMethod.POST)
         public ResponseEntity<Public_Key> getKMS(@RequestBody String nameService) {
+        	
         	Public_Key pk_KMS=pkService.getKey(nameService);
+        	System.out.println(pk_KMS.toString());
         	if(pk_KMS!=null){
                 return new ResponseEntity<Public_Key>(pk_KMS,HttpStatus.OK);
 
