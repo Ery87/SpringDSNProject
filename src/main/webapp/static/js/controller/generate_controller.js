@@ -36,7 +36,7 @@ App.controller('GenerateController',['$scope','$window','UserService',function($
    	 	var salt= CryptoJS.lib.WordArray.random(128/8).toString(CryptoJS.enc.Hex);
    	 	var keySize = 128;
    	 	var iterationCount = 1000;
-   								
+   		vae aesUtil=new AesUtil(keySize,iterationCount);						
 				var message={"iv":iv,"salt":salt,"keySize":keySize,"iterationCount":iterationCount,"passPhrase":passphrase};
 				var jsontoStringMessaggio=JSON.stringify(message);
 				 var KMS={service:'',modulus:'',exponent:''};
