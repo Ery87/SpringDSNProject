@@ -15,7 +15,6 @@ User findById(Integer id);
 	
 	String getPublicKey(Integer id);
 	
-	void insertPK(String m,String e,Integer id);
 	
 	void deleteByEmail(String email);
 	
@@ -28,7 +27,7 @@ User findById(Integer id);
 	
 	public void updateUser(Integer id,byte[] photo);
 	
-
+	public void updateUserKey(Integer id,String m,String e,String pk);
 	
 	boolean isUserSSOUnique(String email);
 

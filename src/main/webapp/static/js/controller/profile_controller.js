@@ -10,9 +10,107 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
         var tagImage;
         var metaTag;
         var id_utente;
-       var url='http://193.206.170.142/OSN';
-       //       var url='http://localhost:8080/OSN';
+        //     var url='http://193.206.170.142/OSN';
+       var url='http://localhost:8080/OSN';
+      
+       
+       self.getRMS=function(name){
+      	 ProfileService.getPK(name) 
+      	 .then(
+  			    	 function(data){
+  			    		 	
+  					  Lockr.set('modulus_RMS',data.modulus);
+  					 Lockr.set('exponent_RMS',data.exponent);
+  					
+      			 },function(errResponse){
+  							console.error('Error while inviate key client to OSN');
+  					 	  
+  				
+      			 });
+       },  
+       
+     self.getKMS=function(name){
+    	 ProfileService.getPK(name) 
+    	 .then(
+			    	 function(data){
+			    		 	
+					  Lockr.set('modulus_KMS',data.modulus);
+					 Lockr.set('exponent_KMS',data.exponent);
+					
+    			 },function(errResponse){
+							console.error('Error while inviate key client to OSN');
+					 	  
+				
+    			 });
+     }
+     
+     
+ 	//UPLOAD PHOTO
+		
+     
+     
+		self.uploadPhotoRule=function(){
+		var tag=$scope.ctrl.tag;
+		var passPhrase=$scope.ctrl.passPhrase;
+		Lockr.get('passPhrase',passPhrase);
+		var rule=$scope.ctrl.rule;
+		console.log(Lockr.get('photo'));
+		var idResource="file";
 
+				var id=self.user.id;
+			
+				//1:CS->RMS	
+				var iv=CryptoJS.lib.WordArray.random(128/8).toString(CryptoJS.enc.Hex);
+		   	 	var salt= CryptoJS.lib.WordArray.random(128/8).toString(CryptoJS.enc.Hex);
+		   	 	Lockr.set("iv",iv);
+		   	 	Lockr.set('salt',salt);
+				
+				var n2=Math.floor(Math.random()*100+1);
+				var msgKms={"idu":id,"idR":idResource,"n2":n2};
+				msgKms=JSON.stringify(msgKms);
+				self.getKMS('KMS');
+				var rsa=new RSAKey();
+				var mKMS=Lockr.get('modulus_KMS');
+				var eKMS=Lockr.get('exponent_KMS')
+				
+				rsa.setPublic(mKMS,eKMS);
+				
+				var msgKMSEncrypted=rsa.encrypt(msgKms);
+				
+				self.getRMS('RMS');
+				var mRMS=Lockr.get('modulus_RMS');
+				var eRMS=Lockr.get('exponent_RMS');
+				var n1=Math.floor(Math.random()*100+1);
+				var msgRMS={"idu":id,"n1":n1,"idR":idResource,"msgKMS":msgKMSEncrypted};
+				msgRMS=JSON.stringify(msgRMS);
+				var aes=new AesUtil(128,1000);
+				var encryptmsgRMS=aes.encrypt(salt,iv,passPhrase,msgRMS);
+				
+				var paramRMS={"salt":salt,"iv":iv,"passPhrase":passPhrase};
+				paramRMS=JSON.stringify(paramRMS);
+				rsa.setPublic(mRMS,eRMS);
+				paramRMS=rsa.encrypt(paramRMS);
+				
+				var message={'paramRMS':paramRMS,'encryptmsgRMS':encryptmsgRMS};
+				
+				
+				console.log(encryptmsgRMS);
+				
+				
+				ProfileService.prova(message)
+				.then(
+						function(){
+							console.log("ok");
+						},
+						function(errResponse){
+							console.error('Error while creating User.');
+						});
+			},	
+		
+   
+		
+   
+     	
         self.generateKeys = function () {
             var sKeySize =1024;
             var keySize = parseInt(sKeySize);
@@ -56,23 +154,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
             		 function(data){
             			 
             			self.user=data;
-            			var email=self.user.email;
-            			var N = Math.floor((Math.random() * 10) + 1);
-            			var messageProtocol="Login request";
-            			var protocol= new Object();
-            			protocol.email=email;
-            			protocol.N=N;
-            			protocol.messageProtocol=messageProtocol;
-            		 
-            			ProfileService.getLoginMessage(protocol)
-            			.then(
-            					function(data){
-            						
-            						return data;
-            					}, function(errResponse){
-                       			 console.error('Error while inviate protocol RMS...');
-                     			
-                       	 });
+            		
             				
             			
      					self.image=self.user.photo;
@@ -162,30 +244,8 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 				
 			},
 			
-			self.uploadPhoto=function(){
-				var rule=$scope.ctrl.rule;
-				var files=$scope.ctrl.evt.target.files;
-				var file=files[0];
-				if(files && file){
-					var reader=new FileReader();
-				
-					reader.onload=function(readerEvt){
-						var binaryString=readerEvt.target.result;
-						var b=btoa(binaryString);
-						var id=self.user.id;
-						ProfileService.upload(id,b)
-						.then(
-								function(){
-									ProfileService.sendRule(id,rule);
-								},
-								function(errResponse){
-									console.error('Error while creating User.');
-								});
-					};
-					reader.readAsBinaryString(file);
-				}
-
-			};
+			
+		
 			
 			self.reset=function(){
 		        self.users='';
@@ -194,8 +254,44 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 			};
 		
 
-			
-	
+     
+			 var handleFileSelect = function(evt) {
+		        	
+	        	    var files = evt.target.files;
+	        	    var file = files[0];
+	        	    Lockr.set('name_photo',file.name);
+	        	    if (files && file) {
+	        	        var reader = new FileReader();
+
+	        	        reader.onload = function(readerEvt) {
+	        	            var binaryString = readerEvt.target.result;
+	        	            var b=btoa(binaryString);
+	        	           
+	        	           Lockr.set("photo",b);
+	        	        	
+	        	        };
+
+	        	        reader.readAsBinaryString(file);
+	        	    }
+	        	};
+	         
+	        	
+	         
+	        	
+	       
+	        	 if ($window.File && $window.FileReader && $window.FileList && $window.Blob) {
+	          	    document.getElementById('filePicker').addEventListener('change', handleFileSelect, false);
+	          	    
+	          	} else {
+	          		 
+	                	    alert('The File APIs are not fully supported in this browser.');
+
+	             	  }
+
+	          	
+	        	
+	        	
+	        
 
         
 }]);

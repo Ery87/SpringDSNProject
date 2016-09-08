@@ -5,8 +5,8 @@ App.controller('GenerateController',['$scope','$window','UserService',function($
      var id;
      var KMS={service:'',modulus:'',exponent:''};
      var RMS={service:'',modulus:'',exponent:''};
-    var url='http://193.206.170.142/OSN';
-    //    var url='http://localhost:8080/OSN';
+     //   var url='http://193.206.170.142/OSN';
+     var url='http://localhost:8080/OSN';
   
      
    
@@ -36,11 +36,11 @@ App.controller('GenerateController',['$scope','$window','UserService',function($
    	 	var salt= CryptoJS.lib.WordArray.random(128/8).toString(CryptoJS.enc.Hex);
    	 	var keySize = 128;
    	 	var iterationCount = 1000;
-   		vae aesUtil=new AesUtil(keySize,iterationCount);						
+   		var aesUtil=new AesUtil(keySize,iterationCount);						
 				var message={"iv":iv,"salt":salt,"keySize":keySize,"iterationCount":iterationCount,"passPhrase":passphrase};
 				var jsontoStringMessaggio=JSON.stringify(message);
 				 var KMS={service:'',modulus:'',exponent:''};
-				  UserService.getPK_KMS('RMS') //MODIFICARE
+				  UserService.getPK('RMS') //MODIFICARE
 				   .then(
 						   function(data){
 							
@@ -60,10 +60,24 @@ App.controller('GenerateController',['$scope','$window','UserService',function($
 				UserService.clientKeys(messageCripted)
 										.then(
 												function(data){
-															
+														
 														var decrypt=aesUtil.decrypt(salt,iv,passphrase,data);
 														var jsondecrypt=JSON.parse(decrypt);
-														console.log(jsondecrypt);
+													
+														var client_exponent=jsondecrypt.client_public_exponent;
+														var client_modulus=jsondecrypt.client_modulus;
+														var client_private=jsondecrypt.client_private_exponent;
+														var client_privateCrypted=aesUtil.encrypt(salt,iv,passphrase,client_private);
+														var keys={"id":$scope.id,"exponent":client_exponent,"modulus":client_modulus,"private":client_privateCrypted};
+														
+														UserService.savePKClient(keys)
+														.then(
+																function(data){
+																	console.log("ok");
+																},function(errResponse){
+																	console.error('Error while inviate key client to OSN');
+																});
+												
 														},function (errResponse){
 															console.error('Error while inviate pkIRMS');
 														});
@@ -81,22 +95,7 @@ App.controller('GenerateController',['$scope','$window','UserService',function($
    	 	
    	 	
    	 	
-	/*	UserService.savePKClient(keyPublic) //salvo la PKClient nel db
-			.then(
-					function(data){
-					
-							},function(errResponse){
-							console.error('Error while search PKIRMS ');
-						});
-					},
-					function(errResponse){
-						console.error('Error while search PKIRMS on Server ');
-					});
-						
-					};*/
-		
 	
-
 
 
 }]);

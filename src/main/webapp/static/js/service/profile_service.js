@@ -1,12 +1,13 @@
 'use strict';
 
 App.factory('ProfileService',['$http','$q',function($http,$q){
-	var path='http://193.206.170.142/OSN';
-	//	  var path='http://localhost:8080/OSN';
+	//var path='http://193.206.170.142/OSN';
+		  var path='http://localhost:8080/OSN';
 	
 	
 	return{
 		getUser:function(id){
+			
 			return $http.post(path+'/profile/',id)
 			.then(
 					function(response){
@@ -20,7 +21,38 @@ App.factory('ProfileService',['$http','$q',function($http,$q){
 	        
 	        
 	    },
-	   
+	    
+prova:function(msg){
+			
+			return $http.post(path+'/prova/',msg)
+			.then(
+					function(response){
+				return response.data;
+			},
+			function(errResponse){
+				console.error('Error while search user');
+				return $q.reject(errResponse);
+			}
+			);
+	        
+	        
+	    },
+	    
+	    
+	    	getPK:function(name){
+			
+				return $http.post(path+'/getPK',name).then(
+	
+			    			function(response){
+			    				return response.data;
+			    			},
+			    			function(errResponse){
+								console.error('Error while receive pk kms');
+								return $q.reject(errResponse);
+							});
+		},
+		
+		
 		getLoginMessage:function(protocol){
 			return $http({
 				url:'http://193.206.170.143/RMS/loginRequest',

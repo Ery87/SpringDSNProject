@@ -2,6 +2,7 @@
 
 
 import java.math.BigInteger;
+import java.util.Arrays;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -54,13 +55,42 @@ public class User {
 	@Column(name="photo", nullable=false)
 	private byte[] photo;
 	
-	@Column(name="modulus")
-	private String modulus;
+	@Column(name="exponent_public")
+	private String exponent_public;
 	
-	@Column(name="exponent")
-	private String exponent;
+	@Column(name="modulus_public")
+	private String modulus_public;
+	
+
+
+	@Column(name="private_key")
+	private String private_key;
 	
 	
+	public String getExponent_public() {
+		return exponent_public;
+	}
+
+	public void setExponent_public(String exponent_public) {
+		this.exponent_public = exponent_public;
+	}
+
+	public String getModulus_public() {
+		return modulus_public;
+	}
+
+	public void setModulus_public(String modulus_public) {
+		this.modulus_public = modulus_public;
+	}
+
+	public String getPrivate_key() {
+		return private_key;
+	}
+
+	public void setPrivate_key(String private_key) {
+		this.private_key = private_key;
+	}
+
 	public User(){}
 	
 	public Integer getId() {
@@ -130,22 +160,7 @@ public class User {
 	}
 
 
-	public void setModulus(String modulus){
-		this.modulus=modulus;
-	}
-	
-	public String getModulus(){
-		return modulus;
-	}
-	
-	public void setExponent(String e){
-		this.exponent=e;
-	}
-	
-	public String getExponent(){
-		return exponent;
-	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -174,8 +189,10 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [id=" + id_user + ", email=" + email + ", firstName=" + firstname + ", lastName=" + lastname
-				+ ", city=" + city +", birth_day=" + birth_day+ "]";
+		return "User [id_user=" + id_user + ", firstname=" + firstname + ", lastname=" + lastname + ", email=" + email
+				+ ", birth_day=" + birth_day + ", city=" + city + ", pw=" + pw + ", photo=" + Arrays.toString(photo)
+				+ ", exponent_public=" + exponent_public + ", modulus_public=" + modulus_public + ", private_key="
+				+ private_key + "]";
 	}
 
 	

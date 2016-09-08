@@ -2,6 +2,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
   <head>  
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-route.js"></script>
+      <script src="<c:url value='/static/js/libraries/rollups/aes.js' />"></script>
+  <script src="<c:url value='/static/js/libraries/components/enc-base64-min.js' />"></script>
+  
     <title>Welcome to DSNProject</title>  
     <style>
       .username.ng-valid {
@@ -115,16 +120,36 @@
               <form name="form"  class="form-horizontal" >
           <tr>    
          <td> <label for="filePicker">Choose or drag a photo:</label></td>
-         </tr>
-         <tr>
-                  <td><input type="file" id="filePicker"> </td>
-    <td><input type="text" ng-model="ctrl.rule" name="rule" class="rule form-control input-sm" placeholder="Write your access rule" required ng-minlength="3"/></td>   
-        <td>&nbsp&nbsp&nbsp<input type="submit" ng-click="ctrl.uploadPhoto()" class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid" value="Upload Photo"/></td>
-    </tr>
+     
+                  <td><input type="file" id="filePicker"> </td></tr>
+             <tr><td><label>MetaTag : </label> </td>
+               	 <td><input type="text" ng-model="ctrl.tag" name="tag" class="metaTag form-control input-sm" placeholder="Write your metaTag" required ng-minlength="3"/>  </td> </tr>
+  				<tr><td><label>Access's Rule: </label></td>
+  					 <td><input type="text" ng-model="ctrl.rule" name="rule" class="rule form-control input-sm" placeholder="Write your access rule" required ng-minlength="3"/></td> </tr>
+  			  
+       			<tr><td><label>PassPhrase</label>	 </td>
+       			<td><input type="text" ng-model="ctrl.passPhrase" name="passPhrase" class="passPhraseform-control input-sm" placeholder="Write your passPhrase" required ng-minlength="3"/></td></tr>   
+   
+       <tr><td></td> <td><button type="submit" ng-click="ctrl.uploadPhotoRule()" class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid"/>Upload Photo</button></td></tr>
+   
     
          
                </form>
+               
+              <div class="row floatRight" >
+               <ul>Access's Rules
+				  <li>1: only friends</li>
+				  <li>2: friends of friends</li>
+				  <li>3: friends of friends of friends</li>
+				  <li>ecc..</li>
+				  <li>up to the degree of relation 7</li>
+				</ul> 	
+                	</div>
+                	   	
                </table>
+           
+            
+               
                </div>
              <h3>{{ctrl.title}}</h3>
              <h4>{{ctrl.message}}</h4>
@@ -159,13 +184,28 @@
           </div>
       </div>
       
- <script src="<c:url value='/static/js/libraries/aes.js' />"></script>
-             <script src="<c:url value='/static/js/libraries/enc-base64-min.js' />"></script>
-                   <script src="<c:url value='/static/js/libraries/keypair.js' />"></script>
-      
-    
+   
       <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
       <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-route.js"></script>
+       <script   src="<c:url value='/static/js/libraries/excluded/jquery-2.1.3.min.js' />"></script>
+	         <script   src="<c:url value='/static/js/libraries/rollups/aes.js' />"></script>
+	                 <script   src="<c:url value='/static/js/libraries/rollups/pbkdf2.js' />"></script>
+	         
+  <script src="<c:url value='/static/js/libraries/AesUtil.js'/>"></script>
+  	         
+  <script src="<c:url value='/static/js/libraries/lockr.js'/>"></script>
+ 	         
+  <script src="<c:url value='/static/js/libraries/lockr.min.js'/>"></script>
+  	     	  
+     	 
+
+	  <script src="http://www-cs-students.stanford.edu/~tjw/jsbn/prng4.js"></script>
+	  <script src="http://www-cs-students.stanford.edu/~tjw/jsbn/rng.js"></script>	  
+	  <script src="http://www-cs-students.stanford.edu/~tjw/jsbn/jsbn.js"></script>	
+	  <script src="http://www-cs-students.stanford.edu/~tjw/jsbn/jsbn2.js"></script>		  
+	  <script src="http://www-cs-students.stanford.edu/~tjw/jsbn/rsa.js"></script>
+	  <script src="http://www-cs-students.stanford.edu/~tjw/jsbn/rsa2.js"></script>	  
+      
       <script src="<c:url value='/static/js/app.js' />"></script>
       <script src="<c:url value='/static/js/service/login_service.js' />"></script>
       <script src="<c:url value='/static/js/controller/login_controller.js' />"></script>

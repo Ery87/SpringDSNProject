@@ -46,13 +46,13 @@
         <input type="file" id="filePicker">
     </div>
     <br>
-   <div class="row">
-                          <div class="form-actions floatRight">
-                              <input type="submit" ng-click="ctrl.uploadPhoto()"  class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid">
+     <!-- <div class="row">
+                       <div class="form-actions floatRight">
+                              <button type="submit" ng-click="ctrl.uploadPhoto()"  class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid">Send photo</button>
                              
                               <button type="button" ng-click="ctrl.reset()" class="btn btn-warning btn-sm" ng-disabled="myForm.$pristine">Reset Form</button>
                           </div>
-                              
+                           -->     
                       </div>
                   
                   

@@ -23,6 +23,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.RSAPrivateKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -90,16 +91,132 @@ public class HelloWorldRestController {
 	@Autowired 
 	Public_KeyService pkService;
 	
-	
+
  
+	
+	@RequestMapping(value = "/prova/", method = RequestMethod.POST)
+    public void uploadReq (HttpServletRequest request, HttpServletResponse response) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException, JSONException{
+    	
+    	
+    	
+    	StringBuilder sb = new StringBuilder();
+        BufferedReader br = request.getReader();
+        String str = null;
+        while ((str = br.readLine()) != null) {
+            sb.append(str);
+        }
+        JSONObject messaggioInChiaro = new JSONObject(sb.toString());
+        
+        String paramRMS=messaggioInChiaro.getString("paramRMS");			//ACCEDO ALLA KEYSIMM CIFRATA TRAMITE CHIAVE PUBBLICA DI RMS
+        
+        RSAPrivateKeySpec spec = new RSAPrivateKeySpec(new BigInteger("17714908574856389042047912980040795159637941050288872641206841191521734706784824832587434981882447608061483516636172075038361031641464335903337528243013601798968698688028612808889155394216948237201735891627985050112232818125882516408062750119579076532728058982496002319380681963642398518248582531197827290636948450219681285816430149218145081558444117686831521075752620790347565538493795037354011541355760251161663100066112133754391379261720042326840236102811977234477719273601679510118145984721644619247954955084233630790301208917025621493044134461979822724888691405830185658708289093804087754091527782031674415494421"), new BigInteger("3193100309669019389866975846212397778671635833606397188009466637097307659661704621013402649510617721196122873827350973075181330649566171781224746648987895052431713957027053467680967890991116613913729741791680842836501614058029054829004154403811398615760815428845160373511817691327153420145421753223979336623450286456680659702981887841904851516103670703517747044018559696301849847656525215149550874762061740130122693552122371039672803732736921211104351033717193752619213654445454041991222502562351748180793135077431242863828024145583498865011149171566439944824817170908360572903125256698750197062617755564419422244029"));
+    	KeyFactory factory = KeyFactory.getInstance("RSA");
+    	PrivateKey priv = factory.generatePrivate(spec);
+
+    	Cipher cipher;
+        
+        byte[] dectyptedText = new byte[1];
+        try {
+          cipher = javax.crypto.Cipher.getInstance("RSA");
+          
+          byte[] messaggioCifratoBytes = new byte[256];
+
+          BigInteger messaggioCifrato = new BigInteger(paramRMS.toString(), 16);
+          if (messaggioCifrato.toByteArray().length > 256) {
+              for (int i=1; i<257; i++) {
+            	  messaggioCifratoBytes[i-1] = messaggioCifrato.toByteArray()[i];
+              }
+          } else {
+        	  messaggioCifratoBytes = messaggioCifrato.toByteArray();
+          }
+         
+          cipher.init(Cipher.DECRYPT_MODE, priv);
+          dectyptedText = cipher.doFinal(messaggioCifratoBytes);
+          } catch(NoSuchAlgorithmException e) {
+        	  System.out.println(e);
+          } catch(NoSuchPaddingException e) { 
+        	  System.out.println(e);
+          } catch(InvalidKeyException e) {
+        	  System.out.println(e);
+          } catch(IllegalBlockSizeException e) {
+        	  System.out.println(e);
+          } catch(BadPaddingException e) {
+        	  System.out.println(e);
+          }
+          String messaggioDecifrato = new String(dectyptedText);
+          JSONObject AESSimmKey = new JSONObject(messaggioDecifrato);
+          
+          String salt=AESSimmKey.getString("salt");							//ACCEDO ALLA KEYSIMM in CHIARO
+          String iv=AESSimmKey.getString("iv");
+          String passphrase=AESSimmKey.getString("passPhrase");
+          
+          AesUtil aesUtil=new AesUtil(128, 1000);
+          String strmsgRMS=aesUtil.decrypt(salt, iv, passphrase, messaggioInChiaro.getString("encryptmsgRMS"));		//OTTENGO LA STRINGA DEL MESSAGGIO A RMS
+          
+          JSONObject jsonmsgRMS=new JSONObject(strmsgRMS);							//MSG IN JSON A RMS
+          
+          int idu=jsonmsgRMS.getInt("idu");
+          String idresource=jsonmsgRMS.getString("idR");
+          int n1=jsonmsgRMS.getInt("n1");
+          String msgKMS=jsonmsgRMS.getString("msgKMS");								//ACCEDO ALLA STRINGA DEL MSG CIFRATO TRAMITE CHIAVE PUBBLICA DI KMS
+          
+          
+
+          
+          dectyptedText = new byte[1];
+          try {
+            cipher = javax.crypto.Cipher.getInstance("RSA");
+            
+            byte[] messaggioCifratoBytes = new byte[256];
+
+            BigInteger messaggioCifrato = new BigInteger(msgKMS.toString(), 16);
+            if (messaggioCifrato.toByteArray().length > 256) {
+                for (int i=1; i<257; i++) {
+              	  messaggioCifratoBytes[i-1] = messaggioCifrato.toByteArray()[i];
+                }
+            } else {
+          	  messaggioCifratoBytes = messaggioCifrato.toByteArray();
+            }
+           
+            cipher.init(Cipher.DECRYPT_MODE, priv);
+            dectyptedText = cipher.doFinal(messaggioCifratoBytes);
+            } catch(NoSuchAlgorithmException e) {
+          	  System.out.println(e);
+            } catch(NoSuchPaddingException e) { 
+          	  System.out.println(e);
+            } catch(InvalidKeyException e) {
+          	  System.out.println(e);
+            } catch(IllegalBlockSizeException e) {
+          	  System.out.println(e);
+            } catch(BadPaddingException e) {
+          	  System.out.println(e);
+            }
+            messaggioDecifrato = new String(dectyptedText);
+            JSONObject jsonmsgKMS = new JSONObject(messaggioDecifrato);				//MSG IN CHIARO DESTINATO A KMS
+   
+            System.out.println(jsonmsgKMS);
+          
+          
+    	
+    	
+    }
+	
+	
+	
+	
+	
+	
+	
+	
 	
     
     //-------------------Retrieve Single User--------------------------------------------------------
      
 	@RequestMapping(value = { "/profile/" }, method = RequestMethod.POST)
     public ResponseEntity<User> getUser(@RequestBody Integer id) throws UnsupportedEncodingException {
+		
 		User user=userService.findById(id);
-		if (user == null) {
+				if (user == null) {
             System.out.println("User not found");
             return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
         }    
@@ -134,6 +251,9 @@ public class HelloWorldRestController {
             System.out.println("A User with name " + user.getFirstName() + " already exist");
             return new ResponseEntity<User>(HttpStatus.CONFLICT);
         }
+        user.setExponent_public(null);
+        user.setModulus_public(null);
+        user.setPrivate_key(null);
         userService.saveUser(user);
         
         return new ResponseEntity<User>(user,HttpStatus.CREATED);
@@ -268,16 +388,17 @@ public class HelloWorldRestController {
         while ((str = br.readLine()) != null) {
             sb.append(str);
         }
-        JSONObject messaggio = new JSONObject(sb.toString());
+        JSONObject messagge = new JSONObject(sb.toString());
     	
-		Integer id=messaggio.getInt("id");
+		Integer id=messagge.getInt("id");
 		
-		String modulus=messaggio.getString("modulus");
-		String exponent=messaggio.getString("exponent");
-
+		String modulus=messagge.getString("modulus");
+		String exponent=messagge.getString("exponent");
+		String privateKey=messagge.getString("private");
 		User u=userService.findById(id);
 		if(u!=null){
-			userService.insertPK(modulus,exponent, id);
+			
+			userService.updateUserKey(id, modulus, exponent, privateKey);
 			return HttpStatus.OK;
 
 		}else{
@@ -293,22 +414,7 @@ public class HelloWorldRestController {
 
   
    
-    //------------------- GET PK_RMS  --------------------------------------------------------
-
   
-    @RequestMapping(value = "/getRMS", method = RequestMethod.POST)
-    public ResponseEntity<Public_Key> getRMS(@RequestBody String nameService) {
-    	Public_Key pk_RMS=pkService.getKey(nameService);
-    	if(pk_RMS!=null){
-            return new ResponseEntity<Public_Key>(pk_RMS,HttpStatus.OK);
-
-    	}else{
-            return new ResponseEntity<Public_Key>(HttpStatus.NOT_FOUND);
-
-    	}
-    }
-    	
-    
     
     
 
@@ -319,21 +425,45 @@ public class HelloWorldRestController {
         //-------------------GET PK_KMS --------------------------------------------------------
 
       
-        @RequestMapping(value = "/getKMS", method = RequestMethod.POST)
+        @RequestMapping(value = "/getPK", method = RequestMethod.POST)
         public ResponseEntity<Public_Key> getKMS(@RequestBody String nameService) {
         	
-        	Public_Key pk_KMS=pkService.getKey(nameService);
-        	System.out.println(pk_KMS.toString());
-        	if(pk_KMS!=null){
-                return new ResponseEntity<Public_Key>(pk_KMS,HttpStatus.OK);
+        	Public_Key pk=pkService.getKey(nameService);
+        	System.out.println(pk.toString());
+        	if(pk!=null){
+                return new ResponseEntity<Public_Key>(pk,HttpStatus.OK);
 
         	}else{
                 return new ResponseEntity<Public_Key>(HttpStatus.NOT_FOUND);
 
         	}
         }
+        
+      /*  @RequestMapping(value = "/createSocialUser/", method = RequestMethod.POST)
+        public  HttpStatus createUser(@RequestBody Integer idu, HttpServletResponse response ) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException, JSONException {
+        return HttpStatus.OK;
+        }
        
-    	
+        @RequestMapping(value = "/clientKeys/", method = RequestMethod.POST)
+        public void clientKeys (HttpServletRequest request, HttpServletResponse response) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException, JSONException{
+        	JSONObject jsonmsg = new JSONObject();
+    	   	jsonmsg.put("client_modulus", "nfkjnkjfjernfkjlfr");
+    	   	jsonmsg.put("client_public_exponent", "nfkjnkjfjernfkjlfr");
+    	   	jsonmsg.put("client_private_exponent", "nfkjnkjfjernfkjlfr");
+    	   	PrintWriter pw = null;
+            try{
+              	pw = response.getWriter();    	 	
+            	pw.println(jsonmsg);
+            	}catch(Exception ex)
+              	{
+              	pw.println("{");
+              	pw.println("\"successful\": false,");
+              	pw.println("\"message\": \""+ex.getMessage()+"\",");
+              	pw.println("}");
+              	return;
+              	} 
+        	
+        }*/
       
     
 }

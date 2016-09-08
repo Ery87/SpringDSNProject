@@ -46,16 +46,16 @@ public class UserServiceImpl implements UserService{
 		dao.savePhoto(entity);
 		
 	}
-	public void insertPK(String modulus,String exponent, Integer id) {
+	
+	public void updateUserKey(Integer id, String m, String e, String pk) {
 		User entity=dao.findById(id);
 		if(entity!=null){
-			entity.setModulus(modulus);
-			entity.setExponent(exponent);
+			entity.setExponent_public(e);
+			entity.setModulus_public(m);
+			entity.setPrivate_key(pk);
 		}
 		dao.savePK(entity);
-		
 	}
-
 	
 	public void deleteByEmail(String email) {
 		dao.deleteByEmail(email);
@@ -79,6 +79,8 @@ public class UserServiceImpl implements UserService{
 	public String getPublicKey(Integer id) {
 		return dao.getPublicKey(id);
 	}
+
+	
 
 	
 	
