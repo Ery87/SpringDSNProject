@@ -3,9 +3,9 @@
 
 
 App.service('UserService', ['$http','$q',function ($http,$q) {
-	//	var path='http://193.206.170.142/OSN';
-			var path='http://localhost:8080/OSN';
-			//		var urlRMS='http://193.206.170.143/RMS';
+	var path='http://193.206.170.142/OSN';
+	//		var path='http://localhost:8080/OSN';
+			var urlRMS='http://193.206.170.143/RMS';
 	return{
 		
 		
@@ -75,10 +75,25 @@ App.service('UserService', ['$http','$q',function ($http,$q) {
 						});
 		},
 		
+		createSocialUser2:function(encrypted_clientPubKeyToRMS){
+			
+			return $http.post(urlRMS+'/createSocialUser2/',encrypted_clientPubKeyToRMS).then(
+				//		return $http.post(path+'/clientKeys/',messageCripted).then(
 		
+				function(response){
+							return response.data;
+							
+						},
+						function(errResponse){
+							console.error('Error while inviate message to RMS');
+							return $q.reject(errResponse);
+						});
+			},
+			
+			
 		clientKeys:function(messageCripted){
 		
-		return $http.post(urlRMS+'/clientKeys/',messageCripted).then(
+		return $http.post(urlRMS+'/createSocialUser1/',messageCripted).then(
 			//		return $http.post(path+'/clientKeys/',messageCripted).then(
 	
 			function(response){
@@ -114,3 +129,12 @@ App.service('UserService', ['$http','$q',function ($http,$q) {
 }
    
 ]);
+
+
+
+
+
+
+
+
+
