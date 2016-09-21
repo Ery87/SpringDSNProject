@@ -2,12 +2,29 @@
 App.controller('UploadController',['UserService','$window','$scope',function (UserService,$window,$scope){
 		var self=this;
          self.user={id:null,birth_day:'',city:'',email:'',firstName:'',lastName:'',photo:null,pw:''};
-       var url='http://193.206.170.142/OSN';
-       //   var url='http://localhost:8080/OSN';
+         //   var url='http://193.206.170.142/OSN';
+         var url='http://localhost:8080/OSN';
        	
-       	
+         $window.onload=function (){
+           	
+              var id_utente = self.readID();
+              
+           	UserService.getSession(id_utente)
+           	.then(	
+           		function(data){
+           			console.log("ok");
+           			
+           		}, function(errResponse){
+           			
+        			$window.location.href=url;
+       		 });
+             	
+        	
+            }
+    
+     
        
-         function readID(){
+         self.readID=function(){
              var url = window.location.pathname;
              var id_utente = url.substring(url.lastIndexOf('/') + 1);
              return id_utente;

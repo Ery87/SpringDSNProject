@@ -6,7 +6,7 @@ App.controller('LoginController',['$scope','$window','LoginService',function($sc
      var message;
    
      //    var url='http://193.206.170.142/OSN';
-     var url='http://localhost:8080/OSN';
+  var url='http://localhost:8080/OSN';
 
    
     	 
@@ -47,8 +47,15 @@ App.controller('LoginController',['$scope','$window','LoginService',function($sc
       	  		 var decrypted = CryptoJS.AES.decrypt(self.user.pw, key, {iv: iv});
       	  		
               if((decrypted.toString(CryptoJS.enc.Utf8))==u.pw){
-            	  
-            		$window.location.href=url+'/profile/'+self.user.id+'?'+self.user.lastName+self.user.firstName;
+            	  	LoginService.loginGet(self.user.id)
+            	  		.then(
+            	  		function(data){
+                		$window.location.href=url+'/profile/'+self.user.id+'?'+self.user.lastName+self.user.firstName;
+                		
+            	  	},function(errResponse){
+                 	   self.message='Error username or password, please repeat';
+
+      	  			});
 
                }else {
             	   self.message='Error username or password, please repeat';

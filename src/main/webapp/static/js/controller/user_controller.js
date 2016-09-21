@@ -3,11 +3,10 @@ App.controller('UserController',['UserService','$window','$scope',function (User
 		var self=this;
          self.user={id:null,birth_day:'',city:'',email:'',firstName:'',lastName:'',photo:null,pw:''};
          var message='';    
-        var url='http://193.206.170.142/OSN';
-        //       var url='http://localhost:8080/OSN';
+         //     var url='http://193.206.170.142/OSN';
+            var url='http://localhost:8080/OSN';
          
-         
-         
+                
         
          
          
@@ -20,13 +19,22 @@ App.controller('UserController',['UserService','$window','$scope',function (User
             UserService.saveUser(utente)
 		              .then(
 		            		  function(d){
-		            			  self.id=d.id;
-		       
-		            			 
-		      		            			$window.location.href=url+'/uploadPhoto/'+self.id;
+		            			 self.user=d;
+		            			
+
+		            			  UserService.loginGet(self.user)
+		              	  			.then(
+		              	  					function(data){
+		                  	
+		            			
+		      		            			$window.location.href=url+'/uploadPhoto/'+self.user.id;
  
 		            					 },
+		            					 function(errResponse){
+		  					               console.error('Error while creating User.');
 
+		  				              }	
+		                   );},
 				              function(errResponse){
 					               console.error('Error while creating User.');
 

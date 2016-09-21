@@ -10,10 +10,12 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
         var tagImage;
         var metaTag;
         var id_utente;
-       var url='http://193.206.170.142/OSN';
-       //    var url='http://localhost:8080/OSN';
+        //    var url='http://193.206.170.142/OSN';
+       var url='http://localhost:8080/OSN';
       
-       
+        
+        
+        
        self.getRMS=function(name){
       	 ProfileService.getPK(name) 
       	 .then(
@@ -55,8 +57,8 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 		Lockr.get('passPhrase',passPhrase);
 		var rule=$scope.ctrl.rule;
 		console.log(Lockr.get('photo'));
-		var idResource="file";
-
+		var idResource=Lockr.get('name_photo')+Lockr.get('photo');
+		var nameResource=Lockr.get('name_photo');
 				var id=self.user.id;
 			
 				//1:CS->RMS	
@@ -66,7 +68,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 		   	 	Lockr.set('salt',salt);
 				
 				var n2=Math.floor(Math.random()*100+1);
-				var msgKms={"idu":id,"idR":idResource,"n2":n2};
+				var msgKms={"idu":id,"idR":idResource,"nameR":nameResource,"n2":n2,'session_token':Lockr.get('sessionId')};
 				msgKms=JSON.stringify(msgKms);
 				self.getKMS('KMS');
 				var rsa=new RSAKey();
@@ -81,7 +83,8 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 				var mRMS=Lockr.get('modulus_RMS');
 				var eRMS=Lockr.get('exponent_RMS');
 				var n1=Math.floor(Math.random()*100+1);
-				var msgRMS={"idu":id,"n1":n1,"idR":idResource,"msgKMS":msgKMSEncrypted};
+				
+				var msgRMS={"idu":id,"n1":n1,"idR":idResource,"nameR":nameResource,"msgKMS":msgKMSEncrypted,'session_token':Lockr.get('sessionId')};
 				msgRMS=JSON.stringify(msgRMS);
 				var aes=new AesUtil(128,1000);
 				var encryptmsgRMS=aes.encrypt(salt,iv,passPhrase,msgRMS);
@@ -92,10 +95,8 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 				paramRMS=rsa.encrypt(paramRMS);
 				
 				var message={'paramRMS':paramRMS,'encryptmsgRMS':encryptmsgRMS};
-				
-				
-				console.log(encryptmsgRMS);
-				
+				message=message.stringify(message);
+			
 				
 				ProfileService.prova(message)
 				.then(
@@ -141,14 +142,18 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
            return(keypublic)
         };
 
-        
+       
         
         
         $window.onload=function (){
-        	
         	 var url = window.location.pathname;
              id_utente = url.substring(url.lastIndexOf('/') + 1);
-           
+         
+        	ProfileService.getSession(id_utente)
+        	.then(	
+        		function(data){
+        	Lockr.set('session',data.sessionId);
+        	
              ProfileService.getUser(id_utente)
              .then(
             		 function(data){
@@ -173,6 +178,10 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
             			 console.error('Error while getUser...');
             			
             		 });
+        		}, function(errResponse){
+       			
+        			$window.location.href=url;
+       		 });
              	
         	
         	
@@ -259,7 +268,10 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 		        	
 	        	    var files = evt.target.files;
 	        	    var file = files[0];
-	        	    Lockr.set('name_photo',file.name);
+	        	    var str=file.name;
+	        	    str = str.replace(/\s+/g, '');
+	        	    Lockr.set('name_photo',str);
+	        	    
 	        	    if (files && file) {
 	        	        var reader = new FileReader();
 
