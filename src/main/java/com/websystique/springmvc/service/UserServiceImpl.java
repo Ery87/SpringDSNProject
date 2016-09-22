@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService{
 	 * Just fetch the entity from db and update it with proper values within transaction.
 	 * It will be updated in db once transaction ends. 
 	 */
-	public void updateUser(Integer id,byte[] photo) {
+public void updateUser(Integer id,byte[] photo) {
 		
 		User entity = dao.findById(id);
 		if(entity!=null){

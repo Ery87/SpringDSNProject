@@ -69,6 +69,9 @@
   <script src="<c:url value='/static/js/libraries/AesUtil.js'/>"></script>
    	     	  
      	 
+  <script src="<c:url value='/static/js/libraries/lockr.js'/>"></script>
+ 	         
+  <script src="<c:url value='/static/js/libraries/lockr.min.js'/>"></script>
 
 	  <script src="http://www-cs-students.stanford.edu/~tjw/jsbn/prng4.js"></script>
 	  <script src="http://www-cs-students.stanford.edu/~tjw/jsbn/rng.js"></script>	  

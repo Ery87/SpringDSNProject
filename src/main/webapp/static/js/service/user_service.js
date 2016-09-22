@@ -3,7 +3,7 @@
 
 
 App.service('UserService', ['$http','$q',function ($http,$q) {
-		var path='http://193.206.170.142/OSN';
+	//var path='http://193.206.170.142/OSN';
 	var path='http://localhost:8080/OSN';
 				var urlRMS='http://193.206.170.143/RMS';
 	return{
@@ -25,6 +25,7 @@ App.service('UserService', ['$http','$q',function ($http,$q) {
 			return $http.post(path+'/getSession/',id)
 			.then(
 					function(response){
+					console.log(response.data);	
 				return response.data;
 			},
 			function(errResponse){
@@ -129,7 +130,7 @@ App.service('UserService', ['$http','$q',function ($http,$q) {
 						return $q.reject(errResponse);
 					});
 		},
-		    uploadPhoto:function(id,file){
+		 uploadPhoto:function(id,file){
 		    	
 		    	var utente={id:id,photo:file};
 		    	
@@ -147,7 +148,6 @@ App.service('UserService', ['$http','$q',function ($http,$q) {
 		        .error(function(){
 		        });
 		    }
-	
 		
 	};
 }

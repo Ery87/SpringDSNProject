@@ -3,7 +3,7 @@
 App.factory('ProfileService',['$http','$q',function($http,$q){
 	// var path='http://193.206.170.142/OSN';
 var path='http://localhost:8080/OSN';
-	
+var urlRMS='http://193.206.170.143/RMS';
 	
 	return{
 		
@@ -36,28 +36,29 @@ var path='http://localhost:8080/OSN';
 	        
 	    },
 	    
-prova:function(msg){
-			
-			return $http.post(path+'/prova/',msg)
-			.then(
-					function(response){
-				return response.data;
-			},
-			function(errResponse){
-				console.error('Error while search user');
-				return $q.reject(errResponse);
-			}
-			);
-	        
-	        
-	    },
-	    
-	    
+	    uploadReq1:function(msg){
+					
+					return $http.post(urlRMS+'/uploadReq1/',msg)
+					.then(
+							function(response){
+						return response.data;
+					},
+					function(errResponse){
+						console.error(errResponse);
+						return $q.reject(errResponse);
+					}
+					);
+			        
+			        
+			    },
+			    
+			    
 	    	getPK:function(name){
 			
 				return $http.post(path+'/getPK',name).then(
 	
 			    			function(response){
+			    				
 			    				return response.data;
 			    			},
 			    			function(errResponse){

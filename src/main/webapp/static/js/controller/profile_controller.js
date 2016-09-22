@@ -11,7 +11,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
         var metaTag;
         var id_utente;
         //    var url='http://193.206.170.142/OSN';
-       var url='http://localhost:8080/OSN';
+          var url='http://localhost:8080/OSN';
       
         
         
@@ -35,9 +35,9 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
     	 ProfileService.getPK(name) 
     	 .then(
 			    	 function(data){
-			    		 	
 					  Lockr.set('modulus_KMS',data.modulus);
-					 Lockr.set('exponent_KMS',data.exponent);
+					  Lockr.set('exponent_KMS',data.exponent);
+					 
 					
     			 },function(errResponse){
 							console.error('Error while inviate key client to OSN');
@@ -54,13 +54,13 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 		self.uploadPhotoRule=function(){
 		var tag=$scope.ctrl.tag;
 		var passPhrase=$scope.ctrl.passPhrase;
-		Lockr.get('passPhrase',passPhrase);
+		Lockr.set('passPhrase',passPhrase);
 		var rule=$scope.ctrl.rule;
-		console.log(Lockr.get('photo'));
-		var idResource=Lockr.get('name_photo')+Lockr.get('photo');
+	
 		var nameResource=Lockr.get('name_photo');
 				var id=self.user.id;
-			
+				var idResource=Lockr.get('name_photo')+id;
+	
 				//1:CS->RMS	
 				var iv=CryptoJS.lib.WordArray.random(128/8).toString(CryptoJS.enc.Hex);
 		   	 	var salt= CryptoJS.lib.WordArray.random(128/8).toString(CryptoJS.enc.Hex);
@@ -69,7 +69,6 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 				
 				var n2=Math.floor(Math.random()*100+1);
 				var msgKms={"idu":id,"idR":idResource,"nameR":nameResource,"n2":n2,'session_token':Lockr.get('sessionId')};
-				msgKms=JSON.stringify(msgKms);
 				self.getKMS('KMS');
 				var rsa=new RSAKey();
 				var mKMS=Lockr.get('modulus_KMS');
@@ -77,8 +76,10 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 				
 				rsa.setPublic(mKMS,eKMS);
 				
+
 				var msgKMSEncrypted=rsa.encrypt(msgKms);
-				
+				console.log(msgKms);
+				console.log(msgKMSEncrypted);
 				self.getRMS('RMS');
 				var mRMS=Lockr.get('modulus_RMS');
 				var eRMS=Lockr.get('exponent_RMS');
@@ -95,13 +96,13 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 				paramRMS=rsa.encrypt(paramRMS);
 				
 				var message={'paramRMS':paramRMS,'encryptmsgRMS':encryptmsgRMS};
-				message=message.stringify(message);
-			
+				message=JSON.stringify(message);
+		
 				
-				ProfileService.prova(message)
+				ProfileService.uploadReq1(message)
 				.then(
-						function(){
-							console.log("ok");
+						function(data){
+							console.log(data);
 						},
 						function(errResponse){
 							console.error('Error while creating User.');

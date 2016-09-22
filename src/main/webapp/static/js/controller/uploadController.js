@@ -2,23 +2,24 @@
 App.controller('UploadController',['UserService','$window','$scope',function (UserService,$window,$scope){
 		var self=this;
          self.user={id:null,birth_day:'',city:'',email:'',firstName:'',lastName:'',photo:null,pw:''};
-         //   var url='http://193.206.170.142/OSN';
-         var url='http://localhost:8080/OSN';
+         //        var url='http://193.206.170.142/OSN';
+      var url='http://localhost:8080/OSN';
        	
          $window.onload=function (){
            	
               var id_utente = self.readID();
+         
               
-           	UserService.getSession(id_utente)
+              
+        	UserService.getSession(id_utente)
            	.then(	
            		function(data){
-           			console.log("ok");
            			
            		}, function(errResponse){
            			
-        			$window.location.href=url;
+        			$window.location.href=url; 
        		 });
-             	
+            
         	
             }
     
@@ -44,17 +45,12 @@ App.controller('UploadController',['UserService','$window','$scope',function (Us
         	        reader.onload = function(readerEvt) {
         	            var binaryString = readerEvt.target.result;
         	            var b=btoa(binaryString);
-        	            var id=readID();
+        	            var id=self.readID();
         	        	UserService.uploadPhoto(id,b)
         	        	.then(
         				function(data){
         				
-        				//	var id=data.data.IDuser;
-        				//	UserService.saveRMS(id)
-        				//	.then(
-        				//			function(data){
-	            						
-        		      		            			$window.location.href=url+'/generateKey/'+id;
+        										$window.location.href=url+'/generateKey/'+id;
 
 
         							},
@@ -67,11 +63,7 @@ App.controller('UploadController',['UserService','$window','$scope',function (Us
             			
 	            			
         				},
-        			/*	 function(errResponse){
-				               console.error('Error while upload photo User.');
-
-			              }	);
-        	        };*/
+        			
 
         	        reader.readAsBinaryString(file);
         	    }

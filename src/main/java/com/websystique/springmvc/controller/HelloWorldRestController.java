@@ -39,6 +39,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -142,6 +143,11 @@ public class HelloWorldRestController {
     
     	 if(!(u==null)){
     		HttpSession session=req.getSession();
+    		session.setAttribute("user", user.getEmail());
+    		session.setMaxInactiveInterval(0);
+    		Cookie userName=new Cookie("user",user.getEmail());
+    		userName.setMaxAge(0);
+    		res.addCookie(userName);
     		userSession.setUser(u);
     	
     		userSession.setSessionId(session.getId());
@@ -151,18 +157,27 @@ public class HelloWorldRestController {
 		
     }
     @RequestMapping(value="/getSession/",method=RequestMethod.POST)
-    public ResponseEntity<String> getSession(@RequestBody Integer id,HttpServletRequest req,HttpServletResponse res){
+    public void getSession(@RequestBody Integer id,HttpServletRequest req,HttpServletResponse res) throws IOException{
     	User u=userService.findById(id);
     	SessionUser sesUser=sessionUser.getSessionUser(u);
+    	PrintWriter pw=res.getWriter();
     	
-    	HttpSession session=req.getSession();
-    	System.out.println(session.getId());
-    	System.out.println(sesUser.getSessionId());
-    	if((sesUser.getSessionId()).equals(session)){
-    		return new ResponseEntity<String>(sesUser.getSessionId(),HttpStatus.OK);
-    	}else{
-    	return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
-    }
+    	
+    /*	if((sesUser.getSessionId()).equals(req.getRequestedSessionId())){*/
+	    	pw.println("{");
+			pw.println("\"successful\": true,");
+			pw.println("\"session\": \""+sesUser.getSessionId()+"\"");
+			pw.println("}");
+  
+    		
+    	
+    /*	}else{
+    		pw.println("{");
+			pw.println("\"successful\": false,");
+			pw.println("}");
+	      	}*/
+    	return;
+    	
     	
 		
     }
@@ -291,6 +306,7 @@ public class HelloWorldRestController {
     	return;
     }
    
+   
     
     public List<User> ordinaryList(List<User> user){
         Collections.sort(user, new Comparator<User>(){
@@ -351,19 +367,29 @@ public class HelloWorldRestController {
 
       
         @RequestMapping(value = "/getPK", method = RequestMethod.POST)
-        public ResponseEntity<Public_Key> getKMS(@RequestBody String nameService) {
-        	
-        	Public_Key pk=pkService.getKey(nameService);
-        	System.out.println(pk.toString());
-        	if(pk!=null){
-                return new ResponseEntity<Public_Key>(pk,HttpStatus.OK);
+        public void getKMS(@RequestBody String nameService,HttpServletResponse res) {
+        PrintWriter pw=null;
+    	Public_Key pk=pkService.getKey(nameService);
 
-        	}else{
-                return new ResponseEntity<Public_Key>(HttpStatus.NOT_FOUND);
-
-        	}
-        }
         
-      
-    
+        try{
+        	if(pk!=null){
+        	JSONObject json=new JSONObject();
+        	json.put("service", pk.getService());
+        	json.put("modulus", pk.getModulus());
+        	json.put("exponent", pk.getExponent());
+         	pw = res.getWriter();  
+         	pw.println(json);
+        	}
+        }catch(Exception ex)
+         	{
+         	pw.println("{");
+         	pw.println("\"successful\": false,");
+         	pw.println("\"message\": \""+ex.getMessage()+"\",");
+         	pw.println("}");
+        	return;
+         	}   
+        }
+       
+   
 }

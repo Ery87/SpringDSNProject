@@ -3,7 +3,7 @@
 App.controller('GenerateController',['$scope','$window','UserService',function($scope,$window,UserService){
 	var self=this;
      var id;
-     //   var url='http://193.206.170.142/OSN';
+     // var url='http://193.206.170.142/OSN';
   var url='http://localhost:8080/OSN';
   
      
@@ -19,15 +19,16 @@ App.controller('GenerateController',['$scope','$window','UserService',function($
     
    
    $window.onload=function(){
-	   $scope.id=self.readID();
-	  			   UserService.getSession(self.id)
+	   self.id=self.readID();
+	 
+	  		 UserService.getSession(self.id)
 			        	.then(	
 			        		function(data){
-			        			 Lockr.set('session',data.sessionId);
+			        			Lockr.set("sessionId",data.session);
 			        		}, function(errResponse){
-			        			
+			        	
 			     			$window.location.href=url;
-			    		 });
+			    		});
 			          	
 		
          
@@ -71,13 +72,13 @@ App.controller('GenerateController',['$scope','$window','UserService',function($
 				
 				
 				var PK_kms=new RSAKey(); //public key kms
-				
 				PK_kms.setPublic(Lockr.get('KMS.modulus'),Lockr.get('KMS.exponent'));
 				var messageCripted=PK_kms.encrypt(jsontoStringMessaggio);
 				
 				var msgtoRMS={"idu": idUser, "encryptedmsgtoKMS": messageCripted};			
 				var msgtoRMS=JSON.stringify(msgtoRMS); 
-	
+
+
 				UserService.clientKeys(msgtoRMS)
 										.then(
 												function(data){
@@ -89,7 +90,9 @@ App.controller('GenerateController',['$scope','$window','UserService',function($
 														var client_modulus=jsondecrypt.client_modulus;
 														var client_private=jsondecrypt.client_private_exponent;
 														var client_privateCrypted=aesUtil.encrypt(salt,iv,passphrase,client_private);
-														var keys={"id":$scope.id,"exponent":client_exponent,"modulus":client_modulus,"private":client_privateCrypted};
+														var keys={"id":self.id,"exponent":client_exponent,"modulus":client_modulus,"private":client_privateCrypted};
+														console.log(keys);
+														
 														
 														UserService.savePKClient(keys)
 														.then(
@@ -126,7 +129,8 @@ App.controller('GenerateController',['$scope','$window','UserService',function($
 																	UserService.createSocialUser2(encrypted_clientPubKeyToRMS)
 																	.then(
 																			function(data){
-																				$window.location.href=url;
+																			
+																			$window.location.href=url;
 																			},function(errResponse){
 																				console.error('Error while inviate key client to OSN');
 																			});
