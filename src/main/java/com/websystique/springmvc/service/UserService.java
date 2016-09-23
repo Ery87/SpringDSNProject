@@ -27,7 +27,7 @@ User findById(Integer id);
 	
 	public void updateUser(Integer id,byte[] photo);
 	
-	public void updateUserKey(Integer id,String m,String e,String pk);
+	public void updateUserKey(Integer id,String m,String e,String pk, String iv, String salt);
 	
 	boolean isUserSSOUnique(String email);
 

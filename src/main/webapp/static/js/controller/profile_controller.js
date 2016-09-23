@@ -10,11 +10,25 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
         var tagImage;
         var metaTag;
         var id_utente;
-        //    var url='http://193.206.170.142/OSN';
-          var url='http://localhost:8080/OSN';
+         var url='http://193.206.170.142/OSN';
+         //     var url='http://localhost:8080/OSN';
       
         
-        
+        self.getPKClient=function(id){
+        	ProfileService.getPKClient(id)
+        	.then(
+        			function(data){
+        				
+        				Lockr.set("modulus_Client",data.modulus_public);
+        				Lockr.set("private_Client",data.private_key)	;
+        				Lockr.set("exponent_Client",data.exponent_public);
+        				
+        			},function(errResponse){
+							console.error('Error while receive key client to OSN');
+	  					 	  
+        			}
+        			);
+        },
         
        self.getRMS=function(name){
       	 ProfileService.getPK(name) 
@@ -70,16 +84,15 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 				var n2=Math.floor(Math.random()*100+1);
 				var msgKms={"idu":id,"idR":idResource,"nameR":nameResource,"n2":n2,'session_token':Lockr.get('sessionId')};
 				self.getKMS('KMS');
+				msgKms=JSON.stringify(msgKms);
+
 				var rsa=new RSAKey();
 				var mKMS=Lockr.get('modulus_KMS');
 				var eKMS=Lockr.get('exponent_KMS')
 				
 				rsa.setPublic(mKMS,eKMS);
 				
-
 				var msgKMSEncrypted=rsa.encrypt(msgKms);
-				console.log(msgKms);
-				console.log(msgKMSEncrypted);
 				self.getRMS('RMS');
 				var mRMS=Lockr.get('modulus_RMS');
 				var eRMS=Lockr.get('exponent_RMS');
@@ -102,7 +115,32 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 				ProfileService.uploadReq1(message)
 				.then(
 						function(data){
-							console.log(data);
+							var keySize = 128;
+					   	 	var iterationCount = 1000;
+					   		var aesUtil=new AesUtil(keySize,iterationCount);
+							var key=data.AESParams;
+							self.getPKClient(id);
+							var keyPrivate=aesUtil.decrypt(Lockr.get('salt'),Lockr.get('iv'),Lockr.get('passPhrase'),Lockr.get("private_Client"));
+							keyPrivate=JSON.parse(keyPrivate);
+						 	rsa.setPrivate(Lockr.get('modulus_Client'),Lockr.get('exponent_Client'), keyPrivate); //recupera parametri della chiave del client
+				 	 	
+						 	key=rsa.decrypt(key);
+				 	 	
+						 	key=JSON.parse(key);
+				 	 	
+						 	iv=key.iv;
+						 	salt=key.salt;
+						 	passphrase=key.passphrase;
+				 	 	
+						 	var aesUtil = new AesUtil(128, 1000);
+						 	
+						 	decrypted_msg=aesUtil.decrypt(salt, iv, passphrase, data.encrypted_msg_client);
+						 	
+						 	decrypted_msg=JSON.parse(decrypted_msg);
+						 	
+						 	secret_user=decrypted_msg.secretUser;
+						 	nonce_plus_one=decrypted_msg.nonce_one_plus_one;
+						 	kms_msg=decrypted_msg.KMSmsg;
 						},
 						function(errResponse){
 							console.error('Error while creating User.');
@@ -147,15 +185,8 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
         
         
         $window.onload=function (){
-        	 var url = window.location.pathname;
-             id_utente = url.substring(url.lastIndexOf('/') + 1);
-         
-        	ProfileService.getSession(id_utente)
-        	.then(	
-        		function(data){
-        	Lockr.set('session',data.sessionId);
-        	
-             ProfileService.getUser(id_utente)
+        		
+		     ProfileService.getUser(id_utente)
              .then(
             		 function(data){
             			 
@@ -174,15 +205,15 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
      					self.getAlbum();  
      					
             			
-            		 },
-            		 function(errResponse){
+         		 },
+            		function(errResponse){
             			 console.error('Error while getUser...');
             			
             		 });
-        		}, function(errResponse){
+        		/*},function(errResponse){
        			
         			$window.location.href=url;
-       		 });
+       		 });*/
              	
         	
         	

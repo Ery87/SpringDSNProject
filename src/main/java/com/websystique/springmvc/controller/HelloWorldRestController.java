@@ -119,68 +119,42 @@ public class HelloWorldRestController {
 	
      
     @RequestMapping(value="/login/",method=RequestMethod.POST)
-    public ResponseEntity<User>  login(@RequestBody User user){
+    public void  login(@RequestBody User user,HttpServletResponse res) throws JSONException, IOException{
    
     	User u=userService.findByEmail(user.getEmail());
+    	PrintWriter pw=null;
+    	 
     	if(!(u==null)){
-	
-    		return new ResponseEntity<User>(u, HttpStatus.OK); 
+    		JSONObject json=new JSONObject();
+        	json.put("id", u.getId());
+
+        	json.put("email", u.getEmail());
+        	json.put("firstname", u.getFirstName());
+        	json.put("lastname", u.getLastName());
+
+        	json.put("pw",u.getPw());
+        
+        	
+					pw = res.getWriter();
+				
+         	pw.println(json);
+        
 
     	}else{
     		
-    		return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
-    	}
-		
-    }
-    
-    
-    @RequestMapping(value="/loginGet/",method=RequestMethod.POST)
-    public void  loginGet(@RequestBody User u,HttpServletRequest req,HttpServletResponse res){
-    
-    	SessionUser userSession=new SessionUser();
-    	
-    	User user=userService.findByEmail(u.getEmail());
-    
-    	 if(!(u==null)){
-    		HttpSession session=req.getSession();
-    		session.setAttribute("user", user.getEmail());
-    		session.setMaxInactiveInterval(0);
-    		Cookie userName=new Cookie("user",user.getEmail());
-    		userName.setMaxAge(0);
-    		res.addCookie(userName);
-    		userSession.setUser(u);
-    	
-    		userSession.setSessionId(session.getId());
-    		sessionUser.saveSession(userSession);
-    	 }
-    	
-		
-    }
-    @RequestMapping(value="/getSession/",method=RequestMethod.POST)
-    public void getSession(@RequestBody Integer id,HttpServletRequest req,HttpServletResponse res) throws IOException{
-    	User u=userService.findById(id);
-    	SessionUser sesUser=sessionUser.getSessionUser(u);
-    	PrintWriter pw=res.getWriter();
-    	
-    	
-    /*	if((sesUser.getSessionId()).equals(req.getRequestedSessionId())){*/
-	    	pw.println("{");
-			pw.println("\"successful\": true,");
-			pw.println("\"session\": \""+sesUser.getSessionId()+"\"");
-			pw.println("}");
-  
-    		
-    	
-    /*	}else{
     		pw.println("{");
-			pw.println("\"successful\": false,");
-			pw.println("}");
-	      	}*/
-    	return;
-    	
-    	
+         	pw.println("\"successful\": false,");
+         	pw.println("\"message\": \""+"Not found"+"\",");
+         	pw.println("}");
+        	return;
+             	}
 		
     }
+    
+    
+   
+  
+    
     //-------------------Create a User--------------------------------------------------------
      
     @RequestMapping(value = "/user/", method = RequestMethod.POST,consumes = { "application/json" })
@@ -329,17 +303,19 @@ public class HelloWorldRestController {
         while ((str = br.readLine()) != null) {
             sb.append(str);
         }
-        JSONObject messagge = new JSONObject(sb.toString());
+        JSONObject message = new JSONObject(sb.toString());
     	
-		Integer id=messagge.getInt("id");
+		Integer id=message.getInt("id");
 		
-		String modulus=messagge.getString("modulus");
-		String exponent=messagge.getString("exponent");
-		String privateKey=messagge.getString("private");
+		String modulus=message.getString("modulus");
+		String exponent=message.getString("exponent");
+		String privateKey=message.getString("private");
+		String iv=message.getString("iv");
+		String salt=message.getString("salt");
 		User u=userService.findById(id);
 		if(u!=null){
 			
-			userService.updateUserKey(id, modulus, exponent, privateKey);
+			userService.updateUserKey(id, modulus, exponent, privateKey,iv,salt);
 			return HttpStatus.OK;
 
 		}else{
@@ -351,10 +327,34 @@ public class HelloWorldRestController {
     }
     
     
-    //------------------- Save PKI  --------------------------------------------------------
+    //------------------- Get PK Client --------------------------------------------------------
 
-  
-   
+    @RequestMapping(value = "/getPKClient", method = RequestMethod.POST)
+    public void getPKClient(@RequestBody Integer id,HttpServletResponse res) {
+    	User user=userService.findById(id);
+    	PrintWriter pw=null;
+    	try{
+    	if(user!=null){
+    		JSONObject json=new JSONObject();
+    		json.put("exponent_public", user.getExponent_public());
+    		json.put("modulus_public", user.getModulus_public());
+    		json.put("private_key", user.getPrivate_key());
+    		json.put("iv", user.getIv());
+    		json.put("salt", user.getSalt());
+    		pw=res.getWriter();
+    		pw.println(json);
+    	}
+    	}catch(Exception ex){
+    		pw.println("{");
+         	pw.println("\"successful\": false,");
+         	pw.println("\"message\": \""+ex.getMessage()+"\",");
+         	pw.println("}");
+        	return;
+    	
+    	}
+    
+    
+    }
   
     
     
@@ -363,11 +363,11 @@ public class HelloWorldRestController {
     
   
     	  
-        //-------------------GET PK_KMS --------------------------------------------------------
+        //-------------------GET PK_KMS and PK_RMS --------------------------------------------------------
 
       
         @RequestMapping(value = "/getPK", method = RequestMethod.POST)
-        public void getKMS(@RequestBody String nameService,HttpServletResponse res) {
+        public void getPK(@RequestBody String nameService,HttpServletResponse res) {
         PrintWriter pw=null;
     	Public_Key pk=pkService.getKey(nameService);
 

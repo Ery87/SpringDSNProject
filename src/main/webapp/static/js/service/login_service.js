@@ -1,8 +1,8 @@
 'use strict';
 
 App.factory('LoginService',['$http','$q',function($http,$q){
-	// var path='http://193.206.170.142/OSN';
- var path='http://localhost:8080/OSN';
+var path='http://193.206.170.142/OSN';
+// var path='http://localhost:8080/OSN';
 
 	return{
 		
@@ -22,18 +22,6 @@ App.factory('LoginService',['$http','$q',function($http,$q){
 		    },
 		    
 		    
-		    loginGet:function(id){
-		    	return $http.post(path+'/loginGet/',id)
-		    	.then(
-		    			function(response){
-		    				return response.data;
-		    			},
-		    			function(errResponse){
-		    				console.error('Error while login ');
-		    				return $q.reject(errResponse);
-		    			}
-		    			);
-		    },
 		    
 		    updateUser: function(user, id){
 				return $http.put(path+'/user/'+id, user)

@@ -2,9 +2,9 @@
 App.controller('UserController',['UserService','$window','$scope',function (UserService,$window,$scope){
 		var self=this;
          self.user={id:null,birth_day:'',city:'',email:'',firstName:'',lastName:'',photo:null,pw:''};
-         var message='';    
-         //   var url='http://193.206.170.142/OSN';
-            var url='http://localhost:8080/OSN';
+        var url='http://193.206.170.142/OSN';
+        var message='';    
+        //     var url='http://localhost:8080/OSN';
          
                 
         
@@ -22,10 +22,6 @@ App.controller('UserController',['UserService','$window','$scope',function (User
 		            			 self.user=d;
 		            			
 
-		            			  UserService.loginGet(self.user)
-		              	  			.then(
-		              	  					function(data){
-		                  	
 		            			
 		      		            			$window.location.href=url+'/uploadPhoto/'+self.user.id;
  
@@ -34,12 +30,7 @@ App.controller('UserController',['UserService','$window','$scope',function (User
 		  					               console.error('Error while creating User.');
 
 		  				              }	
-		                   );},
-				              function(errResponse){
-					               console.error('Error while creating User.');
-
-				              }	
-                 );
+		                   );
          };
 
         

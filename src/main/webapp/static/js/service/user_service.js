@@ -3,37 +3,13 @@
 
 
 App.service('UserService', ['$http','$q',function ($http,$q) {
-	//var path='http://193.206.170.142/OSN';
-	var path='http://localhost:8080/OSN';
+var path='http://193.206.170.142/OSN';
+//	var path='http://localhost:8080/OSN';
 				var urlRMS='http://193.206.170.143/RMS';
 	return{
 		
 	
-		loginGet:function(user){
-	    	return $http.post(path+'/loginGet/',user)
-	    	.then(
-	    			function(response){
-	    				return response.data;
-	    			},
-	    			function(errResponse){
-	    				console.error('Error while login ');
-	    				return $q.reject(errResponse);
-	    			}
-	    			);
-	    },
-		getSession:function(id){
-			return $http.post(path+'/getSession/',id)
-			.then(
-					function(response){
-					console.log(response.data);	
-				return response.data;
-			},
-			function(errResponse){
-				console.error('Error while search user');
-				return $q.reject(errResponse);
-			}
-			);
-		},
+		
 		 saveUser:function(utente){
 		     
 		       return  $http.post(path+'/user/',utente).then(
@@ -84,7 +60,7 @@ App.service('UserService', ['$http','$q',function ($http,$q) {
 	    	
 	    },
 	    
-	    
+	 
 	    
 	  
 		getPK:function(name){

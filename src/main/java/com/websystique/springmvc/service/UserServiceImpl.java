@@ -47,12 +47,14 @@ public void updateUser(Integer id,byte[] photo) {
 		
 	}
 	
-	public void updateUserKey(Integer id, String m, String e, String pk) {
+	public void updateUserKey(Integer id, String m, String e, String pk,String iv,String salt) {
 		User entity=dao.findById(id);
 		if(entity!=null){
 			entity.setExponent_public(e);
 			entity.setModulus_public(m);
 			entity.setPrivate_key(pk);
+			entity.setSalt(salt);
+			entity.setIv(iv);
 		}
 		dao.savePK(entity);
 	}

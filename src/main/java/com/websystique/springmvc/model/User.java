@@ -62,6 +62,28 @@ public class User {
 	private String modulus_public;
 	
 
+	@Column(name="iv")
+	private String iv;
+	
+	@Column(name="salt")
+	private String salt;
+	
+
+	public String getIv() {
+		return iv;
+	}
+
+	public void setIv(String iv) {
+		this.iv=iv;
+	} 
+	
+	public String getSalt() {
+		return salt;
+	}
+
+	public void setSalt(String salt) {
+		this.salt = salt;
+	}
 
 	@Column(name="private_key")
 	private String private_key;

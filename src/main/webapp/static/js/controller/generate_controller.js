@@ -3,8 +3,8 @@
 App.controller('GenerateController',['$scope','$window','UserService',function($scope,$window,UserService){
 	var self=this;
      var id;
-     // var url='http://193.206.170.142/OSN';
-  var url='http://localhost:8080/OSN';
+   var url='http://193.206.170.142/OSN';
+   //  var url='http://localhost:8080/OSN';
   
      
    
@@ -21,14 +21,7 @@ App.controller('GenerateController',['$scope','$window','UserService',function($
    $window.onload=function(){
 	   self.id=self.readID();
 	 
-	  		 UserService.getSession(self.id)
-			        	.then(	
-			        		function(data){
-			        			Lockr.set("sessionId",data.session);
-			        		}, function(errResponse){
-			        	
-			     			$window.location.href=url;
-			    		});
+	  		
 			          	
 		
          
@@ -90,8 +83,8 @@ App.controller('GenerateController',['$scope','$window','UserService',function($
 														var client_modulus=jsondecrypt.client_modulus;
 														var client_private=jsondecrypt.client_private_exponent;
 														var client_privateCrypted=aesUtil.encrypt(salt,iv,passphrase,client_private);
-														var keys={"id":self.id,"exponent":client_exponent,"modulus":client_modulus,"private":client_privateCrypted};
-														console.log(keys);
+														var keys={"id":self.id,"exponent":client_exponent,"modulus":client_modulus,"private":client_privateCrypted,"salt":salt,"iv":iv};
+														
 														
 														
 														UserService.savePKClient(keys)

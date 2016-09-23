@@ -123,12 +123,12 @@
      
                   <td><input type="file" id="filePicker"> </td></tr>
              <tr><td><label>MetaTag : </label> </td>
-               	 <td><input type="text" ng-model="ctrl.tag" name="tag" class="metaTag form-control input-sm" placeholder="Write your metaTag" required ng-minlength="3"/>  </td> </tr>
+               	 <td><input type="text" ng-model="ctrl.tag" name="tag" class="metaTag form-control input-sm" placeholder="Write your metaTag" required ng-minlength="3" ng-required="string"]/>  </td> </tr>
   				<tr><td><label>Access's Rule: </label></td>
-  					 <td><input type="text" ng-model="ctrl.rule" name="rule" class="rule form-control input-sm" placeholder="Write your access rule" required ng-minlength="3"/></td> </tr>
+  					 <td><input type="number" ng-model="ctrl.rule" name="rule" class="rule form-control input-sm" placeholder="Write your access rule" min="1" max="7" step="1"/></td> </tr>
   			  
        			<tr><td><label>PassPhrase</label>	 </td>
-       			<td><input type="text" ng-model="ctrl.passPhrase" name="passPhrase" class="passPhraseform-control input-sm" placeholder="Write your passPhrase" required ng-minlength="3"/></td></tr>   
+       			<td><input type="password" ng-model="ctrl.passPhrase" name="passPhrase" class="passPhraseform-control input-sm" placeholder="Write your passPhrase" required ng-minlength="3"/></td></tr>   
    
        <tr><td></td> <td><button type="submit" ng-click="ctrl.uploadPhotoRule()" class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid"/>Upload Photo</button></td></tr>
    
