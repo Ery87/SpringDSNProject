@@ -9,9 +9,9 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
         var message;
         var tagImage;
         var metaTag;
-        var id_utente;
-         var url='http://193.206.170.142/OSN';
-         //     var url='http://localhost:8080/OSN';
+     
+        //    var url='http://193.206.170.142/OSN';
+         var url='http://localhost:8080/OSN';
       
         
         self.getPKClient=function(id){
@@ -22,7 +22,11 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
         				Lockr.set("modulus_Client",data.modulus_public);
         				Lockr.set("private_Client",data.private_key)	;
         				Lockr.set("exponent_Client",data.exponent_public);
-        				
+        				Lockr.set("salt",data.salt);
+        				Lockr.set("iv",data.iv);
+						
+
+        			
         			},function(errResponse){
 							console.error('Error while receive key client to OSN');
 	  					 	  
@@ -70,22 +74,32 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 		var passPhrase=$scope.ctrl.passPhrase;
 		Lockr.set('passPhrase',passPhrase);
 		var rule=$scope.ctrl.rule;
-	
-		var nameResource=Lockr.get('name_photo');
-				var id=self.user.id;
-				var idResource=Lockr.get('name_photo')+id;
-	
+		Lockr.set("rule",rule);
+		var album={"tag":tag,"id":Lockr.get("id"),"fileName":Lockr.get("fileName")};
+		
+		ProfileService.saveAlbum(album)
+		.then(
+				function(data){
 				//1:CS->RMS	
+
+				Lockr.set("idResource",data.idAlbum);
 				var iv=CryptoJS.lib.WordArray.random(128/8).toString(CryptoJS.enc.Hex);
 		   	 	var salt= CryptoJS.lib.WordArray.random(128/8).toString(CryptoJS.enc.Hex);
-		   	 	Lockr.set("iv",iv);
-		   	 	Lockr.set('salt',salt);
+		   	 	Lockr.set("iv1",iv);
+		   	 	Lockr.set('salt1',salt);
 				
 				var n2=Math.floor(Math.random()*100+1);
-				var msgKms={"idu":id,"idR":idResource,"nameR":nameResource,"n2":n2,'session_token':Lockr.get('sessionId')};
+				var msgKms={"idu":Lockr.get("id"),"idR":Lockr.get("idResource"),"n2":n2,'session_token':Lockr.get('sessionId')};
+			
+				
+				
+					
+				
+				
+				
 				self.getKMS('KMS');
 				msgKms=JSON.stringify(msgKms);
-
+				
 				var rsa=new RSAKey();
 				var mKMS=Lockr.get('modulus_KMS');
 				var eKMS=Lockr.get('exponent_KMS')
@@ -98,7 +112,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 				var eRMS=Lockr.get('exponent_RMS');
 				var n1=Math.floor(Math.random()*100+1);
 				
-				var msgRMS={"idu":id,"n1":n1,"idR":idResource,"nameR":nameResource,"msgKMS":msgKMSEncrypted,'session_token':Lockr.get('sessionId')};
+				var msgRMS={"idu":Lockr.get("id"),"n1":n1,"idR":Lockr.get("idResource"),"msgKMS":msgKMSEncrypted,'session_token':Lockr.get('sessionId')};
 				msgRMS=JSON.stringify(msgRMS);
 				var aes=new AesUtil(128,1000);
 				var encryptmsgRMS=aes.encrypt(salt,iv,passPhrase,msgRMS);
@@ -110,7 +124,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 				
 				var message={'paramRMS':paramRMS,'encryptmsgRMS':encryptmsgRMS};
 				message=JSON.stringify(message);
-		
+	
 				
 				ProfileService.uploadReq1(message)
 				.then(
@@ -119,32 +133,83 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 					   	 	var iterationCount = 1000;
 					   		var aesUtil=new AesUtil(keySize,iterationCount);
 							var key=data.AESParams;
-							self.getPKClient(id);
+							self.getPKClient(Lockr.get("id"));
+							var rsa=new RSAKey();
 							var keyPrivate=aesUtil.decrypt(Lockr.get('salt'),Lockr.get('iv'),Lockr.get('passPhrase'),Lockr.get("private_Client"));
-							keyPrivate=JSON.parse(keyPrivate);
 						 	rsa.setPrivate(Lockr.get('modulus_Client'),Lockr.get('exponent_Client'), keyPrivate); //recupera parametri della chiave del client
 				 	 	
 						 	key=rsa.decrypt(key);
 				 	 	
 						 	key=JSON.parse(key);
-				 	 	
-						 	iv=key.iv;
-						 	salt=key.salt;
-						 	passphrase=key.passphrase;
-				 	 	
+				 	
+						 	var iv=key.iv;
+						 	var salt=key.salt;
+						 	var passphrase=key.passphrase;
+				 	 
+
 						 	var aesUtil = new AesUtil(128, 1000);
-						 	
-						 	decrypted_msg=aesUtil.decrypt(salt, iv, passphrase, data.encrypted_msg_client);
+					
+						 	var decrypted_msg=aesUtil.decrypt(salt, iv, passphrase, data.encrypted_msg_client);
 						 	
 						 	decrypted_msg=JSON.parse(decrypted_msg);
 						 	
-						 	secret_user=decrypted_msg.secretUser;
-						 	nonce_plus_one=decrypted_msg.nonce_one_plus_one;
-						 	kms_msg=decrypted_msg.KMSmsg;
+						 	var secret_user=decrypted_msg.secretUser;
+						 	var nonce_plus_one=decrypted_msg.nonce_one_plus_one;
+						 	var kms_msg=decrypted_msg.KMSmsg;
+						 	
+							var rsa=new RSAKey();
+							rsa.setPrivate(Lockr.get('modulus_Client'),Lockr.get('exponent_Client'), keyPrivate);
+							kms_msg=rsa.decrypt(decrypted_msg.KMSmsg);
+							kms_msg=JSON.parse(kms_msg);
+							var passSecret=secret_user+kms_msg.secretRsc;
+							
+							//Encryption photo
+						 	var aesUtil = new AesUtil(128, 1000);
+						 	var encryptedPhoto=aesUtil.encrypt(secret_user,kms_msg.secretRsc,passSecret, Lockr.get("photo"));
+						 	
+						 	//Msg to KMS
+						 	
+						 	var msgKMS={"id":Lockr.get("id"),"idResource":Lockr.get("idResource"),"n2_2":(kms_msg.nonce_two_plus_one+1),"encryptedPhoto":encryptedPhoto};
+							var iv=CryptoJS.lib.WordArray.random(128/8).toString(CryptoJS.enc.Hex);
+					   	 	var salt= CryptoJS.lib.WordArray.random(128/8).toString(CryptoJS.enc.Hex);
+						 	var aesUtil = new AesUtil(128, 1000);
+
+						 	var msgKMSEncrypt=aesUtil.encrypt(iv,salt,Lockr.get("passPhrase"),JSON.stringify(msgKMS));
+						 	
+						 	var keyKMS={"iv":iv,"salt":salt,"passPhrase":Lockr.get("passPhrase")};
+						 	var rsa=new RSAKey();
+						 	rsa.setPublic(mKMS,eKMS);
+						 	var keyKMSencrypt=rsa.encrypt(JSON.stringify(keyKMS));
+					   	 	var messageToKMS={"keyKMSencrypt":keyKMSencrypt,"msgKMSEncrypt":msgKMSEncrypt};
+						 	
+					   	 	var msgRMS={"id":Lockr.get("id"),"N1_2":(nonce_plus_one+1),"idResource":Lockr.get("idResource"),"rule":Lockr.get("rule"),"messageToKMS":messageToKMS};
+						 	
+						 	var iv=CryptoJS.lib.WordArray.random(128/8).toString(CryptoJS.enc.Hex);
+					   	 	var salt= CryptoJS.lib.WordArray.random(128/8).toString(CryptoJS.enc.Hex);
+						 	var aesUtil = new AesUtil(128, 1000);
+						 	msgRMS=aesUtil.encrypt(iv,salt,Lockr.get("passPhrase"),JSON.stringify(msgRMS));
+						 	
+						 	var keyRMS={"iv":iv,"salt":salt,"passPhrase":Lockr.get("passPhrase")};
+						 	var rsa=new RSAKey();
+							rsa.setPublic(mRMS,eRMS);
+							var keyRMSencrypt=rsa.encrypt(JSON.stringify(keyRMS));
+							
+							var messageToRMS={"keyRMSencrypt":keyRMSencrypt,"msgRMS":msgRMS};
+							
+							console.log(messageToRMS);
+						 	
+						 	
+						 						
+						 	
+						 	
 						},
 						function(errResponse){
 							console.error('Error while creating User.');
 						});
+				},
+				function(errResponse){
+					window.alert("File already exists!");
+				});
 			},	
 		
    
@@ -182,23 +247,39 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
         };
 
        
+        self.readID=function(){
+            var url = window.location.pathname;
+            var id_utente = url.substring(url.lastIndexOf('/') + 1);
+            return id_utente;
+            }
         
         
         $window.onload=function (){
-        		
-		     ProfileService.getUser(id_utente)
+			
+        	var id_utente=self.readID();	
+        	Lockr.set("id",id_utente);
+        	
+		     ProfileService.getUser(Lockr.get("id"))
              .then(
             		 function(data){
             			 
             			self.user=data;
-            		
-            				
-            			
      					self.image=self.user.photo;
-     					var prova="data:image/png;base64,";
-     					var str=prova+self.image
+     				
+     						  var binary = '';
+     						  var bytes = new Uint8Array( self.image);
+     						  var len = bytes.byteLength;
+     						  for (var i = 0; i < len; i++) {
+     						    binary += String.fromCharCode( bytes[ i ] );
+     						  }
+     						  var base64Image=window.btoa( binary );
+     					
+     							var tag="data:image/JPEG;base64,";
+     	     					var imageDecoded=tag+base64Image;
+			
+     			
      					var img = document.createElement("img");
-     					img.src = str;
+     					img.src = imageDecoded;
      					 img.width="50";
      					img.height="50";
      					  document.getElementById("foo").appendChild(img);
@@ -210,11 +291,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
             			 console.error('Error while getUser...');
             			
             		 });
-        		/*},function(errResponse){
-       			
-        			$window.location.href=url;
-       		 });*/
-             	
+        		
         	
         	
         },
@@ -222,7 +299,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
         
         self.getAlbum=function(){
           	
-        	ProfileService.getAlbum(id_utente)
+        	ProfileService.getAlbum(Lockr.get("id"))
              .then(
             		 function(response){
             			
@@ -240,11 +317,11 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
   
         
 		self.searchFriend=function(){
-			var id=self.user.id;
+
 			var search=self.friend;
 			var st=search.charAt(0);
 			if(st=='#'){
-				ProfileService.searchImage(id,search)
+				ProfileService.searchImage(Lockr.get("id"),search)
 				.then(
 						function(response){
 							
@@ -258,7 +335,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 	           		 });
 					
 			}else{
-				ProfileService.searchFriend(id,search)
+				ProfileService.searchFriend(Lockr.get("id"),search)
 			.then(
 					function(response){
 						
@@ -302,7 +379,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 	        	    var file = files[0];
 	        	    var str=file.name;
 	        	    str = str.replace(/\s+/g, '');
-	        	    Lockr.set('name_photo',str);
+	        	    Lockr.set("fileName",str);
 	        	    
 	        	    if (files && file) {
 	        	        var reader = new FileReader();

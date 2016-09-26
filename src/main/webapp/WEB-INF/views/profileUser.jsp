@@ -86,7 +86,8 @@
                         
                       
                        
-                <td><div id="foo"></div></td>         
+                <td> <div id="foo"></div> 
+                </td>         
 				 <td><span ng-bind="ctrl.user.birth_day"></span></td>
                  <td><span ng-bind="ctrl.user.city"></span></td>	
                  <td></td>

@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.websystique.springmvc.dao.AlbumDao;
 import com.websystique.springmvc.model.Album;
+import com.websystique.springmvc.model.User;
 import com.websystique.springmvc.service.AlbumService;
 
 @Service("AlbumService")
@@ -18,32 +19,30 @@ public class AlbumServiceImpl implements AlbumService{
 	@Autowired
 	AlbumDao dao;
 
-	public Album findById(Integer id) {
-		return dao.findById(id);
+	public Album findById(User user,String fileName) {
+		return dao.findById(user,fileName);
 	}
 
 	
-	public List<Album> findAllByUserId(Integer userId) {
+	public List<Album> findAllByUserId(User userId) {
 		return dao.findAllByUserId(userId);
 	}
 	
-	public void saveAlbum(Album document){
-		dao.save(document);
-	}
+	
 
-	public void deleteById(Integer id){
-		dao.deleteById(id);
-	}
 
 	public List<Album> findByMetaTag(String meta) {
 		return dao.findByMetaTag(meta);
 	}
 
 
-	public Album findById(BigInteger id) {
-		// TODO Auto-generated method stub
-		return null;
+	@Override
+	public void save(Album album) {
+		dao.save(album);// TODO Auto-generated method stub
+		
 	}
+
+
 
 
 	

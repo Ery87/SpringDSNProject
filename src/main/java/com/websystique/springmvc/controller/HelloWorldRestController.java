@@ -104,17 +104,35 @@ public class HelloWorldRestController {
     //-------------------Retrieve Single User--------------------------------------------------------
      
 	@RequestMapping(value = { "/profile/" }, method = RequestMethod.POST)
-    public ResponseEntity<User> getUser(@RequestBody Integer id) throws UnsupportedEncodingException {
+    public void getUser(@RequestBody Integer id,HttpServletResponse res) throws JSONException, IOException {
 		
 		User user=userService.findById(id);
+		PrintWriter pw=null;
 				if (user == null) {
             System.out.println("User not found");
-            return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
-        }    
+            pw.println("{");
+         	pw.println("\"successful\": false,");
+         	pw.println("\"message\": \""+"Not found"+"\",");
+         	pw.println("}");
+        	return;
+				}    
 		
 	
-		return new ResponseEntity<User>(user, HttpStatus.OK);
-    }
+				JSONObject json=new JSONObject();
+	        	json.put("id", user.getId());
+	        	json.put("email", user.getEmail());
+	        	json.put("firstname", user.getFirstName());
+	        	json.put("lastname", user.getLastName());
+	        	json.put("birth_day", user.getBirth_day());
+	        	json.put("city", user.getCity());
+	        	json.put("photo", user.getPhoto());
+	        	json.put("pw",user.getPw());
+	        
+	        	
+						pw = res.getWriter();
+					
+	         	pw.println(json);
+	            }
  
 	
      
@@ -221,6 +239,57 @@ public class HelloWorldRestController {
 
         	}
 	}
+    	
+    	
+
+    	//------------------- Save Album--------------------------------------------------------
+
+    	@RequestMapping(value="/saveAlbum",method=RequestMethod.POST)
+    	public void saveAlbum(HttpServletRequest request,HttpServletResponse res) throws IOException, JSONException{
+    		System.out.println("Save album user");
+    		PrintWriter pw=res.getWriter();
+    		
+    		StringBuilder sb = new StringBuilder();
+    		Album album=null;
+            BufferedReader br = request.getReader();
+            String str = null;
+            while ((str = br.readLine()) != null) {
+                sb.append(str);
+            }
+            JSONObject message = new JSONObject(sb.toString());
+    		Integer id=message.getInt("id");
+    		String metaTag=message.getString("tag");
+    		String fileName=message.getString("fileName");
+    		
+    		User user=userService.findById(id);
+    		
+    			album=albumService.findById(user, fileName);
+    			if(album==null){
+    				Album albumUser=new Album();
+    				albumUser.setFileName(fileName);
+    				albumUser.setMetaTag(metaTag);
+    				albumUser.setUser(user);
+    				albumService.save(albumUser);
+    		
+    				pw.println("{");
+    				pw.println("\"successful\": true,");
+    				pw.println("\"idAlbum\": \""+albumUser.getId()+"\"");
+    				pw.println("}");
+    				return;
+    	    		
+    				
+    				
+    			}else{
+    	    		System.out.println("file not exists");
+    	    		pw.println("{");
+    				pw.println("\"successful\": false,");
+    	         	pw.println("\"message\": \""+"File already exists"+"\",");
+    				pw.println("}");
+    				return;
+    			}
+    			
+
+    	}
 
     	//------------------- Search Album--------------------------------------------------------
 
@@ -230,7 +299,7 @@ public class HelloWorldRestController {
     		User user=userService.findById(id);
     		if(!(user==null)){
         		List<Album> albums=new ArrayList<Album>();
-        		albums=albumService.findAllByUserId(id);
+        		albums=albumService.findAllByUserId(user);
         		return new ResponseEntity<List<Album>>(albums,HttpStatus.OK);
     		}else
     			return new ResponseEntity<List<Album>>(HttpStatus.NOT_FOUND);
@@ -276,6 +345,7 @@ public class HelloWorldRestController {
 			pw.println("\"successful\": true,");
 			pw.println("\"IDuser\": \""+u.getId()+"\"");
 			pw.println("}");
+			
     	}
     	return;
     }

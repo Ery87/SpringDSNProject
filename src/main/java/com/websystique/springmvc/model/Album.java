@@ -33,14 +33,26 @@ public class Album{
 
 
 	
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name="id_user")
 	private User user;
 	
 	
+	@Column(name="fileName")
+	private String fileName;
 	
 	
 	
+	public Album(){}
+	
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
 	public Integer getId() {
 		return id_album;
 	}
@@ -103,8 +115,8 @@ public class Album{
 
 	@Override
 	public String toString() {
-		return "Album [id=" + id_album + ", metaTag=" + metaTag + ", url="
-				+ url +  "]";
+		return "Album [id_album=" + id_album + ", metaTag=" + metaTag + ", url=" + url + ", user=" + user
+				+ ", fileName=" + fileName + "]";
 	}
 
 	

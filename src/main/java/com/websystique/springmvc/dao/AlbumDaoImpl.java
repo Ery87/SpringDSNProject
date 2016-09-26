@@ -8,13 +8,15 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.websystique.springmvc.model.Album;
+import com.websystique.springmvc.model.User;
 
 @Repository("AlbumDao")
 public class AlbumDaoImpl extends AbstractDao<Integer, Album> implements AlbumDao{
 
 	@SuppressWarnings("unchecked")
-	public List<Album> findByMetaTag() {
+	public List<Album> findByMetaTag(String meta) {
 		Criteria crit = createEntityCriteria();
+		crit.add(Restrictions.eq("metaTag",meta));
 		return (List<Album>)crit.list();
 	}
 
@@ -23,30 +25,23 @@ public class AlbumDaoImpl extends AbstractDao<Integer, Album> implements AlbumDa
 	}
 
 	
-	public Album findById(Integer id) {
-		return getByKey(id);
+	public Album findById(User user,String fileName) {
+		Criteria crit = createEntityCriteria();
+		crit.add(Restrictions.eq("user",user));
+		crit.add(Restrictions.eq("fileName",fileName));
+		return (Album)crit.uniqueResult();
+	
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Album> findAllByUserId(Integer userId){
+	public List<Album> findAllByUserId(User userId){
 		Criteria crit = createEntityCriteria();
-		Criteria userCriteria = crit.createCriteria("user");
-		userCriteria.add(Restrictions.eq("id", userId));
+		crit.add(Restrictions.eq("user", userId));
 		return (List<Album>)crit.list();
 	}
 
 	
-	public void deleteById(Integer id) {
-		Album document =  getByKey(id);
-		delete(document);
-	}
-
-	public List<Album> findByMetaTag(String meta) {
-		Criteria crit=createEntityCriteria();
-		crit.add(Restrictions.eq("metaTag", meta));
-		List<Album> albums=(List<Album>) crit.list();
-		return albums;
-	}
+	
 
 	
 }

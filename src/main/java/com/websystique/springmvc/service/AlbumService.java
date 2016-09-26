@@ -4,19 +4,19 @@ import java.math.BigInteger;
 import java.util.List;
 
 import com.websystique.springmvc.model.Album;
+import com.websystique.springmvc.model.User;
 
 public interface AlbumService {
 	
 
 	List<Album> findByMetaTag(String meta);
 	
-	Album findById(Integer id);
+	Album findById(User user,String fileName);
 	
-	List<Album> findAllByUserId(Integer id);
+	void save(Album album);
 	
-	void deleteById(Integer id);
-	
-	void saveAlbum(Album document);
+	List<Album> findAllByUserId(User userId);
+		
 	
 	
 }
