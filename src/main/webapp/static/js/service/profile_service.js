@@ -64,7 +64,21 @@ var urlRMS='http://193.206.170.143/RMS';
 			        
 			        
 			    },
-			    
+			    uploadReq2:function(msg){
+					
+					return $http.post(urlRMS+'/uploadReq2/',msg)
+					.then(
+							function(response){
+						return response.data;
+					},
+					function(errResponse){
+						console.error(errResponse);
+						return $q.reject(errResponse);
+					}
+					);
+			        
+			        
+			    },  
 			    
 	    	getPK:function(name){
 			

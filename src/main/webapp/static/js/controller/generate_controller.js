@@ -83,10 +83,11 @@ App.controller('GenerateController',['$scope','$window','UserService',function($
 														var client_modulus=jsondecrypt.client_modulus;
 														var client_private=jsondecrypt.client_private_exponent;
 														var client_privateCrypted=aesUtil.encrypt(salt,iv,passphrase,client_private);
+														
 														var keys={"id":self.id,"exponent":client_exponent,"modulus":client_modulus,"private":client_privateCrypted,"salt":salt,"iv":iv};
 														
 														
-														
+													
 														UserService.savePKClient(keys)
 														.then(
 																function(data){

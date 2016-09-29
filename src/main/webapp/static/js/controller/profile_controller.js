@@ -76,7 +76,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 		var rule=$scope.ctrl.rule;
 		Lockr.set("rule",rule);
 		var album={"tag":tag,"id":Lockr.get("id"),"fileName":Lockr.get("fileName")};
-		
+	
 		ProfileService.saveAlbum(album)
 		.then(
 				function(data){
@@ -89,10 +89,10 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 		   	 	Lockr.set('salt1',salt);
 				
 				var n2=Math.floor(Math.random()*100+1);
-				var msgKms={"idu":Lockr.get("id"),"idR":Lockr.get("idResource"),"n2":n2,'session_token':Lockr.get('sessionId')};
+				var msgKms={"idu":Lockr.get("id"),"idR":Lockr.get("idResource"),"n2":n2,'session_token':"provaprpororororor"};
 			
 				
-				
+		
 					
 				
 				
@@ -112,7 +112,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 				var eRMS=Lockr.get('exponent_RMS');
 				var n1=Math.floor(Math.random()*100+1);
 				
-				var msgRMS={"idu":Lockr.get("id"),"n1":n1,"idR":Lockr.get("idResource"),"msgKMS":msgKMSEncrypted,'session_token':Lockr.get('sessionId')};
+				var msgRMS={"idu":Lockr.get("id"),"n1":n1,"idR":Lockr.get("idResource"),"msgKMS":msgKMSEncrypted,'session_token':"provaprpororororor"};
 				msgRMS=JSON.stringify(msgRMS);
 				var aes=new AesUtil(128,1000);
 				var encryptmsgRMS=aes.encrypt(salt,iv,passPhrase,msgRMS);
@@ -135,8 +135,15 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 							var key=data.AESParams;
 							self.getPKClient(Lockr.get("id"));
 							var rsa=new RSAKey();
-							var keyPrivate=aesUtil.decrypt(Lockr.get('salt'),Lockr.get('iv'),Lockr.get('passPhrase'),Lockr.get("private_Client"));
-						 	rsa.setPrivate(Lockr.get('modulus_Client'),Lockr.get('exponent_Client'), keyPrivate); //recupera parametri della chiave del client
+							var s=Lockr.get('salt');
+							var i=Lockr.get('iv');
+							var p=Lockr.get('passPhrase');
+							var privateK=Lockr.get("private_Client");
+							console.log(s);
+							
+							var keyPrivate=aesUtil.decrypt(s,i,p,privateK);
+							keyPrivate=keyPrivate.toString(CryptoJS.enc.utf8);
+							rsa.setPrivate(Lockr.get('modulus_Client'),Lockr.get('exponent_Client'), keyPrivate); //recupera parametri della chiave del client
 				 	 	
 						 	key=rsa.decrypt(key);
 				 	 	
@@ -165,7 +172,10 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 							
 							//Encryption photo
 						 	var aesUtil = new AesUtil(128, 1000);
-						 	var encryptedPhoto=aesUtil.encrypt(secret_user,kms_msg.secretRsc,passSecret, Lockr.get("photo"));
+					 	var photoEnc=Lockr.get("photo");
+						 
+						 	var encryptedPhoto=aesUtil.encrypt(secret_user,kms_msg.secretRsc,passSecret,  photoEnc);
+						 	
 						 	
 						 	//Msg to KMS
 						 	
@@ -182,7 +192,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 						 	var keyKMSencrypt=rsa.encrypt(JSON.stringify(keyKMS));
 					   	 	var messageToKMS={"keyKMSencrypt":keyKMSencrypt,"msgKMSEncrypt":msgKMSEncrypt};
 						 	
-					   	 	var msgRMS={"id":Lockr.get("id"),"N1_2":(nonce_plus_one+1),"idResource":Lockr.get("idResource"),"rule":Lockr.get("rule"),"messageToKMS":messageToKMS};
+					   	 	var msgRMS={"id":Lockr.get("id"),"N1_2":(nonce_plus_one+1),"idResource":Lockr.get("idResource"),"rule":Lockr.get("rule"),"messageToKMS":JSON.stringify(messageToKMS)};
 						 	
 						 	var iv=CryptoJS.lib.WordArray.random(128/8).toString(CryptoJS.enc.Hex);
 					   	 	var salt= CryptoJS.lib.WordArray.random(128/8).toString(CryptoJS.enc.Hex);
@@ -190,17 +200,21 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 						 	msgRMS=aesUtil.encrypt(iv,salt,Lockr.get("passPhrase"),JSON.stringify(msgRMS));
 						 	
 						 	var keyRMS={"iv":iv,"salt":salt,"passPhrase":Lockr.get("passPhrase")};
+						 	console.log(keyRMS);
 						 	var rsa=new RSAKey();
 							rsa.setPublic(mRMS,eRMS);
 							var keyRMSencrypt=rsa.encrypt(JSON.stringify(keyRMS));
 							
 							var messageToRMS={"keyRMSencrypt":keyRMSencrypt,"msgRMS":msgRMS};
-							
-							console.log(messageToRMS);
-						 	
-						 	
-						 						
-						 	
+							messageToRMS=JSON.stringify(messageToRMS);
+							ProfileService.uploadReq2(messageToRMS)
+								.then(
+										function(data){
+											
+										},function(errResponse){
+											console.error('Error while upload request two.');
+										});
+	 	
 						 	
 						},
 						function(errResponse){
@@ -353,6 +367,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 			
 		
 			self.logout=function(){
+				Lockr.flush();
 				$window.location.href=url;
 			},
 			
