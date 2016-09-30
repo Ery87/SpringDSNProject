@@ -10,8 +10,8 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
         var tagImage;
         var metaTag;
      
-        //    var url='http://193.206.170.142/OSN';
-         var url='http://localhost:8080/OSN';
+       var url='http://193.206.170.142/OSN';
+       //     var url='http://localhost:8080/OSN';
       
         
         self.getPKClient=function(id){
@@ -139,7 +139,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 							var i=Lockr.get('iv');
 							var p=Lockr.get('passPhrase');
 							var privateK=Lockr.get("private_Client");
-							console.log(s);
+							
 							
 							var keyPrivate=aesUtil.decrypt(s,i,p,privateK);
 							keyPrivate=keyPrivate.toString(CryptoJS.enc.utf8);
@@ -172,8 +172,8 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 							
 							//Encryption photo
 						 	var aesUtil = new AesUtil(128, 1000);
-					 	var photoEnc=Lockr.get("photo");
-						 
+						 	var photoEnc=Lockr.get("photo");
+						
 						 	var encryptedPhoto=aesUtil.encrypt(secret_user,kms_msg.secretRsc,passSecret,  photoEnc);
 						 	
 						 	
@@ -197,13 +197,15 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 						 	var iv=CryptoJS.lib.WordArray.random(128/8).toString(CryptoJS.enc.Hex);
 					   	 	var salt= CryptoJS.lib.WordArray.random(128/8).toString(CryptoJS.enc.Hex);
 						 	var aesUtil = new AesUtil(128, 1000);
+						 	
 						 	msgRMS=aesUtil.encrypt(iv,salt,Lockr.get("passPhrase"),JSON.stringify(msgRMS));
 						 	
 						 	var keyRMS={"iv":iv,"salt":salt,"passPhrase":Lockr.get("passPhrase")};
-						 	console.log(keyRMS);
+						 
 						 	var rsa=new RSAKey();
 							rsa.setPublic(mRMS,eRMS);
 							var keyRMSencrypt=rsa.encrypt(JSON.stringify(keyRMS));
+						
 							
 							var messageToRMS={"keyRMSencrypt":keyRMSencrypt,"msgRMS":msgRMS};
 							messageToRMS=JSON.stringify(messageToRMS);
@@ -368,7 +370,14 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 		
 			self.logout=function(){
 				Lockr.flush();
-				$window.location.href=url;
+				ProfileService.logOut()
+				.then(
+						function(data){
+							return;
+						},function(errResponse){
+							 console.error('Error while logout...');
+		           			 
+		           		 });
 			},
 			
 			self.submit=function(){
