@@ -2,9 +2,9 @@
 App.controller('UserController',['UserService','$window','$scope',function (UserService,$window,$scope){
 		var self=this;
          self.user={id:null,birth_day:'',city:'',email:'',firstName:'',lastName:'',photo:null,pw:''};
-          var url='http://193.206.170.142/OSN';
+      //       var url='http://193.206.170.142/OSN';
         var message='';    
-        //   var url='http://localhost:8080/OSN';
+         var url='http://localhost:8080/OSN';
          
                 
         

@@ -24,7 +24,7 @@
 			
 		})
 		
-		.when('/user/{id}',{
+		.when('/profile/{id}?{lastname}{firstname}',{
 				controller:'ProfileController',
 				templateUrl: 'WEB-INF/views/profileUser.jsp'
 			
@@ -32,6 +32,16 @@
 			.when('/generateKey/{id}',{
 				controller:'GenerateController',
 				templateUrl: 'WEB-INF/views/generateKey.jsp'
+			
+		})
+			.when('/userView/{id}/{id}?{fistname}{lastname}',{
+				controller:'UserViewsController',
+				templateUrl: 'WEB-INF/views/userView.jsp'
+			
+		})
+		.when('/searchFriend/{id}',{
+				controller:'SearchController',
+				templateUrl: 'WEB-INF/views/searchFriend.jsp'
 			
 		})
 		

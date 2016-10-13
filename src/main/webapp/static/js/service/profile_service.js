@@ -1,8 +1,8 @@
 'use strict';
 
 App.factory('ProfileService',['$http','$q',function($http,$q){
-	var path='http://193.206.170.142/OSN';
-//	var path='http://localhost:8080/OSN';
+	//var path='http://193.206.170.142/OSN';
+		var path='http://localhost:8080/OSN';
 var urlRMS='http://193.206.170.143/RMS';
 	
 	return{
@@ -18,7 +18,38 @@ var urlRMS='http://193.206.170.143/RMS';
 						});
 		   },
 		
-	
+		   getUserViewPhoto:function(id,filename){
+				var message={"id":id,"filename":filename};
+				return $http({
+					 url: path+'/getPhoto/',
+					  method: "POST",
+					  data: message,
+					  headers: {
+					    'Content-Type': 'application/json'
+					  }}).success(function(response){
+						 
+						  return response.data;
+					  })
+				        .error(function(){
+				        });
+			},
+			
+			getDownload:function(msgRMS){
+				
+				return $http({
+					 url: urlRMS+'/downloadReq/',
+					  method: "POST",
+					  data:msgRMS ,
+					  headers: {
+					    'Content-Type': 'application/json'
+					  }}).success(function(response){
+						 
+						  return response.data;
+					  })
+				        .error(function(){
+				        });
+			},
+				
 		getUser:function(id){
 			
 			return $http.post(path+'/profile/',id)
@@ -122,23 +153,7 @@ var urlRMS='http://193.206.170.143/RMS';
 				
 			});
 		},
-		searchFriend:function(id,friend){
-			
-			
-			return $http({
-	    		  url: path+'/searchFriend/',
-	    		  method: "POST",
-	    		  data: friend,
-	    		  headers: {
-	    		    'Content-Type': 'application/json'
-	    		  }}).success(function(response){
-	    			 
-	    			  return response.data;
-	    		  })
-			        .error(function(){
-			        	console.error('Error while inviate protocol');
-			        });
-		},
+		
 	
 		getAlbum:function(id){
 		 	

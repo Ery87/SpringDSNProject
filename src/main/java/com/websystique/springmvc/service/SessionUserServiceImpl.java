@@ -42,5 +42,12 @@ public class SessionUserServiceImpl implements SessionUserService{
 	}
 
 
+	@Override
+	public void deleteSession(User u, String session) {
+		dao.deleteSession(u, session);
+		
+	}
+
+
 
 }

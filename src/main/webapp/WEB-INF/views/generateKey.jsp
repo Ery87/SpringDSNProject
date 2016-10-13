@@ -33,25 +33,35 @@
   </head>
   <body ng-app="myApp" class="ng-cloak">
  
-      <div class="generic-container" ng-controller="GenerateController as ctrl">
+     <div class="generic-container" ng-controller="GenerateController as ctrl">
         <h1 style="text-align:center;">Welcome to DSNProject!</h1>
           <div class="panel panel-default">
               <div class="panel-heading"><span class="lead">To generate the key pairs to enter your Passphrase </span></div>
                 <form  name="myForm" class="form-horizontal">
-                      
+                      <div class="row"><br></div> 
                       <div class="row">
-                          <div class="form-group col-md-12">
-                              <label class="col-md-2 control-lable" for="Passphrase">Passphrase</label>
+                          <div style="padding-left: 70px;" class="form-group col-md-12">
+                            <label class="col-md-2 control-lable" for="Passphrase" >Passphrase</label>
                               <div class="col-md-7">
-                                  <input type="text" ng-model="ctrl.Passphrase" id="Passphrase" class="Passphrase form-control input-sm" placeholder="Write your Passphrase" required/>
-                                  
-                              </div>
+                     				<p> <input data-ng-model='user.password' type="password" name='password' placeholder='insert passPhrase' required></p>
+    						  <div ng-show="form.password.$error.required">
+    							    Field required</div>
                           </div>
                       </div>
-                      
                       <div class="row">
-                          <div class="form-actions floatRight">
-                              <input type="submit" ng-click="ctrl.generateKey()"  class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid">
+                          <div style="padding-left: 70px;" class="form-group col-md-12">
+                          <label class="col-md-2 control-lable" for="Passphrase" >Confirm Passphrase</label>
+                              <div class="col-md-7">
+                             <p>  <input ng-model='user.password_verify' type="password" name='confirm_password' placeholder='confirm passPhrase' required data-password-verify="user.password"></p>
+   									   <div ng-show="form.confirm_password.$error.required">
+  												      Field required!</div>
+							      <div ng-show="form.confirm_password.$error.passwordVerify">
+					       					 Fields are not equal!</div>
+                      </div>
+                      </div>
+                      <div class="row">
+                          <div style="padding-right: 70px;" class="form-actions floatRight">
+                         <input type="submit" ng-click="ctrl.generateKey()"  class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid">
                         <button type="button" ng-click="ctrl.reset()" class="btn btn-warning btn-sm" ng-disabled="myForm.$pristine">Reset Form</button>
                           </div>
                    

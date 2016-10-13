@@ -28,6 +28,15 @@ public class SessionDaoImpl extends AbstractDao<Integer,SessionUser> implements 
 		return sessUser; 
 	}
 
+	@Override
+	public void deleteSession(User u, String sessionId) {
+		Criteria crit=createEntityCriteria();
+		crit.add(Restrictions.eq("user", u));
+		crit.add(Restrictions.eq("sessionId", sessionId));
+		SessionUser session=(SessionUser)crit.uniqueResult();
+		delete(session);		
+	}
+
 
 	
 	

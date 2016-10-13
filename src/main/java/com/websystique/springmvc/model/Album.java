@@ -27,9 +27,6 @@ public class Album{
 	@Column(name="metaTag", length=100, nullable=false)
 	private String metaTag;
 	
-	@Column(name="url", length=255)
-	private String url;
-	
 
 
 	
@@ -37,7 +34,7 @@ public class Album{
 	@JoinColumn(name="id_user")
 	private User user;
 	
-	
+	@NotEmpty
 	@Column(name="fileName")
 	private String fileName;
 	
@@ -69,13 +66,7 @@ public class Album{
 		this.metaTag = name;
 	}
 
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String description) {
-		this.url = description;
-	}
+	
 
 	
 
@@ -115,7 +106,7 @@ public class Album{
 
 	@Override
 	public String toString() {
-		return "Album [id_album=" + id_album + ", metaTag=" + metaTag + ", url=" + url + ", user=" + user
+		return "Album [id_album=" + id_album + ", metaTag=" + metaTag + ", user=" + user
 				+ ", fileName=" + fileName + "]";
 	}
 

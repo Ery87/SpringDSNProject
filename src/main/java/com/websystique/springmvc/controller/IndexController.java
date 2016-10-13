@@ -31,4 +31,15 @@ public class IndexController {
 		  return "generateKey";
 	  }
 	
+	  
+	  @RequestMapping(value="/userView/{id}/{id}?{firstname}{lastname}", method=RequestMethod.GET)
+	  public String userView(){
+		  return "userView";
+	  }
+	  
+	  @RequestMapping(value="/searchFriend/{id}", method=RequestMethod.GET)
+	  public String searchFriend(){
+		  return "searchFriend";
+	  }
+	
 }
