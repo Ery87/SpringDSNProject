@@ -20,9 +20,10 @@ public class SessionDaoImpl extends AbstractDao<Integer,SessionUser> implements 
 	}
 
 	@Override
-	public SessionUser getSessionUser(User u) {
+	public SessionUser getSessionUser(User u,String session) {
 		Criteria crit=createEntityCriteria();
 		crit.add(Restrictions.eq("user", u));
+		crit.add(Restrictions.eq("sessionId", session));
 		SessionUser sessUser=(SessionUser)crit.uniqueResult();
 		
 		return sessUser; 

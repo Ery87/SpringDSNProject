@@ -12,20 +12,26 @@ App.controller('UserController',['UserService','$window','$scope',function (User
          
        self.createUser=function(){
     	   	var utente=$scope.ctrl.user;
-    	    var key = CryptoJS.enc.Base64.parse("MTIzNDU2NzgxMjM0NTY3OA==");
-    	    var iv  = CryptoJS.enc.Base64.parse("EBESExQVFhcYGRobHB0eHw==");
-    	    var encrypted = CryptoJS.AES.encrypt(utente.pw, key, {iv: iv});
-    	    utente.pw=encrypted.toString();
+    	    var salt=bcrypt.genSaltSync(10);
+    	    var hash=bcrypt.hashSync(utente.pw,salt)
+    	    utente.pw=hash;
             UserService.saveUser(utente)
 		              .then(
 		            		  function(d){
 		            			 self.user=d;
 		            			
-
+		            			 UserService.loginGet(self.user.email)
+		            			 	.then(
+		            			 			function(data){
 		            			
 		      		            			$window.location.href=url+'/uploadPhoto/'+self.user.id;
- 
-		            					 },
+		      		            			},
+		      		            			
+			            					 function(errResponse){
+			  					               console.error('Error while login get.');
+
+		            					 });
+		            		  },
 		            					 function(errResponse){
 		  					               console.error('Error while creating User.');
 

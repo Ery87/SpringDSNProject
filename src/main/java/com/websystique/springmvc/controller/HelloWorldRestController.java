@@ -31,6 +31,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -114,7 +115,7 @@ public class HelloWorldRestController {
 		
 		User user=userService.findById(id);
 		PrintWriter pw=null;
-		SessionUser session=sessionUser.getSessionUser(user);
+		SessionUser session=sessionUser.getSessionUser(user,req.getSession().getId());
 		JSONObject json=new JSONObject();
 		pw=res.getWriter();
 		if(session!=null && session.getSessionId().equals(req.getSession().getId()))	{
@@ -148,13 +149,54 @@ public class HelloWorldRestController {
 	            }
 	}
 	
+	
+	 //-------------------Retrieve getFriendship requestor--------------------------------------------------------
+    
+		@RequestMapping(value = { "/getFriendshipRequestor/" }, method = RequestMethod.POST)
+	    public void getFriendshipRequestor(@RequestBody Integer id,HttpServletResponse res,HttpServletRequest req) throws JSONException, IOException {
+			
+			
+			User user=userService.findById(id);
+			PrintWriter pw=null;
+			JSONObject json=new JSONObject();
+			pw=res.getWriter();
+			if (user == null) {
+	            System.out.println("User not found");
+	            pw.println("{");
+	         	pw.println("\"successful\": false,");
+	         	pw.println("\"message\": \""+"Not found"+"\",");
+	         	pw.println("}");
+	        	return;
+					}else{    
+			
+		
+					
+		        	json.put("id", user.getId());
+		        	json.put("email", user.getEmail());
+		        	json.put("firstname", user.getFirstName());
+		        	json.put("lastname", user.getLastName());
+		        	json.put("birth_day", user.getBirth_day());
+		        	json.put("city", user.getCity());
+		        	json.put("photo", user.getPhoto());
+		        	
+						
+		         	pw.println(json);
+					}
+			
+			
+		}
+		
+	
+	
 	 @RequestMapping(value="/checkSession",method=RequestMethod.POST)
 	    public void  checkSession(@RequestBody Integer id,HttpServletRequest req,HttpServletResponse res) throws JSONException, IOException{
-	    	User u=userService.findById(id);
-	    	SessionUser session=sessionUser.getSessionUser(u);
+		
+	
+		 User u=userService.findById(id);
+	    	SessionUser session=sessionUser.getSessionUser(u,req.getSession().getId());
 	    	JSONObject json=new JSONObject();
 			PrintWriter pw=null;
-
+		
 				if(session!=null && session.getSessionId().equals(req.getSession().getId())){
 					json.put("session", session.getSessionId());
 				}else{
@@ -173,6 +215,7 @@ public class HelloWorldRestController {
     	PrintWriter pw=null;
     	 
     	if(!(u==null)){
+    		
     		JSONObject json=new JSONObject();
         	json.put("id", u.getId());
 
@@ -226,7 +269,7 @@ public class HelloWorldRestController {
     @RequestMapping(value ="/logout", method = RequestMethod.POST)
     public void logout(@RequestBody Integer id,HttpServletRequest request,HttpServletResponse response) throws IOException, JSONException {
     	User user=userService.findById(id);
-    	SessionUser session=sessionUser.getSessionUser(user);
+    	SessionUser session=sessionUser.getSessionUser(user,request.getSession().getId());
     	sessionUser.deleteSession(user, session.getSessionId());
     	
     	request.getSession().invalidate();
@@ -237,15 +280,18 @@ public class HelloWorldRestController {
     
     @RequestMapping(value = "/loginGet/", method = RequestMethod.POST)
     public void loginGet(@RequestBody String email,HttpServletRequest request, HttpServletResponse response) throws IOException {
-    	 session = request.getSession();
-    	  session.setAttribute("email", email);
-    	  session.setMaxInactiveInterval(1000);
-    	  SessionUser u=new SessionUser();
-    	  User user=userService.findByEmail(email);
-    	  u.setUser(user);
-    	  u.setSessionId(session.getId());
-    	  sessionUser.saveSession(u);
-    	  
+    	
+    	session = request.getSession();
+    	session.setAttribute("email", email);
+    	session.setMaxInactiveInterval(1000);
+    	SessionUser u=new SessionUser();
+    	User user=userService.findByEmail(email);
+    	SessionUser check_session=sessionUser.getSessionUser(user,session.getId());
+    	 	if(check_session==null){
+	    	u.setUser(user);
+	    	u.setSessionId(session.getId());
+	    	sessionUser.saveSession(u);
+    	}
     }
     
      
@@ -299,6 +345,57 @@ public class HelloWorldRestController {
     
     }
     
+  //-------------------Get Friend Request-------------------------------------------------------
+    
+    @RequestMapping(value = "/getFriendRequest/", method = RequestMethod.POST)
+    public ResponseEntity<List<User>> getFriendRequest(HttpServletResponse res,HttpServletRequest req,@RequestBody Integer id) throws IOException, JSONException{
+    	User u=null;
+    	List<User> users=new ArrayList<User>();
+    	List<FriendshipRequest> friendshipList=friendshipService.getAllRequest(id);
+    	if(!(friendshipList.isEmpty())){
+    	
+    		for(FriendshipRequest f:friendshipList){
+    			    			u=userService.findById(f.getUser_requestor());
+    			
+    			users.add(u);
+    			
+
+    			
+    		}
+	          return new ResponseEntity<List<User>>(users,HttpStatus.OK);
+    	}else{
+    		
+			return new ResponseEntity<List<User>>(users,HttpStatus.ACCEPTED);
+
+    	}
+ 	
+    }
+  
+
+    //------------------- delete Pending --------------------------------------------------------
+
+    
+    
+	@RequestMapping(value = "/deletePending/", method = RequestMethod.POST)
+    public void deletePending(HttpServletRequest req,HttpServletResponse res) throws IOException, JSONException{
+		PrintWriter pw=res.getWriter();
+		
+		StringBuilder sb = new StringBuilder();
+		Album album=null;
+        BufferedReader br = req.getReader();
+        String str = null;
+        while ((str = br.readLine()) != null) {
+            sb.append(str);
+        }
+        JSONObject message = new JSONObject(sb.toString());
+		Integer id_requestor=message.getInt("id_requestor");
+		Integer id_acceptor=message.getInt("id_acceptor");
+		friendshipService.delete(id_requestor, id_acceptor);
+		
+		
+	}
+
+    
     //------------------- Friendship Request --------------------------------------------------------
 
     
@@ -316,23 +413,13 @@ public class HelloWorldRestController {
             sb.append(str);
         }
         JSONObject message = new JSONObject(sb.toString());
-		Integer idSession=message.getInt("idSession");
-		Integer idSearched=message.getInt("idSearched");
-		String messageEncryptToPFS=message.getString("messageToPFS");
+		Integer idSession=message.getInt("id_requestor");
+		Integer idSearched=message.getInt("id_acceptor");
 		
-		FriendshipRequest friend=new FriendshipRequest();
-		friend.setUser_requestor(idSession);
-		friend.setUser_acceptor(idSearched);
-		friendshipService.save(friend);
-		User userSession=userService.findById(idSession);
-		User userSearched=userService.findById(idSearched);
-		String txt_email="Hi "+ userSearched.getFirstName()+" "+userSearched.getLastName()+"!\n\n"+userSession.getFirstName()+" "+userSession.getLastName() +" sent you a friendship request!\nIf you want to add him to your friends click this link:\n\n http://193.206.170.147/PathFinder/friendshipCreation/"+messageEncryptToPFS;
-		String emailSearched="dsn.project.p2p@gmail.com"; //userSearched.getEmail();//MODIFICARE
-	
-		SendEmail emailtoSend=new SendEmail(emailSearched);
-		emailtoSend.setText(txt_email);
-		emailtoSend.setSubject("Request friendship");
-		emailtoSend.send();
+		FriendshipRequest friend_relation=new FriendshipRequest();
+		friend_relation.setUser_acceptor(idSearched);
+		friend_relation.setUser_requestor(idSession);
+		friendshipService.save(friend_relation);
 		
 		}
 		

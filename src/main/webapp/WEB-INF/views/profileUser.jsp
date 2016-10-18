@@ -9,7 +9,7 @@
   
     <title>Welcome to DSNProject</title>  
     <style>
-      .username.ng-valid {
+   /*   .username.ng-valid {
           background-color: lightgreen;
       }
       .username.ng-dirty.ng-invalid-required {
@@ -27,7 +27,54 @@
       }
       .email.ng-dirty.ng-invalid-email {
           background-color: yellow;
-      }
+      }"*/
+      
+      
+a:focus {
+	outline: none;
+}
+#panel {
+	background: rgb(245, 245, 245);
+	height: 200px;
+	display: none;
+	color:#324a94;
+	padding-left:20px;
+	}
+.slide {
+	margin: 0;
+	padding: 0;
+	border-top: solid 20px #365886;
+	 border-radius: 10px; 
+  -moz-border-radius: 10px; /* firefox */
+  -webkit-border-radius: 10px; /* safari, chrome */
+	
+	
+}
+
+.btn-slide {
+	background: #3d71af;
+	text-align: center;
+	width: 144px;
+	height:33px;
+	padding: 8px 10px 0 0;
+	margin: 0 auto;
+	display: block;
+	font: bold 120%/100% Arial, Helvetica, sans-serif;
+	color: #fff;
+	text-decoration: none;
+	
+  border-radius: 10px; 
+  -moz-border-radius: 10px; /* firefox */
+  -webkit-border-radius: 10px; /* safari, chrome */
+		
+	
+}
+.active {
+	background-position: right 12px;
+}
+
+
+      
 
     </style>
     
@@ -42,14 +89,18 @@
      
 		<div class="container"> 
 			<div id="header">
+			<div id="panel">
+		</div>
+			
+			<p class="slide"><a href="#" class="btn-slide">Friendship Request</a></p>	
+       
 			<div id="navcontainer" >          
               	<div class="row floatRight" >
                 <div class="form-group col-md-12 ">
-         <!--       <form name="form"  class="form-horizontal" >-->  
  					 <input type="hidden" name="id" value="ctrl.user.id">
  					 <p><input type="submit" ng-click="ctrl.submit()"  class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid" value="search"/> &nbsp;&nbsp;<input type="button" ng-click="ctrl.logout()" class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid" value="logout"/></p>
  					 
-				<!--</form>  -->		
+				
 					</div>
 					
 					</div>
@@ -73,9 +124,11 @@
                
                
                 <div id="gutter">
-           </div>   
+           </div> 
+             
            <div id="col1">
            
+
            
                 <p>  <label for="filePicker">Upload your photo:</label>
      
@@ -135,7 +188,8 @@
                        
                
 
-               
+
+              
             
 						
       

@@ -139,7 +139,11 @@
         <script src="<c:url value='/static/js/libraries/lockr.js'/>"></script>
  	         
   <script src="<c:url value='/static/js/libraries/lockr.min.js'/>"></script>
-      
+  <script type="text/javascript" src="static/js/libraries/base64.js"></script>
+   	  <script type="text/javascript" src="static/js/libraries/bcrypt.js"></script>
+   	  <script type="text/javascript" src="static/js/libraries/util.js"></script> 
+   	  <script type="text/javascript" src="static/js/libraries/impl.js"></script> 
+   	  <script type="text/javascript" src="static/js/libraries/utfx.js"></script>    
      <script src="<c:url value='/static/js/app.js' />"></script>
       <script src="<c:url value='/static/js/service/login_service.js' />"></script>
       <script src="<c:url value='/static/js/controller/login_controller.js' />"></script>

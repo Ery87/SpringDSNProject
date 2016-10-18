@@ -7,7 +7,7 @@ public interface SessionUserService {
 	
 void saveSession(SessionUser u);
 	
-	SessionUser getSessionUser(User u);
+	SessionUser getSessionUser(User u,String session);
 	void deleteSession(User u,String session);
 
 

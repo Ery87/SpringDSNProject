@@ -65,7 +65,19 @@ App.service('UserService', ['$http','$q',function ($http,$q) {
 	    },
 	    
 	 
-	    
+	    loginGet:function(email){
+	    	
+			return $http.post(path+'/loginGet/',email).then(
+
+		    			function(response){
+		    				return response.data;
+		    			},
+		    			function(errResponse){
+							console.error('Error while receive pk kms');
+							return $q.reject(errResponse);
+						});
+		
+	    },
 	  
 		getPK:function(name){
 			

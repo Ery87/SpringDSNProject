@@ -13,7 +13,15 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
         //   var url='http://193.206.170.142/OSN';
           var url='http://localhost:8080/OSN';
       
-        
+
+          angular.element(document).ready(function () {
+          	$(".btn-slide").click(function(){
+          		$("#panel").slideToggle("slow");
+          		$(this).toggleClass("active"); return false;
+          	});
+          	
+          	 
+          });    
         
      
  	//UPLOAD PHOTO
@@ -338,6 +346,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
               			myTable.appendChild(tblBody);
               			document.getElementById("gallery").appendChild(myTable);
               			self.compile(document.getElementById("gallery"));
+              			self.addFriendRequest();
              		 },
             		 function(errResponse){
             			 console.error('Error while getUser...');
@@ -361,6 +370,140 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
   		    })     
   		},
   	
+  		
+  		self.addFriendRequest=function(){
+  			ProfileService.getFriendRequest(Lockr.get("id"))
+  			.then(
+  					function(data){
+  					
+  						if(data.length!=0){
+  							var myTable=document.createElement("TABLE");
+  							myTable.setAttribute("class","table table-hover");
+  							var tblBody = document.createElement("tbody");
+  							for(var i=0;i<data.length;i++){
+  						
+  								var tr=document.createElement("tr");
+  								
+  								var td_FirstName=document.createElement("td");
+  	              				var firstName_text = document.createTextNode(data[i].firstName);
+  	              				td_FirstName.appendChild(firstName_text);
+  	              				tr.appendChild(td_FirstName);
+  	              				
+  	              				var td_lastName=document.createElement("td");
+  	              				var lastName_text=document.createTextNode(data[i].lastName);
+  	              				td_lastName.appendChild(lastName_text);
+  	              				tr.appendChild(td_lastName);
+  	              				
+  	              				var td_butt=document.createElement("td");
+  	              				var a=document.createElement("a");
+  	              				a.href="";	
+  	              				a.setAttribute("ng-click","ctrl.addUser('"+data[i].id+"')");
+  	              				var button=document.createElement("button");
+  	              				var text_button=document.createTextNode("accept the request");
+  	              				button.appendChild(text_button);
+  	              				a.appendChild(button);
+  	              				td_butt.appendChild(a);
+	              				tr.appendChild(td_butt);
+	              				
+	              				var td_refuse=document.createElement("td");
+  	              				var a_refuse=document.createElement("a");
+  	              				a_refuse.href="";
+  	              				a_refuse.setAttribute("ng-click","ctrl.refuseFriend('"+data[i].id+"')");
+  	              				var button_refuse=document.createElement("button");
+  	              				var text_refuse=document.createTextNode("refuse");
+  	              				button_refuse.appendChild(text_refuse);
+  	              				a_refuse.appendChild(button_refuse);
+  	              				td_refuse.appendChild(a_refuse);
+  	              				tr.appendChild(td_refuse);
+  	              				
+  	              				td_butt.appendChild(a);
+  	              				tr.appendChild(td_butt);
+  	              				tblBody.appendChild(tr);
+  
+  							}
+  							myTable.appendChild(tblBody);
+  							document.getElementById("panel").appendChild(myTable);
+  	              			self.compile(document.getElementById("panel"));
+  	              	
+  						}else{
+  							var h2=document.createElement("h2");
+  							var text=document.createTextNode("There are not friend requests....");
+  							h2.appendChild(text);
+  							document.getElementById("panel").appendChild(h2);
+  							
+  						}
+  						
+  					},function(errResponse){
+  						console.error('error while notification...');
+  					});
+  		},
+  		self.refuseFriend=function(id){
+  			var id_acceptor=Lockr.get("id");
+  			
+  			ProfileService.deletePending(id_acceptor,id)
+  			.then(
+  					function(data){
+  						$window.location.reload(false); 
+  				  },function(errResponse){
+  						console.error('error while delete pending...');
+				  });
+			  
+  			
+  		},
+  		
+  		self.addUser=function(id){
+  			var id_acceptor=Lockr.get("id");
+  			
+  			ProfileService.deletePending(id_acceptor,id)
+  			.then(
+  					function(data){
+  						
+  						ProfileService.getFriendshipRequestor(id)
+  						.then(
+  								function(data){
+  									
+  									var nameRequestor=data.firstname;
+									var surnameRequestor=data.lastname;
+									var emailRequestor=data.email;
+												
+									var messagetoPFS={"idRequestor":id,"idOwner":id_acceptor,"emailRequestor":emailRequestor,"nameRequestor":nameRequestor,"surnameRequestor":surnameRequestor,"nameSearched":self.user.firstname,"surnameSearched":self.user.lastname};
+									console.log(messagetoPFS);
+									messagetoPFS=JSON.stringify(messagetoPFS);
+								
+									ProfileService.getPK('PFS') 
+									   .then(
+											   function (data){
+												   var PFS_modulus=data.modulus;
+												   var PFS_exponent=data.exponent;
+												   var rsa=new RSAKey();
+												   
+												   rsa.setPublic(PFS_modulus,PFS_exponent);
+												   var messageEncrypttoPFS=rsa.encrypt(messagetoPFS);
+												   ProfileService.friendshipCreation(messageEncrypttoPFS)
+												  .then(
+														  function(data){
+															  console.log(data);
+										  						$window.location.reload(false); 
+
+															  
+														  },function(errResponse){
+							  			  						console.error('error while inviate request to PFS...');
+														  });
+													  
+												  
+								
+  								},function(errResponse){
+  			  						console.error('error while get PK...');
+  								});
+  						
+  					},function(errResponse){
+  						console.error('error while get user...');
+  					});
+  					},function(errResponse){
+  						console.error('error while delete pending...');
+  					});
+  		},
+  		
         self.download=function(filename){
         	
         	ProfileService.getUserViewPhoto(Lockr.get("id"),filename)

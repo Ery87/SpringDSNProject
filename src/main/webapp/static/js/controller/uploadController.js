@@ -5,15 +5,25 @@ App.controller('UploadController',['UserService','$window','$scope',function (Us
          //     var url='http://193.206.170.142/OSN';
        var url='http://localhost:8080/OSN';
        	
-         $window.onload=function (){
-           	
-              var id_utente = self.readID();
-         
-              
-              
-        	
-        	
-            }
+       $window.onload=function (){
+
+    	   var id_utente = self.readID();
+    	   UserService.checkSession(self.id)
+    	   .then(
+    			   function(data){
+    				   if(data.session==0){
+    					   $window.location.href=url
+    				   }
+
+    			   },function(errResponse){
+    				   console.error('Error while check session....');
+    			   });
+
+
+
+
+
+       }
     
      
        

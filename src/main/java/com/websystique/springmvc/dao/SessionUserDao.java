@@ -9,7 +9,7 @@ public interface SessionUserDao {
 	
 	void saveSession(SessionUser u);
 	void deleteSession(User u,String sessionId);
-	SessionUser getSessionUser(User u);
+	SessionUser getSessionUser(User u,String session);
 	
 
 }

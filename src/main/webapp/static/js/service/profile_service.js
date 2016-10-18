@@ -4,7 +4,7 @@ App.factory('ProfileService',['$http','$q',function($http,$q){
 	//var path='http://193.206.170.142/OSN';
 		var path='http://localhost:8080/OSN';
 var urlRMS='http://193.206.170.143/RMS';
-	
+var urlPFS='http://193.206.170.147/PathFinder';	
 	return{
 		getPKClient:function(id){
 			   return $http.post(path+'/getPKClient',id).then(
@@ -33,7 +33,36 @@ var urlRMS='http://193.206.170.143/RMS';
 				        .error(function(){
 				        });
 			},
-			
+  			getFriendRequest:function(id){
+  				return $http.post(path+'/getFriendRequest/',id)
+  				.then(
+  						function(response){
+  					return response.data;
+  				},
+  				function(errResponse){
+  					console.error('Error while search user');
+  					return $q.reject(errResponse);
+  				}
+  				);
+  			},
+
+  			deletePending:function(id_acceptor,id){
+  				var message={"id_requestor":id,"id_acceptor":id_acceptor};
+				console.log(message);
+  				return $http({
+					 url: path+'/deletePending/',
+					  method: "POST",
+					  data: message,
+					  headers: {
+					    'Content-Type': 'application/json'
+					  }}).success(function(response){
+						 
+						  return response.data;
+					  })
+				        .error(function(){
+				        });
+		
+  			},
 			getDownload:function(msgRMS){
 				
 				return $http({
@@ -64,6 +93,33 @@ var urlRMS='http://193.206.170.143/RMS';
 			);
 	        
 	        
+	    },
+	    
+	    getFriendshipRequestor:function(id){
+	    	return $http.post(path+'/getFriendshipRequestor/',id)
+			.then(
+					function(response){
+				return response.data;
+			},
+			function(errResponse){
+				console.error('Error while search user');
+				return $q.reject(errResponse);
+			}
+			);
+	        
+	    },
+	    
+	    friendshipCreation:function(messageEncrypttoPFS){
+	    	return $http.post(urlPFS+'/friendshipCreation',messageEncrypttoPFS)
+			.then(
+					function(response){
+				return response.data;
+			},
+			function(errResponse){
+				console.error(errResponse);
+				return $q.reject(errResponse);
+			}
+			);
 	    },
 	    
 	    saveAlbum:function(album){
@@ -125,8 +181,8 @@ var urlRMS='http://193.206.170.143/RMS';
 							});
 		},
 		
-		logOut:function(){
-			return $http.get(path+'/logout').then(
+		logout:function(id){
+			return $http.post(path+'/logout',id).then(
 					
 	    			function(response){
 	    				
