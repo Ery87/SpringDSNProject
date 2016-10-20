@@ -36,17 +36,17 @@ public class UserServiceImpl implements UserService{
 	 * Just fetch the entity from db and update it with proper values within transaction.
 	 * It will be updated in db once transaction ends. 
 	 */
-public void updateUser(Integer id,byte[] photo) {
-		
+	public void updateUser(Integer id,byte[] photo) {
+
 		User entity = dao.findById(id);
 		if(entity!=null){
-			
+
 			entity.setPhoto(photo);
 		}
 		dao.savePhoto(entity);
-		
+
 	}
-	
+
 	public void updateUserKey(Integer id, String m, String e, String pk,String iv,String salt) {
 		User entity=dao.findById(id);
 		if(entity!=null){
@@ -58,7 +58,7 @@ public void updateUser(Integer id,byte[] photo) {
 		}
 		dao.savePK(entity);
 	}
-	
+
 	public void deleteByEmail(String email) {
 		dao.deleteByEmail(email);
 	}
@@ -70,9 +70,9 @@ public void updateUser(Integer id,byte[] photo) {
 	public boolean isUserSSOUnique(String email) {
 		User user = findByEmail(email);
 		return ( user == null || ((email != null) && (user.getEmail() == email)));
-		}
+	}
 
-	
+
 
 	public List<User> findByLastname(String lastname) {
 		return dao.findByLastname(lastname);
@@ -82,11 +82,11 @@ public void updateUser(Integer id,byte[] photo) {
 		return dao.getPublicKey(id);
 	}
 
-	
 
-	
-	
 
-	
-	
+
+
+
+
+
 }

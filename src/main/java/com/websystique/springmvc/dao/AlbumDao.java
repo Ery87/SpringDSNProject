@@ -9,12 +9,12 @@ import com.websystique.springmvc.model.User;
 public interface AlbumDao {
 
 	List<Album> findByMetaTag(String meta);
-	
+
 	Album findById(User user,String fileName);
-	
+
 	void save(Album album);
-	
+
 	List<Album> findAllByUserId(User userId);
-		
-	
+
+
 }

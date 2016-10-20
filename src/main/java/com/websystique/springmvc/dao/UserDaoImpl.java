@@ -17,7 +17,7 @@ import com.websystique.springmvc.model.User;
 @Repository("userDao")
 public  class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
 
-	
+
 	public User findById(Integer id) {
 		User user = getByKey(id);
 		if(user!=null){
@@ -38,7 +38,7 @@ public  class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao 
 		Criteria criteria = createEntityCriteria().addOrder(Order.asc("firstname"));
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);//To avoid duplicates.
 		List<User> users = (List<User>) criteria.list();
-		
+
 		return users;
 	}
 
@@ -62,7 +62,7 @@ public  class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao 
 
 	public void savePhoto(User user) {
 		getSession().update(user);
-		
+
 	}
 
 	public String getPublicKey(Integer id) {

@@ -11,36 +11,34 @@ import com.websystique.springmvc.model.User;
 @Repository("sessionUserDao")
 public class SessionDaoImpl extends AbstractDao<Integer,SessionUser> implements SessionUserDao{
 
-	
+
 
 	@Override
 	public void saveSession(SessionUser u) {
 		persist(u);
-		
+
 	}
 
 	@Override
-	public SessionUser getSessionUser(User u,String session) {
+	public SessionUser getSessionUser(User u) {
 		Criteria crit=createEntityCriteria();
 		crit.add(Restrictions.eq("user", u));
-		crit.add(Restrictions.eq("sessionId", session));
 		SessionUser sessUser=(SessionUser)crit.uniqueResult();
 		
 		return sessUser; 
 	}
 
 	@Override
-	public void deleteSession(User u, String sessionId) {
+	public void deleteSession(User u) {
 		Criteria crit=createEntityCriteria();
 		crit.add(Restrictions.eq("user", u));
-		crit.add(Restrictions.eq("sessionId", sessionId));
 		SessionUser session=(SessionUser)crit.uniqueResult();
 		delete(session);		
 	}
 
 
-	
-	
-	
+
+
+
 
 }

@@ -1,6 +1,6 @@
  package com.websystique.springmvc.model;
 
-
+//Repository user data
 import java.math.BigInteger;
 import java.util.Arrays;
 

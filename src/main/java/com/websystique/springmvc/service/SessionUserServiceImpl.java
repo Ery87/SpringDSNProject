@@ -14,20 +14,20 @@ public class SessionUserServiceImpl implements SessionUserService{
 
 	@Autowired 
 	private SessionUserDao dao;
-	
-	
-	
-	
+
+
+
+
 	public void saveSession(SessionUser u) {
 		dao.saveSession(u);
-		
+
 	}
 
 
 	@Override
 	public void updateSession(User u, String s) {
-		
-		SessionUser user=dao.getSessionUser(u,s);
+
+		SessionUser user=dao.getSessionUser(u);
 		if(user!=null){
 			user.setSessionId(s);
 		}
@@ -36,16 +36,16 @@ public class SessionUserServiceImpl implements SessionUserService{
 
 
 	@Override
-	public SessionUser getSessionUser(User u,String session) {
-		SessionUser sesUser=dao.getSessionUser(u,session);
+	public SessionUser getSessionUser(User u) {
+		SessionUser sesUser=dao.getSessionUser(u);
 		return sesUser;
 	}
 
 
 	@Override
-	public void deleteSession(User u, String session) {
-		dao.deleteSession(u, session);
-		
+	public void deleteSession(User u) {
+		dao.deleteSession(u);
+
 	}
 
 

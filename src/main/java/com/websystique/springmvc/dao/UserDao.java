@@ -10,18 +10,18 @@ public interface UserDao {
 
 
 	User findById(Integer id);
-	
+
 	User findByEmail(String email);
-	
+
 	void save(User user);
-	
+
 	void savePhoto(User user);
-	
-	
+
+
 	void deleteByEmail(String email);
-	
+
 	List<User> findAllUsers();
-	
+
 	List<User> findByLastname(String lastname);
 
 	String getPublicKey(Integer id);

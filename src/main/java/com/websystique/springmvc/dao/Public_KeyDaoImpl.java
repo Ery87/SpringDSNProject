@@ -9,7 +9,7 @@ import com.websystique.springmvc.model.Public_Key;
 @Repository("Public_keyDao")
 public class Public_KeyDaoImpl extends AbstractDao<Integer,Public_Key> implements Public_KeyDao {
 
-	
+
 
 	public Public_Key getKey(String service) {
 		Criteria crit=createEntityCriteria();

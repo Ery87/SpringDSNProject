@@ -23,12 +23,12 @@ public class AlbumServiceImpl implements AlbumService{
 		return dao.findById(user,fileName);
 	}
 
-	
+
 	public List<Album> findAllByUserId(User userId) {
 		return dao.findAllByUserId(userId);
 	}
-	
-	
+
+
 
 
 	public List<Album> findByMetaTag(String meta) {
@@ -39,17 +39,17 @@ public class AlbumServiceImpl implements AlbumService{
 	@Override
 	public void save(Album album) {
 		dao.save(album);// TODO Auto-generated method stub
-		
+
 	}
 
 
 
 
-	
 
 
-	
 
-	
-	
+
+
+
+
 }

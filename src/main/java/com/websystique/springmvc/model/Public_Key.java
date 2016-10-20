@@ -9,6 +9,7 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+//Repository public key of services
 @Entity
 @Table(name="PUBLIC_KEY")
 

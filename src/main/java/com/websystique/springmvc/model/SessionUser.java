@@ -1,5 +1,9 @@
 package com.websystique.springmvc.model;
 
+
+
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,23 +13,38 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+//Repository user session
 @Entity
 @Table(name="SESSION_USER")
 public class SessionUser {
-	
+
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id")
 	private Integer id;
-	
-	
+
+
 	@OneToOne
 	@JoinColumn(name="id_user")
 	private User user;
-	
-	
+
+
 
 	@Column(name="sessionId")
 	private String sessionId;
+
+
+	@Column(name="timeStamp")
+	private Date timeStamp;
+	
+	public Date getTimeStamp() {
+		return timeStamp;
+	}
+
+
+
+	public void setTimeStamp(Date timeStamp) {
+		this.timeStamp = timeStamp;
+	}
 
 
 
@@ -66,7 +85,7 @@ public class SessionUser {
 
 
 	public SessionUser(){};
-	
+
 	@Override
 	public String toString() {
 		return "SessionUser [id=" + id + ", user=" + user + ", sessionId=" + sessionId + "]";
@@ -112,8 +131,8 @@ public class SessionUser {
 			return false;
 		return true;
 	}
-	
-	
-	
-	
+
+
+
+
 }

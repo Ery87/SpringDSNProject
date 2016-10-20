@@ -15,6 +15,8 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+
+/*Repository user resources*/
 @Entity
 @Table(name="ALBUM")
 public class Album{
@@ -22,26 +24,26 @@ public class Album{
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id_album")
 	private Integer id_album;	
-	
+
 	@NotEmpty
 	@Column(name="metaTag", length=100, nullable=false)
 	private String metaTag;
-	
 
 
-	
+
+
 	@ManyToOne
 	@JoinColumn(name="id_user")
 	private User user;
-	
+
 	@NotEmpty
 	@Column(name="fileName")
 	private String fileName;
-	
-	
-	
+
+
+
 	public Album(){}
-	
+
 	public String getFileName() {
 		return fileName;
 	}
@@ -66,9 +68,9 @@ public class Album{
 		this.metaTag = name;
 	}
 
-	
 
-	
+
+
 
 
 	public User getUser() {
@@ -110,8 +112,8 @@ public class Album{
 				+ ", fileName=" + fileName + "]";
 	}
 
-	
 
 
-	
+
+
 }

@@ -24,13 +24,13 @@ public class AlbumDaoImpl extends AbstractDao<Integer, Album> implements AlbumDa
 		persist(document);
 	}
 
-	
+
 	public Album findById(User user,String fileName) {
 		Criteria crit = createEntityCriteria();
 		crit.add(Restrictions.eq("user",user));
 		crit.add(Restrictions.eq("fileName",fileName));
 		return (Album)crit.uniqueResult();
-	
+
 	}
 
 	@SuppressWarnings("unchecked")
@@ -40,8 +40,8 @@ public class AlbumDaoImpl extends AbstractDao<Integer, Album> implements AlbumDa
 		return (List<Album>)crit.list();
 	}
 
-	
-	
 
-	
+
+
+
 }

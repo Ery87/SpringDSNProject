@@ -7,16 +7,16 @@ import com.websystique.springmvc.model.Album;
 import com.websystique.springmvc.model.User;
 
 public interface AlbumService {
-	
+
 
 	List<Album> findByMetaTag(String meta);
-	
+
 	Album findById(User user,String fileName);
-	
+
 	void save(Album album);
-	
+
 	List<Album> findAllByUserId(User userId);
-		
-	
-	
+
+
+
 }

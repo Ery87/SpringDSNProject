@@ -19,7 +19,7 @@ import org.springframework.web.servlet.view.JstlView;
 @EnableWebMvc
 @ComponentScan(basePackages = "com.websystique.springmvc")
 public class HelloWorldConfiguration extends WebMvcConfigurerAdapter{
-	
+
 	@Override
 	public void configureViewResolvers(ViewResolverRegistry registry) {
 		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
@@ -33,25 +33,25 @@ public class HelloWorldConfiguration extends WebMvcConfigurerAdapter{
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/static/**").addResourceLocations("/static/");
 	}
-	 @Bean
-		public MessageSource messageSource() {
-		    ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-		    messageSource.setBasename("messages");
-		    return messageSource;
-		}
-	 @Bean
-	    public static PropertySourcesPlaceholderConfigurer placeholderConfigurer() {
-	        PropertySourcesPlaceholderConfigurer c = new PropertySourcesPlaceholderConfigurer();
-	        c.setLocation(new ClassPathResource("application.properties"));
-	        return c;
-	    }   
-	    /**Optional. It's only required when handling '.' in @PathVariables which otherwise ignore everything after last '.' in @PathVaidables argument.
-	     * It's a known bug in Spring [https://jira.spring.io/browse/SPR-6164], still present in Spring 4.1.7.
-	     * This is a workaround for this issue.
-	     */
-	    @Override
-	    public void configurePathMatch(PathMatchConfigurer matcher) {
-	        matcher.setUseRegisteredSuffixPatternMatch(true);
-	    }
+	@Bean
+	public MessageSource messageSource() {
+		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+		messageSource.setBasename("messages");
+		return messageSource;
+	}
+	@Bean
+	public static PropertySourcesPlaceholderConfigurer placeholderConfigurer() {
+		PropertySourcesPlaceholderConfigurer c = new PropertySourcesPlaceholderConfigurer();
+		c.setLocation(new ClassPathResource("application.properties"));
+		return c;
+	}   
+	/**Optional. It's only required when handling '.' in @PathVariables which otherwise ignore everything after last '.' in @PathVaidables argument.
+	 * It's a known bug in Spring [https://jira.spring.io/browse/SPR-6164], still present in Spring 4.1.7.
+	 * This is a workaround for this issue.
+	 */
+	@Override
+	public void configurePathMatch(PathMatchConfigurer matcher) {
+		matcher.setUseRegisteredSuffixPatternMatch(true);
+	}
 
 }
