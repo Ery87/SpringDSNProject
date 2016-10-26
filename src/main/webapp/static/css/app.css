@@ -1,6 +1,7 @@
 body, #mainWrapper {
 	height: 70%;
-	background-color: rgb(245, 245, 245);
+	/*background-color: rgb(245, 245, 245);*/
+	 background-image: url("images/sfondo-social.jpg");
 }
 
 body, .form-control {

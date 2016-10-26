@@ -1,6 +1,7 @@
 package com.websystique.springmvc.dao;
 
 import java.math.BigInteger;
+import java.util.HashSet;
 import java.util.List;
 
 import com.websystique.springmvc.model.User;
@@ -22,7 +23,7 @@ public interface UserDao {
 
 	List<User> findAllUsers();
 
-	List<User> findByLastname(String lastname);
+	HashSet<User> findByName(String name);
 
 	String getPublicKey(Integer id);
 

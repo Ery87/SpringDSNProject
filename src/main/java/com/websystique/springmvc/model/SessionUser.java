@@ -2,6 +2,7 @@ package com.websystique.springmvc.model;
 
 
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -34,15 +35,15 @@ public class SessionUser {
 
 
 	@Column(name="timeStamp")
-	private Date timeStamp;
+	private Timestamp timeStamp;
 	
-	public Date getTimeStamp() {
+	public Timestamp getTimeStamp() {
 		return timeStamp;
 	}
 
 
 
-	public void setTimeStamp(Date timeStamp) {
+	public void setTimeStamp(Timestamp timeStamp) {
 		this.timeStamp = timeStamp;
 	}
 

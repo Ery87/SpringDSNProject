@@ -1,6 +1,7 @@
 package com.websystique.springmvc.service;
 
 import java.math.BigInteger;
+import java.util.HashSet;
 import java.util.List;
 
 import com.websystique.springmvc.model.User;
@@ -20,7 +21,7 @@ public interface UserService {
 
 	List<User> findAllUsers();
 
-	List<User> findByLastname(String lastname);
+	HashSet<User> findByName(String name);
 
 
 	void saveUser(User user);

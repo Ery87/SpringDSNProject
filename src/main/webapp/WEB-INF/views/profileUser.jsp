@@ -10,7 +10,9 @@
 <script src="<c:url value='/static/js/libraries/rollups/aes.js' />"></script>
 <script
 	src="<c:url value='/static/js/libraries/components/enc-base64-min.js' />"></script>
-
+<script
+		src="<c:url value='/static/js/libraries/excluded/jquery-2.1.3.min.js' />"></script>
+	
 <title>Welcome to DSNProject</title>
 <style>
 /*   .username.ng-valid {
@@ -47,10 +49,13 @@ a:focus {
 .slide {
 	margin: 0;
 	padding: 0;
+	
+	/*
+	background-image : url("images/sfondo-social.jpg");
 	border-top: solid 20px #365886;
 	border-radius: 10px;
 	-moz-border-radius: 10px; /* firefox */
-	-webkit-border-radius: 10px; /* safari, chrome */
+	/*-webkit-border-radius: 10px; /* safari, chrome */
 }
 
 .btn-slide {
@@ -83,6 +88,9 @@ a:focus {
 
 </head>
 <body ng-app="myApp" class="ng-cloak">
+
+
+
 	<div class="generic-container"
 		ng-controller="ProfileController as ctrl">
 
@@ -152,7 +160,7 @@ a:focus {
 			<p>
 				<input type="text" ng-model="ctrl.tag" name="tag"
 					class="metaTag form-control input-sm"
-					placeholder="Write your metaTag" required ng-minlength="3"
+					placeholder="Write your metaTag require min 3 letters" required ng-minlength="3"
 					ng-required="string" />
 			</p>
 			<p>
@@ -237,8 +245,6 @@ a:focus {
 		src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-route.js"></script>
-	<script
-		src="<c:url value='/static/js/libraries/excluded/jquery-2.1.3.min.js' />"></script>
 	<script src="<c:url value='/static/js/libraries/rollups/aes.js' />"></script>
 	<script src="<c:url value='/static/js/libraries/rollups/pbkdf2.js' />"></script>
 

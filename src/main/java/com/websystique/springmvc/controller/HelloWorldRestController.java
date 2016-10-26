@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.Base64;
+import java.util.Calendar;
 import java.io.IOException;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
@@ -25,12 +26,14 @@ import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPrivateKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -113,10 +116,18 @@ public class HelloWorldRestController {
 
 	@RequestMapping(value = { "/profile/" }, method = RequestMethod.POST)
 	public void getUser(@RequestBody Integer id,HttpServletResponse res,HttpServletRequest req) throws JSONException, IOException {
-
+		Calendar calendar = Calendar.getInstance();
+		Timestamp currentTimestamp = new java.sql.Timestamp(calendar.getTime().getTime());
 		User user=userService.findById(id);
 		PrintWriter pw=null;
 		SessionUser session=sessionUser.getSessionUser(user);
+		Date d=session.getTimeStamp();
+	
+		long diff =currentTimestamp.getTime()- d.getTime();
+		    
+		long diffMinutes = diff / (60 * 1000);         
+		System.out.println("Time in minutes: " + diffMinutes + " minutes.");         
+
 		JSONObject json=new JSONObject();
 		pw=res.getWriter();
 		if(session!=null)	{
@@ -127,8 +138,7 @@ public class HelloWorldRestController {
 				pw.println("\"message\": \""+"Not found"+"\",");
 				pw.println("}");
 				return;
-			}    
-
+			}    else if(diffMinutes<=20){
 
 
 			json.put("id", user.getId());
@@ -145,6 +155,11 @@ public class HelloWorldRestController {
 
 			pw.println(json);
 		}else{
+			sessionUser.deleteSession(user);
+			json.put("session",0);
+			pw.println(json);
+		}
+			}else{
 			json.put("session",0);
 			pw.println(json);
 		}
@@ -155,7 +170,6 @@ public class HelloWorldRestController {
 
 	@RequestMapping(value = { "/getFriendshipRequestor/" }, method = RequestMethod.POST)
 	public void getFriendshipRequestor(@RequestBody Integer id,HttpServletResponse res,HttpServletRequest req) throws JSONException, IOException {
-
 
 		User user=userService.findById(id);
 		PrintWriter pw=null;
@@ -169,8 +183,6 @@ public class HelloWorldRestController {
 			pw.println("}");
 			return;
 		}else{    
-
-
 
 			json.put("id", user.getId());
 			json.put("email", user.getEmail());
@@ -192,15 +204,29 @@ public class HelloWorldRestController {
 
 	@RequestMapping(value="/checkSession",method=RequestMethod.POST)
 	public void  checkSession(@RequestBody Integer id,HttpServletRequest req,HttpServletResponse res) throws JSONException, IOException{
+		Calendar calendar = Calendar.getInstance();
+		Timestamp currentTimestamp = new java.sql.Timestamp(calendar.getTime().getTime());
 		User u=userService.findById(id);
 		SessionUser session=sessionUser.getSessionUser(u);
+		Date d=session.getTimeStamp();
+		
+		long diff =currentTimestamp.getTime()- d.getTime();    
+		long diffMinutes = diff / (60 * 1000);         
+		System.out.println("Time in minutes: " + diffMinutes + " minutes.");         
+
 		JSONObject json=new JSONObject();
 		PrintWriter pw=null;
-
+		System.out.println(session);
 		if(session!=null){
+			if(diffMinutes<20){
 			json.put("session", session.getSessionId());
 		}else{
+			sessionUser.deleteSession(u);
 			json.put("session", 0);
+		}
+		}else{
+			json.put("session", 0);
+
 		}
 		pw=res.getWriter();
 		pw.println(json);
@@ -270,7 +296,7 @@ public class HelloWorldRestController {
 
 	@RequestMapping(value ="/logout", method = RequestMethod.POST)
 	public void logout(@RequestBody Integer id,HttpServletRequest request,HttpServletResponse response) throws IOException, JSONException {
-	System.out.println("emtro nel logout");
+	System.out.println("entro nel logout");
 		User user=userService.findById(id);
 		SessionUser session=sessionUser.getSessionUser(user);
 		if(session!=null){
@@ -293,12 +319,21 @@ public class HelloWorldRestController {
 		SessionUser u=new SessionUser();
 		User user=userService.findByEmail(email);
 		SessionUser check_session=sessionUser.getSessionUser(user);
+		Calendar calendar = Calendar.getInstance();
+		Timestamp currentTimestamp = new java.sql.Timestamp(calendar.getTime().getTime());
 	
 		if(check_session==null){
 			u.setUser(user);
 			u.setSessionId(session.getId());
-			u.setTimeStamp(new java.sql.Date(new java.util.Date().getTime()));
+			u.setTimeStamp(new java.sql.Timestamp(new java.util.Date().getTime()));
 			sessionUser.saveSession(u);
+		}else if(((currentTimestamp.getTime()-check_session.getTimeStamp().getTime())/(60*1000))>=20){
+			sessionUser.deleteSession(user);
+			u.setUser(user);
+			u.setSessionId(session.getId());
+			u.setTimeStamp(new java.sql.Timestamp(new java.util.Date().getTime()));
+			sessionUser.saveSession(u);
+	
 		}
 		
 	}
@@ -310,19 +345,20 @@ public class HelloWorldRestController {
 	public ResponseEntity<List<User>> searchFriend(@RequestBody String friend) {
 
 		StringTokenizer st=new StringTokenizer(friend);
-		List<User> users=new ArrayList<User>();
+		HashSet<User> users=new HashSet<User>();
 
 		while(st.hasMoreTokens()){
-
-			users.addAll(userService.findByLastname(st.nextToken()));
+			String x=st.nextToken();
+			System.out.println(x);
+			users.addAll(userService.findByName(x));
 
 		}
 
-		users=ordinaryList(users);
+		List<User> sortedUsers=ordinaryList(users);
 		if (users.isEmpty()){
 			return new ResponseEntity<List<User>>(HttpStatus.NOT_FOUND);
 		}else{
-			return new ResponseEntity<List<User>>(users,HttpStatus.OK);
+			return new ResponseEntity<List<User>>(sortedUsers,HttpStatus.OK);
 
 		}
 	}
@@ -614,15 +650,16 @@ public class HelloWorldRestController {
 		return;
 	}
 
+	
 
-
-	public List<User> ordinaryList(List<User> user){
-		Collections.sort(user, new Comparator<User>(){
+	public List<User> ordinaryList(HashSet<User> user){
+		List<User> sortedList=new ArrayList<User>(user);
+		Collections.sort(sortedList, new Comparator<User>(){
 			public int compare(User u1, User u2){
 				return (u1.getLastName().compareTo(u2.getLastName()));
 			}
 		});
-		return user;   
+		return sortedList;   
 	}
 
 

@@ -91,7 +91,7 @@ App.service('UserService', ['$http','$q',function ($http,$q) {
 						return $q.reject(errResponse);
 					});
 		},
-
+		
 		createSocialUser2:function(encrypted_clientPubKeyToRMS){
 
 			return $http.post(urlRMS+'/createSocialUser2/',encrypted_clientPubKeyToRMS).then(

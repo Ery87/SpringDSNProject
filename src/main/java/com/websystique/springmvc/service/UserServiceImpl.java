@@ -1,6 +1,7 @@
 package com.websystique.springmvc.service;
 
 import java.math.BigInteger;
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,8 +75,8 @@ public class UserServiceImpl implements UserService{
 
 
 
-	public List<User> findByLastname(String lastname) {
-		return dao.findByLastname(lastname);
+	public HashSet<User> findByName(String name) {
+		return dao.findByName(name);
 	}
 
 	public String getPublicKey(Integer id) {

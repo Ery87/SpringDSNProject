@@ -10,7 +10,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 	var message;
 	var tagImage;
 	var metaTag;
-	  var url='http://193.206.170.142/OSN';
+	 var url='http://193.206.170.142/OSN';
 	// var url='http://localhost:8080/OSN';
 
 
@@ -26,6 +26,13 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 
 	//UPLOAD PHOTO
 	self.uploadPhotoRule=function(){
+		ProfileService.checkSession(Lockr.get("id")) 
+		.then(
+				function(data){
+					if(data.session=0){
+						$window.location.href=url;
+					}else{
+				
 		console.log("start:");
 
 		console.time("start_upload");
@@ -49,7 +56,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 					Lockr.set('salt1',salt);
 
 					var n2=Math.floor(Math.random()*100+1);
-					var msgKms={"idu":Lockr.get("id"),"idR":Lockr.get("idResource"),"n2":n2,'session_token':"provaprpororororor"};
+					var msgKms={"idu":Lockr.get("id"),"idR":Lockr.get("idResource"),"n2":n2,'session_token':self.user.session};
 
 
 
@@ -205,6 +212,9 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 				function(errResponse){
 					console.error('Error while creating User.');
 				});
+					}},function(errResponse){
+						console.error('Error while check Session...');
+					});	
 	},	
 
 
@@ -248,10 +258,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 		return id_utente;
 	}
 
-	$window.onbeforeunload=function(){
-		self.logout();
-	},
-
+	
 	$window.onload=function (){
 
 		var id_utente=self.readID();	
@@ -333,6 +340,8 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 						var img=document.createElement("img");
 						img.setAttribute("id",fileName);
 						img.src="/OSN/static/css/images/img3.jpg";
+						img.width="90";
+						img.height="90";
 						cell.appendChild(img);
 
 						var text = document.createTextNode(self.metaTag[j].metaTag);
@@ -443,6 +452,13 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 	
 	//REQUEST REFUSAL OF FRIENDSHIP
 	self.refuseFriend=function(id){
+		ProfileService.checkSession(Lockr.get("id")) 
+		.then(
+				function(data){
+					if(data.session=0){
+						$window.location.href=url;
+					}else{
+	
 		var id_acceptor=Lockr.get("id");
 
 		ProfileService.deletePending(id_acceptor,id)
@@ -452,11 +468,21 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 				},function(errResponse){
 					console.error('error while delete pending...');
 				});
+					}},function(errResponse){
+						console.error('Error while check Session...');
+					});	
 
 	},
 
 	//ACCEPT FRIENDSHIP REQUEST
 	self.addUser=function(id){
+		ProfileService.checkSession(Lockr.get("id")) 
+		.then(
+				function(data){
+					if(data.session=0){
+						$window.location.href=url;
+					}else{
+	
 		var id_acceptor=Lockr.get("id");
 
 		ProfileService.deletePending(id_acceptor,id)
@@ -507,10 +533,20 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 				},function(errResponse){
 					console.error('error while delete pending...');
 				});
+					}},function(errResponse){
+						console.error('Error while check Session...');
+					});
 	},
 
 	// SHOW YOUR ALBUM
 	self.download=function(filename){
+		ProfileService.checkSession(Lockr.get("id")) 
+		.then(
+				function(data){
+					if(data.session=0){
+						$window.location.href=url;
+					}else{
+	
 		ProfileService.getUserViewPhoto(Lockr.get("id"),filename)
 		.then(
 				function(data){
@@ -520,49 +556,108 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 					ProfileService.getPK('RMS')
 					.then(
 							function(data){
+								console.log("start:");
 
-								/*Lockr.set('modulus_RMS',data.modulus);
-    					  				Lockr.set('exponent_RMS',data.exponent);*/
+								console.time("start_download");
+								Lockr.set('modulus_RMS',data.modulus);
+								Lockr.set('exponent_RMS',data.exponent);
 								var n1=Math.floor(Math.random()*100+1);
 								var msgRMS={"idRequestor":Lockr.get('id'),'idResource':idPhoto,'N1':n1};
 
 								msgRMS=JSON.stringify(msgRMS);
-								/*	var rsa=new RSAKey();
-    					  				rsa.setPublic(Lockr.get('modulus_RMS'),Lockr.get('exponent_RMS'));
-    					  				msgRMS=rsa.encrypt(msgRMS);*/
+								var rsa=new RSAKey();
+								rsa.setPublic(Lockr.get('modulus_RMS'),Lockr.get('exponent_RMS'));
+								msgRMS=rsa.encrypt(msgRMS);
 
 								ProfileService.getDownload(msgRMS)
 								.then(
 										function(data){
 
-											var secretUser=data.data.secret_owner;
 
-											var msgKMS=JSON.parse(data.data.msgFromKMS);
+											var AESParams=data.data.AESParams;
+											var encrypted_msg_client=data.data.encrypted_msg_client;
 
-											var secretRSC=msgKMS.token;
-											var passPhrase=secretUser+secretRSC;
-
-											var aesUtil=new AesUtil(128,1000);
-											var photo=aesUtil.decrypt(secretUser,secretRSC,passPhrase,msgKMS.hexstring_encryptedrsc);
-
-											/* var binary = '';
-    				     						  var bytes = new Uint8Array(photo);
-    				     						  var len = b.byteLength;
-    				     						  for (var i = 0; i < len; i++) {
-    				     						    binary += String.fromCharCode( b[ i ] );
-    				     						  }
-    				     						  var base64Image=window.btoa( binary );*/
-
-											var tag="data:image/JPEG;base64,";
-											var imageDecoded=tag+photo;//base64Image;
+											ProfileService.getPKClient(Lockr.get("id"))
+											.then(
+													function(data){
 
 
-											var img = document.getElementById(filename);
-											img.src = imageDecoded;
-											img.width="90";
-											img.height="90";
-											$window.open(imageDecoded);
-											return;
+														var salt=data.salt;
+														var iv=data.iv;
+														do{
+															var passPhrase=prompt("Insert your passPhrase (needed to decrypt resources)");
+														}while(passPhrase==null);
+
+														var keySize = 128;
+														var iterationCount = 1000;
+														var aesUtil=new AesUtil(keySize,iterationCount);	
+														var priv_key=aesUtil.decrypt(salt,iv,passPhrase,data.private_key);
+
+														var rsa=new RSAKey();
+														priv_key=priv_key.toString(CryptoJS.enc.utf8);
+														rsa.setPrivate(data.modulus_public,data.exponent_public, priv_key); 
+
+														var decryptAes=rsa.decrypt(AESParams);
+														decryptAes=JSON.parse(decryptAes);
+
+														var decryptedMessageFromRMS=aesUtil.decrypt(decryptAes.salt,decryptAes.iv,decryptAes.passphrase,encrypted_msg_client);
+														decryptedMessageFromRMS=JSON.parse(decryptedMessageFromRMS);
+
+														var secretOwner=decryptedMessageFromRMS.secret_owner;
+														var msgFromKMS=decryptedMessageFromRMS.msgFromKMS;
+														msgFromKMS=rsa.decrypt(msgFromKMS);
+
+														msgFromKMS=JSON.parse(msgFromKMS);
+
+														var token=msgFromKMS.token;
+
+														var url=msgFromKMS.url_encryptedrsc;
+
+														var secret=secretOwner+token;
+
+
+														var req = new XMLHttpRequest();
+
+														req.open('GET',url, false);
+														req.send(null);
+
+														if(req.status == 200) {
+															var photo=req.responseText;
+														}
+														try{
+															photo=aesUtil.decrypt(secretOwner,token,secret,photo);
+														}catch(e){
+															$window.alert("You don't have permission to access the requested object!");
+															$window.location.reload(false); 
+														}
+
+														var binary = '';
+														var buf = new ArrayBuffer(photo.length); // 2 bytes for each char
+
+														var bytes = new Uint8Array(buf);
+														var len = bytes.byteLength;
+														for (var i = 0; i < len; i++) {
+															binary += String.fromCharCode( bytes[ i ] );
+														}
+														var base64Image=window.btoa( binary );
+
+														var tag="data:image/JPEG;base64,";
+														var imageDecoded=tag+photo;//base64Image;
+
+
+														var img = document.getElementById(filename);
+														img.src = imageDecoded;
+														img.width="90";
+														img.height="90";
+
+						
+														console.log("end:");
+														console.timeEnd("start_download");
+														return;
+													},function(errResponse){
+														console.error('Error while get pk client...');
+
+													});
 										},
 										function(errResponse){
 											console.error('Error while get download...');
@@ -578,8 +673,16 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 					console.error('Error while search photo...');
 
 				});
+		}},function(errResponse){
+					console.error('Error while check Session...');
+				});
 
 	},
+	
+	
+	
+	
+	
 	//CLICK TO SEARCH USER AND REDIRECT TO NEW PAGE
 	self.redirectSearch=function(){
 		console.log(Lockr.get("id"))

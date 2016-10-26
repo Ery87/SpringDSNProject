@@ -1,11 +1,14 @@
 package com.websystique.springmvc.dao;
 
 import java.math.BigInteger;
+import java.util.HashSet;
 import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -53,10 +56,12 @@ public  class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao 
 		delete(user);
 	}
 
-	public List<User> findByLastname(String lastname) {
-		Criteria criteria=createEntityCriteria().addOrder(Order.asc("firstname"));
-		criteria.add(Restrictions.eq("lastname", lastname));
-		List<User> users=(List<User>) criteria.list();
+	public HashSet<User> findByName(String name) {
+		Criteria criteria=createEntityCriteria();
+		Criterion cr1=Restrictions.like("lastname", name+"%");
+		Criterion cr2=Restrictions.like("firstname", name+"%");
+		criteria.add(Restrictions.or(cr1,cr2));
+		HashSet<User> users=new HashSet<User>(criteria.list());
 		return users;
 	}
 

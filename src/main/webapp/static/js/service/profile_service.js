@@ -3,8 +3,8 @@
 
 //SERVICE WEB PAGE PROFILE
 App.factory('ProfileService',['$http','$q',function($http,$q){
-var path='http://193.206.170.142/OSN';
-//	var path='http://localhost:8080/OSN';
+		var path='http://193.206.170.142/OSN';
+		//var path='http://localhost:8080/OSN';
 	var urlRMS='http://193.206.170.143/RMS';
 	var urlPFS='http://193.206.170.147/PathFinder';	
 	return{
@@ -48,9 +48,33 @@ var path='http://193.206.170.142/OSN';
 			);
 		},
 
+		getDownload:function(msgRMS){
+
+			return $http({
+				url: urlRMS+'/downloadReq/',
+				method: "POST",
+				data:msgRMS ,
+				headers: {
+					'Content-Type': 'application/json'
+				}}).success(function(response){
+
+					return response.data;
+				})
+				.error(function(){
+				});
+		},
 		
-		
-		
+		checkSession:function(id){
+			return $http.post(path+'/checkSession',id).then(
+					function(response){
+						return response.data;
+					},
+					function(errResponse){
+						console.error('Error while check session');
+						return $q.reject(errResponse);
+					});
+
+		},
 		deletePending:function(id_acceptor,id){
 			var message={"id_requestor":id,"id_acceptor":id_acceptor};
 			console.log(message);
