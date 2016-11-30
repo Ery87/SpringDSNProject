@@ -88,7 +88,7 @@ import com.websystique.springmvc.service.UserService;
 
 @Controller
 @RestController
-public class HelloWorldRestController {
+public class OSNRestController {
 
 	@Autowired
 	UserService userService;  //Service which will do all data retrieval/manipulation work
@@ -349,7 +349,6 @@ public class HelloWorldRestController {
 
 		while(st.hasMoreTokens()){
 			String x=st.nextToken();
-			System.out.println(x);
 			users.addAll(userService.findByName(x));
 
 		}

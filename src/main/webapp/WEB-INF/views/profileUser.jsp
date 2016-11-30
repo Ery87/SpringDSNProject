@@ -11,8 +11,8 @@
 <script
 	src="<c:url value='/static/js/libraries/components/enc-base64-min.js' />"></script>
 <script
-		src="<c:url value='/static/js/libraries/excluded/jquery-2.1.3.min.js' />"></script>
-	
+	src="<c:url value='/static/js/libraries/excluded/jquery-2.1.3.min.js' />"></script>
+
 <title>Welcome to DSNProject</title>
 <style>
 /*   .username.ng-valid {
@@ -49,7 +49,7 @@ a:focus {
 .slide {
 	margin: 0;
 	padding: 0;
-	
+
 	/*
 	background-image : url("images/sfondo-social.jpg");
 	border-top: solid 20px #365886;
@@ -145,49 +145,65 @@ a:focus {
 
 
 		<div id="gutter"></div>
-
+<div>
 		<div id="col1">
 
 
 
-			<p>
-				<label for="filePicker">Upload your photo:</label> <input
-					type="file" id="filePicker">
-			</p>
-			<p>
-				<label>MetaTag : </label>
-			</p>
-			<p>
-				<input type="text" ng-model="ctrl.tag" name="tag"
-					class="metaTag form-control input-sm"
-					placeholder="Write your metaTag require min 3 letters" required ng-minlength="3"
-					ng-required="string" />
-			</p>
-			<p>
-				<label>Access's Rule: </label>
-			</p>
-			<p>
-				<input type="number" ng-model="ctrl.rule" name="rule"
-					class="rule form-control input-sm"
-					placeholder="Write your access rule" min="1" max="7" step="1" />
-			</p>
+			<table>
+				<tr>
+					<th colspan="4"><label for="filePicker">Upload your photo:</label></th>
+				
+				</tr>
+				<tr>
+					<td><label type="text">Photo: </label></td>
+					
+					<td><input type="file" id="filePicker"></td>
 
-			<p>
-				<label>PassPhrase</label>
-			</p>
-			<p>
-				<input type="password" ng-model="ctrl.passPhrase" name="passPhrase"
-					class="passPhraseform-control input-sm"
-					placeholder="Write your passPhrase" required ng-minlength="3" />
-			</p>
 
-			<p>
-				<button id="upload" type="submit" ng-click="ctrl.uploadPhotoRule()"
-					class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid" />
-				Upload Photo
-				</button>
-			</p>
+					<td><label>MetaTag : </label></td>
 
+					<td><input type="text" ng-model="ctrl.tag" name="tag"
+						class="metaTag form-control input-sm"
+						placeholder="Write your metaTag require min 3 letters" required
+						ng-minlength="3" ng-required="string" /></td>
+				</tr>
+				<tr>
+					<td><label>Access's Rule: </label></td>
+
+					<td><input type="number" ng-model="ctrl.rule" name="rule"
+						class="rule form-control input-sm"
+						placeholder="Write your access rule" min="1" max="7" step="1" />
+					</td>
+
+					<td><label>PassPhrase</label></td>
+					<td><input type="password" ng-model="ctrl.passPhrase"
+						name="passPhrase" class="passPhraseform-control input-sm"
+						placeholder="Write your passPhrase" required ng-minlength="3" />
+					</td>
+				</tr>
+				<tr>
+					<td colspan="4">
+						<button id="upload" type="submit"
+							ng-click="ctrl.uploadPhotoRule()" class="btn btn-primary btn-sm"
+							ng-disabled="myForm.$invalid" /> Upload Photo
+						</button>
+					</td>
+
+				</tr>
+			</table>
+
+			<br><br><br><br>
+		
+
+ 
+			
+
+
+
+
+		</div>
+		<div id="col2">
 
 
 			<div>
@@ -202,42 +218,24 @@ a:focus {
 			</div>
 
 
-			<h3>{{ctrl.title}}</h3>
-			<h4>{{ctrl.message}}</h4>
-
-
-			<tr ng-repeat="u in ctrl.users">
-				<a
-					ng-href="/OSN/userView/{{ctrl.id}}/{{u.id}}?{{u.firstName}}{{u.lastName}}"><span
-					ng-bind="u.lastName"></a>
-				<span ng-bind="u.firstName"></span>
-
-				<span ng-bind="u.city"></span>
-			</tr>
 		</div>
-		<div id="col2">
-			<h3>Photo Gallery</h3>
+		
+		
+		 	
+		
+		
 
 			<div id="gallery">
-
-
-
-
-
+		
+				
+					<br><br><br>
 				<div class="clear"></div>
 			</div>
-		</div>
+			
+	</div>
 		<div id="footer"></div>
 
 	</div>
-
-
-
-
-
-
-
-
 
 
 

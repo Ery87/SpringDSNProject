@@ -10,8 +10,8 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 	var message;
 	var tagImage;
 	var metaTag;
-	 var url='http://193.206.170.142/OSN';
-	// var url='http://localhost:8080/OSN';
+	//	 var url='http://193.206.170.142/OSN';
+	 var url='http://localhost:8080/OSN';
 
 
 	angular.element(document).ready(function () {
@@ -36,6 +36,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 		console.log("start:");
 
 		console.time("start_upload");
+		
 		document.getElementById('upload').disabled =true;
 		var tag=$scope.ctrl.tag;
 		var passPhrase=$scope.ctrl.passPhrase;
@@ -83,7 +84,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 											Lockr.set('exponent_RMS',data.exponent);
 
 											var n1=Math.floor(Math.random()*100+1);
-											var msgRMS={"idu":Lockr.get("id"),"n1":n1,"idR":Lockr.get("idResource"),"msgKMS":msgKMSEncrypted,'session_token':"provaprpororororor"};
+											var msgRMS={"idu":Lockr.get("id"),"n1":n1,"idR":Lockr.get("idResource"),"msgKMS":msgKMSEncrypted,'session_token':self.user.session};
 											msgRMS=JSON.stringify(msgRMS);
 											var aes=new AesUtil(128,1000);
 											var encryptmsgRMS=aes.encrypt(salt,iv,passPhrase,msgRMS);
@@ -299,6 +300,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 					}	
 
 				},
+				
 				function(errResponse){
 
 					console.error('Error while getUser...');
@@ -324,11 +326,14 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 					var i=0;
 					var row = document.createElement("tr");
 					for(var j=0;j<Object.keys(self.metaTag).length;j++){
-						if(i>=3){
+						if(i>=7){
 							i=0;
 							row=document.createElement("tr");
 						}
 						var cell = document.createElement("td");
+						var pImage=document.createElement("p");
+						var pMeta=document.createElement("p");
+						pMeta.setAttribute("align","center");
 						cell.setAttribute("class","cambioimmagine");
 						var a=document.createElement("a");
 						a.href="";
@@ -340,16 +345,17 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 						var img=document.createElement("img");
 						img.setAttribute("id",fileName);
 						img.src="/OSN/static/css/images/img3.jpg";
-						img.width="90";
-						img.height="90";
-						cell.appendChild(img);
+						img.width="120";
+						img.height="120";
+						pImage.appendChild(img)
+						cell.appendChild(pImage);
 
 						var text = document.createTextNode(self.metaTag[j].metaTag);
 						a.appendChild(text);
 
 						i++;
-
-						cell.appendChild(a);
+						pMeta.appendChild(a);
+						cell.appendChild(pMeta);
 						tblBody.appendChild(cell);
 						tblBody.appendChild(row);
 
@@ -584,6 +590,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 
 														var salt=data.salt;
 														var iv=data.iv;
+														
 														do{
 															var passPhrase=prompt("Insert your passPhrase (needed to decrypt resources)");
 														}while(passPhrase==null);

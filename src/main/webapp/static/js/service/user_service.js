@@ -3,8 +3,8 @@
 
 //SERVICE PAGE GENERATE KEY,REGISTRATION AND UPLOAD PROFILE PHOTO
 App.service('UserService', ['$http','$q',function ($http,$q) {
-	var path='http://193.206.170.142/OSN';
-	//var path='http://localhost:8080/OSN';
+	//var path='http://193.206.170.142/OSN';
+	var path='http://localhost:8080/OSN';
 	var urlRMS='http://193.206.170.143/RMS';
 	var pathPFS='http://193.206.170.147/PathFinder/';	
 	return{

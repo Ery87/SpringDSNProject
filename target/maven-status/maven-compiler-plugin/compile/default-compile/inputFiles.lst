@@ -1,14 +1,16 @@
 /Users/Ery/Downloads/Spring4MVCAngularJSExample/src/main/java/com/websystique/springmvc/model/Album.java
 /Users/Ery/Downloads/Spring4MVCAngularJSExample/src/main/java/com/websystique/springmvc/configuration/HibernateConfiguration.java
+/Users/Ery/Downloads/Spring4MVCAngularJSExample/src/main/java/com/websystique/springmvc/configuration/ConfigurationOSN.java
 /Users/Ery/Downloads/Spring4MVCAngularJSExample/src/main/java/com/websystique/springmvc/dao/Public_KeyDaoImpl.java
 /Users/Ery/Downloads/Spring4MVCAngularJSExample/src/main/java/com/websystique/springmvc/dao/SessionDaoImpl.java
-/Users/Ery/Downloads/Spring4MVCAngularJSExample/src/main/java/com/websystique/springmvc/controller/HelloWorldRestController.java
 /Users/Ery/Downloads/Spring4MVCAngularJSExample/src/main/java/com/websystique/springmvc/service/SessionUserServiceImpl.java
 /Users/Ery/Downloads/Spring4MVCAngularJSExample/src/main/java/com/websystique/springmvc/model/Public_Key.java
+/Users/Ery/Downloads/Spring4MVCAngularJSExample/src/main/java/com/websystique/springmvc/configuration/Initializer.java
 /Users/Ery/Downloads/Spring4MVCAngularJSExample/src/main/java/com/websystique/springmvc/dao/FriendshipRequestDaoImpl.java
 /Users/Ery/Downloads/Spring4MVCAngularJSExample/src/main/java/com/websystique/springmvc/service/Public_KeyService.java
 /Users/Ery/Downloads/Spring4MVCAngularJSExample/src/main/java/com/websystique/springmvc/controller/IndexController.java
 /Users/Ery/Downloads/Spring4MVCAngularJSExample/src/main/java/com/websystique/springmvc/service/Public_keyServiceImpl.java
+/Users/Ery/Downloads/Spring4MVCAngularJSExample/src/main/java/com/websystique/springmvc/controller/OSNRestController.java
 /Users/Ery/Downloads/Spring4MVCAngularJSExample/src/main/java/com/websystique/springmvc/model/FriendshipRequest.java
 /Users/Ery/Downloads/Spring4MVCAngularJSExample/src/main/java/com/websystique/springmvc/service/FriendshipRequestService.java
 /Users/Ery/Downloads/Spring4MVCAngularJSExample/src/main/java/com/websystique/springmvc/controller/AesUtil.java
@@ -20,7 +22,6 @@
 /Users/Ery/Downloads/Spring4MVCAngularJSExample/src/main/java/com/websystique/springmvc/service/AlbumService.java
 /Users/Ery/Downloads/Spring4MVCAngularJSExample/src/main/java/com/websystique/springmvc/service/SessionUserService.java
 /Users/Ery/Downloads/Spring4MVCAngularJSExample/src/main/java/com/websystique/springmvc/dao/UserDao.java
-/Users/Ery/Downloads/Spring4MVCAngularJSExample/src/main/java/com/websystique/springmvc/configuration/HelloWorldConfiguration.java
 /Users/Ery/Downloads/Spring4MVCAngularJSExample/src/main/java/com/websystique/springmvc/model/User.java
 /Users/Ery/Downloads/Spring4MVCAngularJSExample/src/main/java/com/websystique/springmvc/dao/AbstractDao.java
 /Users/Ery/Downloads/Spring4MVCAngularJSExample/src/main/java/com/websystique/springmvc/dao/FriendshipRequestDao.java
@@ -29,6 +30,5 @@
 /Users/Ery/Downloads/Spring4MVCAngularJSExample/src/main/java/com/websystique/springmvc/dao/UserDaoImpl.java
 /Users/Ery/Downloads/Spring4MVCAngularJSExample/src/main/java/com/websystique/springmvc/dao/Public_KeyDao.java
 /Users/Ery/Downloads/Spring4MVCAngularJSExample/src/main/java/com/websystique/springmvc/service/AlbumServiceImpl.java
-/Users/Ery/Downloads/Spring4MVCAngularJSExample/src/main/java/com/websystique/springmvc/configuration/HelloWorldInitializer.java
 /Users/Ery/Downloads/Spring4MVCAngularJSExample/src/main/java/com/websystique/springmvc/dao/AlbumDao.java
 /Users/Ery/Downloads/Spring4MVCAngularJSExample/src/main/java/com/websystique/springmvc/dao/AlbumDaoImpl.java
