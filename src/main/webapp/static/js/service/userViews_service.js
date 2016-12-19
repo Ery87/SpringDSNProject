@@ -2,8 +2,9 @@
 
 //SERVICE PAGE YOU SEARCHED
 App.factory('UserViewsService',['$http','$q',function($http,$q){
-	//var path='http://193.206.170.142/OSN';
-	var path='http://localhost:8080/OSN';
+	//var path='http://localhost:8080/OSN';
+	var path='http://193.206.170.142/OSN';
+
 	var urlRMS='http://193.206.170.143/RMS';
 	var pathPFS='http://193.206.170.147/PathFinder';	
 
@@ -43,6 +44,7 @@ App.factory('UserViewsService',['$http','$q',function($http,$q){
 			return $http.post(path+'/getFriendshipRequestor/',id)
 			.then(
 					function(response){
+						
 						return response.data;
 					},
 					function(errResponse){

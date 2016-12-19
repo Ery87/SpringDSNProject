@@ -73,7 +73,13 @@ body {
 #navcontainer #active {
 	border-left: 1px solid #fff;
 }
-
+#photoGallery {
+ table-layout: fixed;
+ width: auto;
+ cellpadding:20;
+  cellspacing:20;
+  color:#324a94;
+}
 #gutter {
 	float: left;
 	width: 10%;
@@ -82,7 +88,7 @@ body {
 
 #col1 {
 	float: left;
-	width: 44%;
+	width: 50%;
 	margin-bottom: 1em;
 	padding-top: 200px;
 	padding-right: 6%;
@@ -96,6 +102,7 @@ body {
 	padding-right: 1%;
 	padding-top: 200px;
 	padding-left: 80px;
+	
 }
 #line {
 	
@@ -119,7 +126,14 @@ body {
 /*	-moz-border-radius: 10px; /* firefox */
 /*	-webkit-border-radius: 10px; /* safari, chrome */
 }
+#legend li{
+	color:#324a94;
+}
 
+#legend h4{
+	color:#94324a;
+	font:bold;
+}
 h1 {
 	margin: 0;
 	padding: 1.5em;

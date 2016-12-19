@@ -13,28 +13,15 @@
 
 <title>Welcome to DSNProject</title>
 <style>
-.username.ng-valid {
-	background-color: lightgreen;
-}
+html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
 
-.username.ng-dirty.ng-invalid-required {
-	background-color: red;
-}
+#showPhoto{
+position:relative;
 
-.username.ng-dirty.ng-invalid-minlength {
-	background-color: yellow;
-}
-
-.email.ng-valid {
-	background-color: lightgreen;
-}
-
-.email.ng-dirty.ng-invalid-required {
-	background-color: red;
-}
-
-.email.ng-dirty.ng-invalid-email {
-	background-color: yellow;
+bottom:100px;
+        left:300px; 
+        width:400px; 
+        height:300px;
 }
 </style>
 
@@ -42,100 +29,144 @@
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 <link href="<c:url value='/static/css/app.css' />" rel="stylesheet"></link>
-<link href="<c:url value='/static/css/style.css' />" rel="stylesheet"></link>
-
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body ng-app="myApp" class="ng-cloak">
-	<div class="generic-container"
-		ng-controller="UserViewsController as ctrl">
-		<div class="container">
+<body class="w3-light-grey" ng-app="myApp" >
+
+
+
+	<div class="w3-content w3-margin-top" style="max-width:1400px;" ng-controller="UserViewsController as ctrl">
+		<div class="w3-row-padding">
+		
 			<div id="header">
-				<div id="navcontainer">
-					<div class="row floatRight">
-						<div class="form-group col-md-12 ">
-							<!--       <form name="form"  class="form-horizontal" >-->
-							<input type="hidden" name="id" value="ctrl.user.id">
-							<p>
+				
+			
+
+		<!-- Left Column -->
+   			 <div class="w3-third">
+    		 <div class="w3-white w3-text-grey w3-card-4">
+        			<div class="w3-display-container">
+     				<div id="foo"></div>
+				
+
+				
+						<div class="w3-display-bottomleft w3-container w3-text-black">
+           				
+        				  </div>
+       						 </div>
+		<br>	
+		  <br>
+          
+		<br>
+		<br>			
+		 <div class="w3-container">
+		 <p> <h2><span ng-bind="ctrl.user.firstname"></span>&nbsp;&nbsp;<span ng-bind="ctrl.user.lastname"></span></h2></p>
+          <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i><span ng-bind="ctrl.user.birth_day"></span></p>
+          <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i><span ng-bind="ctrl.user.city"></span></p>
+          <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i><span ng-bind="ctrl.user.email"></span></p>
+          <hr>
+
+      
+          
+        
+       
+          <br>
+          
+		<br>
+		<br>
+		     <br>
+          
+		<br>
+		<br>
+		  
+          <br>
+          
+		<br>
+		<br>
+		     <br>
+          
+		<br>
+		<br>
+          </div> 
+          <br>
+        </div>
+      </div><br>
+       <!-- End Left Column -->
+    </div>
+
+    <!-- Right Column -->
+    <div class="w3-twothird">
+     <div class="w3-container w3-card-2 w3-white w3-margin-bottom">
+    
+      
+        <div class="w3-container">
+        <br>
+        <br>
+          				<input type="hidden" name="id" value="ctrl.user.id">
+							<p align="right">
 								<input type="button" ng-click="ctrl.back()"
-									class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid"
+									ng-disabled="myForm.$invalid"
 									value="back" />&nbsp;<input type="button" id="requestfriend"
 									ng-click="ctrl.friendshipCreation()"
-									class="btn btn-primary btn-sm" disabled="true"
+									 disabled="true"
 									value="add to friends" />
 							</p>
 
-							<!--</form>  -->
-						</div>
 
-					</div>
-				</div>
+					
+          <hr>
+        </div>
+      
+      
+		
+      </div>
 
-
-
-				<div class="photoFoo">
-					<table>
-						<tr>
-							<td align="center"><div id="foo"></div></td>
-						</tr>
-						<tr>
-							<td><p>
-								<h2>
-									<span ng-bind="ctrl.user.firstname"></span>&nbsp;&nbsp;<span
-										ng-bind="ctrl.user.lastname"></span>
-								</h2>
-								</p></td>
-						</tr>
-						<tr>
-							<td><p>
-								<h4>
-									<span ng-bind="ctrl.user.birth_day"></span>
-								</h4></td>
-							<td><span ng-bind="ctrl.user.city"></span></td>
-						</tr>
-					</table>
+		
+ 
+			
 
 
-				</div>
-			</div>
-
-		</div>
-
-
-
-		<div id="col1">
-
-
-
-			<h3>Photo Gallery</h3>
-
-			<div id="gallery">
-
-
-
-
-
-
+      <div class="w3-container w3-card-2 w3-white">
+        <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Gallery Photo</h2>
+        <div class="w3-container">
+         
+          <hr>
+        </div>
+        <div class="w3-container">
+          <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>2013 - 2015</h6>
+          <div id="gallery">
+		
+				
+					<br><br>
+					<h2>List of metatag:</h2>
+					<br>
 				<div class="clear"></div>
 			</div>
-		</div>
-		
-		<div id="col2">
-		</div>
+			<div id="showPhoto"></div>
+          <hr>
+        </div>
+        <div class="w3-container">
+         
+        </div>
+      </div>
 
+    <!-- End Right Column -->
+    </div>
+    
+  <!-- End Grid -->
+  </div>
+  
+  <!-- End Page Container -->
+</div>
 
-		<div id="footer"></div>
-
-	</div>
-
-
-
-
-
-
-
-
-
-
+<footer >
+  
+</footer>
 
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>

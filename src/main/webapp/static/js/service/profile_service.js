@@ -3,9 +3,9 @@
 
 //SERVICE WEB PAGE PROFILE
 App.factory('ProfileService',['$http','$q',function($http,$q){
-	//var path='http://193.206.170.142/OSN';
-		var path='http://localhost:8080/OSN';
-	var urlRMS='http://193.206.170.143/RMS';
+	var path='http://193.206.170.142/OSN';
+//	var path='http://localhost:8080/OSN';
+var urlRMS='http://193.206.170.143/RMS';
 	var urlPFS='http://193.206.170.147/PathFinder';	
 	return{
 		getPKClient:function(id){
@@ -18,6 +18,22 @@ App.factory('ProfileService',['$http','$q',function($http,$q){
 						console.error('Error while receive pk client');
 						return $q.reject(errResponse);
 					});
+		},
+		
+		searchFriend:function(id,friend){
+			return $http({
+				url: path+'/search',
+				method: "POST",
+				data: friend,
+				headers: {
+					'Content-Type': 'application/json'
+				}}).success(function(response){
+
+					return response.data;
+				})
+				.error(function(){
+					console.error('Error while inviate protocol');
+				});
 		},
 
 		getUserViewPhoto:function(id,filename){

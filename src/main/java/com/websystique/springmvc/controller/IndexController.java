@@ -37,9 +37,6 @@ public class IndexController {
 		return "userView";
 	}
 
-	@RequestMapping(value="/searchFriend/{id}", method=RequestMethod.GET)
-	public String searchFriend(){
-		return "searchFriend";
-	}
+	
 
 }

@@ -10,8 +10,8 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 	var message;
 	var tagImage;
 	var metaTag;
-	//	 var url='http://193.206.170.142/OSN';
-	 var url='http://localhost:8080/OSN';
+	var url='http://193.206.170.142/OSN';
+	// var url='http://localhost:8080/OSN';
 
 
 	angular.element(document).ready(function () {
@@ -26,6 +26,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 
 	//UPLOAD PHOTO
 	self.uploadPhotoRule=function(){
+		console.log("entro");
 		ProfileService.checkSession(Lockr.get("id")) 
 		.then(
 				function(data){
@@ -33,9 +34,6 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 						$window.location.href=url;
 					}else{
 				
-		console.log("start:");
-
-		console.time("start_upload");
 		
 		document.getElementById('upload').disabled =true;
 		var tag=$scope.ctrl.tag;
@@ -49,7 +47,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 		.then(
 				function(data){
 					//1:CS->RMS	
-
+					
 					Lockr.set("idResource",data.idAlbum);
 					var iv=CryptoJS.lib.WordArray.random(128/8).toString(CryptoJS.enc.Hex);
 					var salt= CryptoJS.lib.WordArray.random(128/8).toString(CryptoJS.enc.Hex);
@@ -57,9 +55,9 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 					Lockr.set('salt1',salt);
 
 					var n2=Math.floor(Math.random()*100+1);
+					
 					var msgKms={"idu":Lockr.get("id"),"idR":Lockr.get("idResource"),"n2":n2,'session_token':self.user.session};
-
-
+					
 
 					ProfileService.getPK('KMS')
 					.then(	
@@ -88,12 +86,13 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 											msgRMS=JSON.stringify(msgRMS);
 											var aes=new AesUtil(128,1000);
 											var encryptmsgRMS=aes.encrypt(salt,iv,passPhrase,msgRMS);
-
+											
 											var paramRMS={"salt":salt,"iv":iv,"passPhrase":passPhrase};
 											paramRMS=JSON.stringify(paramRMS);
 											rsa.setPublic(Lockr.get('modulus_RMS'),Lockr.get('exponent_RMS'));
 											paramRMS=rsa.encrypt(paramRMS);
-
+											
+											
 											var message={'paramRMS':paramRMS,'encryptmsgRMS':encryptmsgRMS};
 											message=JSON.stringify(message);
 
@@ -108,7 +107,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 														ProfileService.getPKClient(Lockr.get("id"))
 														.then(
 																function(data){
-
+																	
 																	var rsa=new RSAKey();
 
 																	var keySize = 128;
@@ -118,7 +117,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 																	var keyPrivate=aesUtil.decrypt(data.salt,data.iv,Lockr.get('passPhrase'),data.private_key);
 																	keyPrivate=keyPrivate.toString(CryptoJS.enc.utf8);
 																	rsa.setPrivate(data.modulus_public,data.exponent_public, keyPrivate); //recupera parametri della chiave del client
-
+																	
 																	key=rsa.decrypt(key);
 																	key=JSON.parse(key);
 
@@ -130,12 +129,12 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 
 																	var decrypted_msg=aesUtil.decrypt(salt, iv, passphrase, encrypted_msg_client);
 																	decrypted_msg=JSON.parse(decrypted_msg);
-
+																	
 																	var secret_user=decrypted_msg.secretUser;
 																	var nonce_plus_one=decrypted_msg.nonce_one_plus_one;
 																	var kms_msg=decrypted_msg.KMSmsg;
 
-
+																	
 																	var rsa=new RSAKey();
 																	rsa.setPrivate(data.modulus_public,data.exponent_public, keyPrivate);
 																	kms_msg=rsa.decrypt(decrypted_msg.KMSmsg);
@@ -152,6 +151,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 																	//Msg to KMS
 
 																	var msgKMS={"id":Lockr.get("id"),"idResource":Lockr.get("idResource"),"n2_2":(kms_msg.nonce_two_plus_one+1),"encryptedPhoto":encryptedPhoto};
+																
 																	var iv=CryptoJS.lib.WordArray.random(128/8).toString(CryptoJS.enc.Hex);
 																	var salt= CryptoJS.lib.WordArray.random(128/8).toString(CryptoJS.enc.Hex);
 																	var aesUtil = new AesUtil(128, 1000);
@@ -162,10 +162,11 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 																	var rsa=new RSAKey();
 																	rsa.setPublic(Lockr.get('modulus_KMS'),Lockr.get('exponent_KMS'));
 																	var keyKMSencrypt=rsa.encrypt(JSON.stringify(keyKMS));
+																	
 																	var messageToKMS={"keyKMSencrypt":keyKMSencrypt,"msgKMSEncrypt":msgKMSEncrypt};
 
 																	var msgRMS={"id":Lockr.get("id"),"N1_2":(nonce_plus_one+1),"idResource":Lockr.get("idResource"),"rule":Lockr.get("rule"),"messageToKMS":JSON.stringify(messageToKMS)};
-
+																
 																	var iv=CryptoJS.lib.WordArray.random(128/8).toString(CryptoJS.enc.Hex);
 																	var salt= CryptoJS.lib.WordArray.random(128/8).toString(CryptoJS.enc.Hex);
 																	var aesUtil = new AesUtil(128, 1000);
@@ -175,17 +176,14 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 																	var rsa=new RSAKey();
 																	rsa.setPublic(Lockr.get('modulus_RMS'),Lockr.get('exponent_RMS'));
 																	var keyRMSencrypt=rsa.encrypt(JSON.stringify(keyRMS));
-
+																	
 																	var messageToRMS={"keyRMSencrypt":keyRMSencrypt,"msgRMS":msgRMS};
 																	messageToRMS=JSON.stringify(messageToRMS);
 																	ProfileService.uploadReq2(messageToRMS)
 																	.then(
 																			function(data){
 																				$window.alert("Upload successfully executed!");
-																				console.log("end:");
-																				console.timeEnd("start_upload");
-																				
-																				//$window.location.reload(false); 
+																				$window.location.reload(false); 
 																			},function(errResponse){
 																				console.error('Error while upload request two.');
 																			});
@@ -219,8 +217,39 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 	},	
 
 
+	//SEARCH USER
+	self.searchFriend=function(){ 
+		self.title='';
+		self.users='';
+		self.message='';
+		var search=self.friend;
+		var id=self.readID();
+		ProfileService.searchFriend(id,search)
+		.then(
+				function(response){
+
+					self.title="List of users:"
+						self.users=response.data;
+					self.id=id;
+
+				},
+				function(errResponse){
+					self.message='Not found user';
+
+				});
+	},
 
 
+
+	
+	self.reset=function(){
+		
+		self.friend='';
+		self.title='';
+		self.users='';
+		self.message='';
+
+	};
 
 	self.generateKeys = function () {
 		var sKeySize =1024;
@@ -293,10 +322,11 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 
 						var img = document.createElement("img");
 						img.src = imageDecoded;
-						img.width="50";
-						img.height="50";
+						img.width="460";
+						img.height="300";
+						img.alt="Avatar";
 						document.getElementById("foo").appendChild(img);
-						self.getAlbum();  
+						self.getAlbum(); 
 					}	
 
 				},
@@ -319,9 +349,24 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 				function(response){
 
 					self.metaTag=response.data;
-
-
-					var myTable=document.createElement("TABLE");
+					var ul=document.createElement("ul");
+					for(var j=0;j<Object.keys(self.metaTag).length;j++){
+						var li=document.createElement("li");
+						var a=document.createElement("a");
+						var h=document.createElement("h4");
+						a.href="";
+						var fileName=self.metaTag[j].fileName;
+						a.setAttribute("ng-click","ctrl.download('"+fileName+"')");
+						var text = document.createTextNode(self.metaTag[j].metaTag);
+						h.appendChild(text);
+						a.appendChild(h);
+						li.appendChild(a);
+						ul.appendChild(li);
+					}
+					document.getElementById("gallery").appendChild(ul);
+					
+					/*
+					var myTable=document.createElement("table");
 					var tblBody = document.createElement("tbody");
 					var i=0;
 					var row = document.createElement("tr");
@@ -362,7 +407,9 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 
 					}
 					myTable.appendChild(tblBody);
+				
 					document.getElementById("gallery").appendChild(myTable);
+						*/
 					self.compile(document.getElementById("gallery"));
 					self.addFriendRequest();
 				},
@@ -562,9 +609,6 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 					ProfileService.getPK('RMS')
 					.then(
 							function(data){
-								console.log("start:");
-
-								console.time("start_download");
 								Lockr.set('modulus_RMS',data.modulus);
 								Lockr.set('exponent_RMS',data.exponent);
 								var n1=Math.floor(Math.random()*100+1);
@@ -652,14 +696,13 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 														var imageDecoded=tag+photo;//base64Image;
 
 
-														var img = document.getElementById(filename);
+														var img = document.createElement("img");
 														img.src = imageDecoded;
-														img.width="90";
-														img.height="90";
-
+														img.width="300";
+														img.height="200";
+														document.getElementById("showPhoto").appendChild(img);
+														
 						
-														console.log("end:");
-														console.timeEnd("start_download");
 														return;
 													},function(errResponse){
 														console.error('Error while get pk client...');

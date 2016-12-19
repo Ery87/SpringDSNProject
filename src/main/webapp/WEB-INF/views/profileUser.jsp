@@ -15,59 +15,45 @@
 
 <title>Welcome to DSNProject</title>
 <style>
-/*   .username.ng-valid {
-          background-color: lightgreen;
-      }
-      .username.ng-dirty.ng-invalid-required {
-          background-color: red;
-      }
-      .username.ng-dirty.ng-invalid-minlength {
-          background-color: yellow;
-      }
+html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
 
-      .email.ng-valid {
-          background-color: lightgreen;
-      }
-      .email.ng-dirty.ng-invalid-required {
-          background-color: red;
-      }
-      .email.ng-dirty.ng-invalid-email {
-          background-color: yellow;
-      }"*/
 a:focus {
 	outline: none;
+	
 }
-
+a{
+color:#009688;
+}
 #panel {
 	background: rgb(245, 245, 245);
 	height: 200px;
 	display: none;
-	color: #324a94;
+	color: #009688;
 	padding-left: 20px;
+	font-size: 40px;
 }
 
 .slide {
 	margin: 0;
 	padding: 0;
 
-	/*
-	background-image : url("images/sfondo-social.jpg");
-	border-top: solid 20px #365886;
-	border-radius: 10px;
-	-moz-border-radius: 10px; /* firefox */
-	/*-webkit-border-radius: 10px; /* safari, chrome */
-}
 
+	
+}
+button {
+background: #009688;
+}
 .btn-slide {
-	background: #3d71af;
+
+	/*background:  #009688;*/
 	text-align: center;
-	width: 144px;
-	height: 33px;
+	width: 400px;
+	height: 40px;
 	padding: 8px 10px 0 0;
 	margin: 0 auto;
 	display: block;
-	font: bold 120%/100% Arial, Helvetica, sans-serif;
-	color: #fff;
+	font: bold 200%/100% Arial, Helvetica, sans-serif;
+	color: #009688;
 	text-decoration: none;
 
 	/*  border-radius: 10px; 
@@ -75,108 +61,96 @@ a:focus {
 	/* -webkit-border-radius: 10px; /* safari, chrome */
 }
 
+ td{
+ padding:"10";
+ }
 .active {
 	background-position: right 12px;
 }
+
+#showPhoto{
+position:relative;
+
+bottom:100px;
+left:300px; 
+width:400px; 
+height:300px;
+}
 </style>
 
+<link href="<c:url value='/static/css/app.css' />" rel="stylesheet"></link>
 
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-<link href="<c:url value='/static/css/app.css' />" rel="stylesheet"></link>
-<link href="<c:url value='/static/css/style.css' />" rel="stylesheet"></link>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-</head>
-<body ng-app="myApp" class="ng-cloak">
+<body class="w3-light-grey" ng-app="myApp" >
 
 
 
-	<div class="generic-container"
-		ng-controller="ProfileController as ctrl">
+	<div class="w3-content w3-margin-top" style="max-width:1400px;" ng-controller="ProfileController as ctrl">
 
-		<div class="container">
+		<div class="w3-row-padding">
+		
 			<div id="header">
-				<div id="panel"></div>
-
-				<p class="slide">
-					<a href="#" class="btn-slide">Friendship Request</a>
-				</p>
-
-				<div id="navcontainer">
-					<div class="row floatRight">
-						<div class="form-group col-md-12 ">
-							<input type="hidden" name="id" value="ctrl.user.id">
-							<p>
-								<input type="submit" ng-click="ctrl.submit()"
-									class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid"
-									value="search" /> &nbsp;&nbsp;<input type="button"
-									ng-click="ctrl.logout()" class="btn btn-primary btn-sm"
-									ng-disabled="myForm.$invalid" value="logout" />
-							</p>
-
-
-						</div>
-
-					</div>
-				</div>
-
-
-				<div class="photoFoo">
-					<table>
-						<tr>
-							<td align="center"><div id="foo"></div></td>
-						</tr>
-						<tr>
-							<td><p>
-								<h2>
-									<span ng-bind="ctrl.user.firstname"></span>&nbsp;&nbsp;<span
-										ng-bind="ctrl.user.lastname"></span>
-								</h2>
-								</p></td>
-						</tr>
-
-					</table>
-
-
-				</div>
-			</div>
-
-		</div>
-
-
-		<div id="gutter"></div>
-<div>
-		<div id="col1">
-
-
-
-			<table>
-				<tr>
-					<th colspan="4"><label for="filePicker">Upload your photo:</label></th>
 				
+			
+
+		<!-- Left Column -->
+   			 <div class="w3-third">
+    		 <div class="w3-white w3-text-grey w3-card-4">
+        			<div class="w3-display-container">
+     				<div id="foo"></div>
+				
+
+				
+						<div class="w3-display-bottomleft w3-container w3-text-black">
+           			<!--  <h2><span ng-bind="ctrl.user.firstname"></span>&nbsp;&nbsp;<span
+										ng-bind="ctrl.user.lastname"></span></h2>-->
+        				  </div>
+       						 </div>
+		<br>				
+		 <div class="w3-container">
+		  <p><h2><span ng-bind="ctrl.user.firstname"></span>&nbsp;&nbsp;<span ng-bind="ctrl.user.lastname"></span></h2></p>
+          <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i><span ng-bind="ctrl.user.birth_day"></span></p>
+          <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i><span ng-bind="ctrl.user.city"></span></p>
+          <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i><span ng-bind="ctrl.user.email"></span></p>
+          <hr>
+
+          <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Upload your photo</b></p>
+          	<form  name="myForm"class="form-horizontal">
+          	<table id="photoGallery" >
+          	<tr>
+          <td><label type="text">Photo </label></td>
+				</tr>	
+				<tr>
+					<td><input type="file" id="filePicker"></td>
 				</tr>
 				<tr>
-					<td><label type="text">Photo: </label></td>
-					
-					<td><input type="file" id="filePicker"></td>
-
-
-					<td><label>MetaTag : </label></td>
-
+					<td><label>MetaTag  </label></td>
+				</tr>
+				<tr>	
 					<td><input type="text" ng-model="ctrl.tag" name="tag"
 						class="metaTag form-control input-sm"
 						placeholder="Write your metaTag require min 3 letters" required
 						ng-minlength="3" ng-required="string" /></td>
 				</tr>
 				<tr>
-					<td><label>Access's Rule: </label></td>
-
+					<td><label><nobr>Access's Rule </nobr></label></td>
+				</tr>
+				<tr>	
 					<td><input type="number" ng-model="ctrl.rule" name="rule"
 						class="rule form-control input-sm"
-						placeholder="Write your access rule" min="1" max="7" step="1" />
+						placeholder="Write rule" min="1" max="7" step="1" style="width: 150px;"/>
 					</td>
-
-					<td><label>PassPhrase</label></td>
+					</tr>
+					<tr>
+					<td><label>PassPhrase </label></td>
+					</tr>
+					<tr>
 					<td><input type="password" ng-model="ctrl.passPhrase"
 						name="passPhrase" class="passPhraseform-control input-sm"
 						placeholder="Write your passPhrase" required ng-minlength="3" />
@@ -184,61 +158,146 @@ a:focus {
 				</tr>
 				<tr>
 					<td colspan="4">
-						<button id="upload" type="submit"
-							ng-click="ctrl.uploadPhotoRule()" class="btn btn-primary btn-sm"
-							ng-disabled="myForm.$invalid" /> Upload Photo
-						</button>
+						<input type="button" id="upload"  ng-click="ctrl.uploadPhotoRule()"  value="Upload Photo" /> 
+				
+				
+
 					</td>
 
 				</tr>
 			</table>
-
-			<br><br><br><br>
-		
-
- 
-			
-
-
-
-
-		</div>
-		<div id="col2">
-
-
-			<div>
-				<ul>
-					Access's Rules
-					<li>1: only friends</li>
+          </form>
+        
+       
+          <br>
+          
+         <p class="w3-large w3-text-theme"><b><i class="fa fa-globe fa-fw w3-margin-right w3-text-teal"></i>Access's Rules</b></p>
+          <p><ul>
+					
+					<li >1: only friends</li>
 					<li>2: friends of friends</li>
 					<li>3: friends of friends of friends</li>
 					<li>ecc..</li>
 					<li>up to the degree of relation 7</li>
-				</ul>
+				</ul></p>
+          </div> 
+          <br>
+        </div>
+      </div><br>
+       <!-- End Left Column -->
+    </div>
+
+    <!-- Right Column -->
+    <div class="w3-twothird">
+     <div class="w3-container w3-card-2 w3-white w3-margin-bottom">
+      <div id="panel"></div>
+
+				<p class="slide">
+					<a href="#" class="btn-slide">Friendship Request</a>
+				</p>
+      
+      
+      
+        <div class="w3-container">
+        	<form  name="myForm"class="form-horizontal">
+          				<input type="hidden" name="id" value="ctrl.user.id">
+							<p align="right">
+								<!--  <input type="submit" ng-click="ctrl.submit()"
+									 ng-disabled="myForm.$invalid"
+									value="search" /> &nbsp;&nbsp;-->
+									<input type="button" ng-click="ctrl.logout()"  value="logout" />
+							</p>
+
+	</form>
+
+					
+          <hr>
+        </div>
+      
+      	<span class="lead">Search user: </span>
+      	<form  name="myForm"class="form-horizontal">
+      	<input type="text" ng-model="ctrl.friend" id="friend" class="friend form-control input-sm"	placeholder="Search your friend" required />
+		<div class="has-error" ng-show="myForm.$dirty">
+				<span ng-show="myForm.email.$error.required">This is a
+					required field</span> <span ng-show="myForm.email.$invalid">This
+					field is invalid </span>
+				</div>		
+				<br> <br>		
+			<input type="button" ng-click="ctrl.searchFriend()" class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid" value="search"/>
+			<input type="button" ng-click="ctrl.reset()" class="btn btn-warning btn-sm" ng-disabled="myForm.$pristine" value="reset"/>
+								
+								
+								
+		<h3>{{ctrl.title}}</h3>
+			<h4>{{ctrl.message}}</h4>
+			<table class="table table-hover">
+
+				<tbody>
+
+					<tr ng-repeat="u in ctrl.users">
+						<td><span ng-bind="u.lastName"></span></td>
+						<td><span ng-bind="u.firstName"></span></td>
+
+						<td><span ng-bind="u.city"></span></td>
+						<td></td>
+						<td></td>
+						<td><button><a ng-href="/OSN/userView/{{ctrl.user.id}}/{{u.id}}?{{u.firstName}}{{u.lastName}}">Profile</a></button>
+					</tr>
+				</tbody>
+			</table>							
+	
+      </div>
+
+		
+ 
+			
+
+
+      <div class="w3-container w3-card-2 w3-white">
+        <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Gallery Photo</h2>
+        <div class="w3-container">
+         
+          <hr>
+        </div>
+        <div class="w3-container">
+          <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>2013 - 2015</h6>
+          <div id="gallery">
+		
+				
+					<br><br>
+					<h2>List of metatag:</h2>
+					<br>
+				<div class="clear"></div>
 			</div>
+			<div id="showPhoto"></div>
+          <hr>
+        </div>
+        <div class="w3-container">
+         
+        </div>
+      </div>
+
+    <!-- End Right Column -->
+    </div>
+    
+  <!-- End Grid -->
+  </div>
+  
+  <!-- End Page Container -->
+</div>
+
+<footer >
+  
+</footer>
 
 
-		</div>
+
+
+
 		
 		
 		 	
-		
-		
-
-			<div id="gallery">
-		
-				
-					<br><br><br>
-				<div class="clear"></div>
-			</div>
-			
-	</div>
-		<div id="footer"></div>
-
-	</div>
-
-
-
+	
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
 	<script

@@ -4,8 +4,8 @@ App.controller('UserViewsController',['$scope','$window','UserViewsService',func
 	var self=this;
 	self.user={id:null,birth_day:'',city:'',email:'',firstname:'',lastname:'',photo:new FormData(),pw:''};
 
-	var url='http://localhost:8080/OSN';
-	//	var url='http://193.206.170.142/OSN';
+	//var url='http://localhost:8080/OSN';
+		var url='http://193.206.170.142/OSN';
 
 	//CHECK SESSION AND SHOW USER ALBUM(ENCRYPTED) AND CHECK IF YOU SEARCHED HAS FRIEND
 	$window.onload=function(){
@@ -26,7 +26,7 @@ App.controller('UserViewsController',['$scope','$window','UserViewsService',func
 						UserViewsService.getFriendshipRequestor(Lockr.get("searchedUser"))
 						.then(
 								function(data){
-
+									
 									self.user=data;
 									self.image=self.user.photo;
 
@@ -44,16 +44,18 @@ App.controller('UserViewsController',['$scope','$window','UserViewsService',func
 
 									var img = document.createElement("img");
 									img.src = imageDecoded;
-									img.width="50";
-									img.height="50";
+									img.width="462";
+									img.height="300";
+									img.alt="Avatar";
 									document.getElementById("foo").appendChild(img);
 									self.getAlbum(); 
 									UserViewsService.isPending(Lockr.get("sessionUser"),Lockr.get("searchedUser"))
 									.then(
 											function(data){
+											
 												var isPending=data.data;
 												if(isPending == 0){
-													UserViewService.getPK('PFS')
+													UserViewsService.getPK('PFS')
 													.then(
 															function(data){
 																
@@ -64,6 +66,7 @@ App.controller('UserViewsController',['$scope','$window','UserViewsService',func
 													var rsa=new RSAKey();
 													rsa.setPublic(modulus_PFS,exponent_PFS);
 													var messageEncryptedToPFS=rsa.encrypt(messageToPFS);
+													
 													UserViewsService.isFriend(messageEncryptedToPFS)
 													.then(
 															function(data){	
@@ -122,18 +125,36 @@ App.controller('UserViewsController',['$scope','$window','UserViewsService',func
 		.then(
 				function(response){
 					self.metaTag=response.data;
-
-
-					var myTable=document.createElement("TABLE");
+					var ul=document.createElement("ul");
+					for(var j=0;j<Object.keys(self.metaTag).length;j++){
+						var li=document.createElement("li");
+						var a=document.createElement("a");
+						a.href="";
+						var fileName=self.metaTag[j].fileName;
+						a.setAttribute("ng-click","ctrl.download('"+fileName+"')");
+						var text = document.createTextNode(self.metaTag[j].metaTag);
+						a.appendChild(text);
+						li.appendChild(a);
+						ul.appendChild(li);
+					}
+					document.getElementById("gallery").appendChild(ul);
+					
+		
+					/*
+					var myTable=document.createElement("table");
 					var tblBody = document.createElement("tbody");
 					var i=0;
 					var row = document.createElement("tr");
 					for(var j=0;j<Object.keys(self.metaTag).length;j++){
-						if(i>3){
+						if(i>6){
 							i=0;
+							
 							row=document.createElement("tr");
 						}
 						var cell = document.createElement("td");
+						var pImage=document.createElement("p");
+						var pMeta=document.createElement("p");
+						pMeta.setAttribute("align","center");
 						cell.setAttribute("class","cambioimmagine");
 						var a=document.createElement("a");
 						a.href="";
@@ -145,16 +166,18 @@ App.controller('UserViewsController',['$scope','$window','UserViewsService',func
 						var img=document.createElement("img");
 						img.setAttribute("id",fileName);
 						img.src="/OSN/static/css/images/img3.jpg";
-						img.width="90";
-						img.height="90";
-						cell.appendChild(img);
+						img.width="120";
+						img.height="120";
+						pImage.appendChild(img)
+						cell.appendChild(pImage);
 
 						var text = document.createTextNode(self.metaTag[j].metaTag);
 						a.appendChild(text);
 
 						i++;
 
-						cell.appendChild(a);
+						pMeta.appendChild(a);
+						cell.appendChild(pMeta);
 						tblBody.appendChild(cell);
 						tblBody.appendChild(row);
 
@@ -162,6 +185,7 @@ App.controller('UserViewsController',['$scope','$window','UserViewsService',func
 					}
 					myTable.appendChild(tblBody);
 					document.getElementById("gallery").appendChild(myTable);
+					*/
 					self.compile(document.getElementById("gallery"));
 				},
 				function(errResponse){
@@ -209,9 +233,6 @@ App.controller('UserViewsController',['$scope','$window','UserViewsService',func
 					UserViewsService.getPK('RMS')
 					.then(
 							function(data){
-								console.log("start:");
-
-								console.time("start_download");
 								Lockr.set('modulus_RMS',data.modulus);
 								Lockr.set('exponent_RMS',data.exponent);
 								var n1=Math.floor(Math.random()*100+1);
@@ -298,23 +319,14 @@ App.controller('UserViewsController',['$scope','$window','UserViewsService',func
 														var imageDecoded=tag+photo;//base64Image;
 
 
-														var img = document.getElementById(filename);
+														var img = document.createElement("img");
 														img.src = imageDecoded;
-														img.width="90";
-														img.height="90";
-
-														var div=document.getElementById("col2");
-														var img2=document.createElement("img");
-														img2.src=imageDecoded;
-														img2.width="350";
-														img2.height="350";
-														div.appendChild(img2);
-
-
-
-														console.log("end:");
-														console.timeEnd("start_download");
-														return;
+														img.width="300";
+														img.height="200";
+														document.getElementById("showPhoto").appendChild(img);
+														
+						
+															return;
 													},function(errResponse){
 														console.error('Error while get pk client...');
 

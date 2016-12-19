@@ -192,7 +192,6 @@ public class OSNRestController {
 			json.put("city", user.getCity());
 			json.put("photo", user.getPhoto());
 
-
 			pw.println(json);
 		}
 

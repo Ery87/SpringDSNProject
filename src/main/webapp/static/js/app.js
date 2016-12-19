@@ -39,11 +39,7 @@ App.config(['$routeProvider', '$compileProvider', function($routeProvider, $comp
 		templateUrl: 'WEB-INF/views/userView.jsp'
 
 	})
-	.when('/searchFriend/{id}',{
-		controller:'SearchController',
-		templateUrl: 'WEB-INF/views/searchFriend.jsp'
-
-	})
+	
 
 	.otherwise({redirectTo:'/'});
 }]);
