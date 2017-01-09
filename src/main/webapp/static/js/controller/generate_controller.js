@@ -3,8 +3,8 @@
 App.controller('GenerateController',['$scope','$window','UserService',function($scope,$window,UserService){
 	var self=this;
 	var id;
-	 	var url='http://193.206.170.142/OSN';
-	 	//	var url='http://localhost:8080/OSN';
+ 	 	var url='http://193.206.170.142/OSN';
+ 	//	var url='http://localhost:8080/OSN';
 
 
 

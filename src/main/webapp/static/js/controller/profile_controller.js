@@ -10,8 +10,8 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 	var message;
 	var tagImage;
 	var metaTag;
-	var url='http://193.206.170.142/OSN';
-	// var url='http://localhost:8080/OSN';
+		var url='http://193.206.170.142/OSN';
+		// var url='http://localhost:8080/OSN';
 
 
 	angular.element(document).ready(function () {
@@ -322,8 +322,8 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 
 						var img = document.createElement("img");
 						img.src = imageDecoded;
-						img.width="460";
-						img.height="300";
+						img.width="280";
+						img.height="280";
 						img.alt="Avatar";
 						document.getElementById("foo").appendChild(img);
 						self.getAlbum(); 
@@ -634,15 +634,21 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 
 														var salt=data.salt;
 														var iv=data.iv;
+														var passPhrase="";
+														bootbox.prompt({
+														    title: "Insert your passPhrase (needed to decrypt resources)!",
+														    inputType: 'password',
+														    callback:function (result) {
+														      
+														       Lockr.set("passPhrase",result);
+														       
+														    }
+														});
 														
-														do{
-															var passPhrase=prompt("Insert your passPhrase (needed to decrypt resources)");
-														}while(passPhrase==null);
-
 														var keySize = 128;
 														var iterationCount = 1000;
 														var aesUtil=new AesUtil(keySize,iterationCount);	
-														var priv_key=aesUtil.decrypt(salt,iv,passPhrase,data.private_key);
+														var priv_key=aesUtil.decrypt(salt,iv,Lockr.get('passPhrase'),data.private_key);
 
 														var rsa=new RSAKey();
 														priv_key=priv_key.toString(CryptoJS.enc.utf8);

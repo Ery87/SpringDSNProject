@@ -10,6 +10,8 @@
 <script src="<c:url value='/static/js/libraries/rollups/aes.js' />"></script>
 <script
 	src="<c:url value='/static/js/libraries/components/enc-base64-min.js' />"></script>
+<script
+	src="<c:url value='/static/js/libraries/bootstrap.min.js' />"></script>
 
 <title>Welcome to DSNProject</title>
 <style>
@@ -22,6 +24,12 @@ bottom:100px;
         left:300px; 
         width:400px; 
         height:300px;
+}
+
+#foo img{
+-moz-border-radius: 280px;
+    -webkit-border-radius: 280px;
+    border-radius: 280px;
 }
 </style>
 
@@ -51,7 +59,7 @@ bottom:100px;
    			 <div class="w3-third">
     		 <div class="w3-white w3-text-grey w3-card-4">
         			<div class="w3-display-container">
-     				<div id="foo"></div>
+     				<div id="foo" align="center"></div>
 				
 
 				
@@ -182,6 +190,7 @@ bottom:100px;
 	<script src="<c:url value='/static/js/libraries/lockr.js'/>"></script>
 
 	<script src="<c:url value='/static/js/libraries/lockr.min.js'/>"></script>
+	<script src="<c:url value='/static/js/libraries/bootbox.min.js'/>"></script>
 
   <script src="<c:url value='/static/js/libraries/encoding-indexes.js'/>"></script>
   <script src="<c:url value='/static/js/libraries/encoding.js'/>"></script>

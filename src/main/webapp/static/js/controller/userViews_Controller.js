@@ -4,8 +4,8 @@ App.controller('UserViewsController',['$scope','$window','UserViewsService',func
 	var self=this;
 	self.user={id:null,birth_day:'',city:'',email:'',firstname:'',lastname:'',photo:new FormData(),pw:''};
 
-	//var url='http://localhost:8080/OSN';
-		var url='http://193.206.170.142/OSN';
+	//	var url='http://localhost:8080/OSN';
+	var url='http://193.206.170.142/OSN';
 
 	//CHECK SESSION AND SHOW USER ALBUM(ENCRYPTED) AND CHECK IF YOU SEARCHED HAS FRIEND
 	$window.onload=function(){
@@ -44,8 +44,8 @@ App.controller('UserViewsController',['$scope','$window','UserViewsService',func
 
 									var img = document.createElement("img");
 									img.src = imageDecoded;
-									img.width="462";
-									img.height="300";
+									img.width="280";
+									img.height="280";
 									img.alt="Avatar";
 									document.getElementById("foo").appendChild(img);
 									self.getAlbum(); 
@@ -258,14 +258,20 @@ App.controller('UserViewsController',['$scope','$window','UserViewsService',func
 
 														var salt=data.salt;
 														var iv=data.iv;
-														do{
-															var passPhrase=prompt("Insert your passPhrase (needed to decrypt resources)");
-														}while(passPhrase==null);
-
+														bootbox.prompt({
+														    title: "Insert your passPhrase (needed to decrypt resources)!",
+														    inputType: 'password',
+														    callback:function (result) {
+														      
+														       Lockr.set("passPhrase",result);
+														       
+														    }
+														});
+													
 														var keySize = 128;
 														var iterationCount = 1000;
 														var aesUtil=new AesUtil(keySize,iterationCount);	
-														var priv_key=aesUtil.decrypt(salt,iv,passPhrase,data.private_key);
+														var priv_key=aesUtil.decrypt(salt,iv,Lockr.get('passPhrase'),data.private_key);
 
 														var rsa=new RSAKey();
 														priv_key=priv_key.toString(CryptoJS.enc.utf8);

@@ -12,6 +12,8 @@
 	src="<c:url value='/static/js/libraries/components/enc-base64-min.js' />"></script>
 <script
 	src="<c:url value='/static/js/libraries/excluded/jquery-2.1.3.min.js' />"></script>
+<script
+	src="<c:url value='/static/js/libraries/bootstrap.min.js' />"></script>
 
 <title>Welcome to DSNProject</title>
 <style>
@@ -76,6 +78,12 @@ left:300px;
 width:400px; 
 height:300px;
 }
+
+#foo img{
+-moz-border-radius: 280px;
+    -webkit-border-radius: 280px;
+    border-radius: 280px;
+}
 </style>
 
 <link href="<c:url value='/static/css/app.css' />" rel="stylesheet"></link>
@@ -103,7 +111,7 @@ height:300px;
    			 <div class="w3-third">
     		 <div class="w3-white w3-text-grey w3-card-4">
         			<div class="w3-display-container">
-     				<div id="foo"></div>
+     				<div id="foo" align="center"></div>
 				
 
 				
@@ -311,7 +319,10 @@ height:300px;
 
 	<script src="<c:url value='/static/js/libraries/lockr.min.js'/>"></script>
 
+	<script src="<c:url value='/static/js/libraries/bootbox.min.js'/>"></script>
 
+
+	
 
 	<script src="http://www-cs-students.stanford.edu/~tjw/jsbn/prng4.js"></script>
 	<script src="http://www-cs-students.stanford.edu/~tjw/jsbn/rng.js"></script>
