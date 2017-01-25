@@ -18,7 +18,6 @@
 <title>Welcome to DSNProject</title>
 <style>
 html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
-
 a:focus {
 	outline: none;
 	
@@ -34,19 +33,15 @@ color:#009688;
 	padding-left: 20px;
 	font-size: 40px;
 }
-
 .slide {
 	margin: 0;
 	padding: 0;
-
-
 	
 }
 button {
 background: #009688;
 }
 .btn-slide {
-
 	/*background:  #009688;*/
 	text-align: center;
 	width: 400px;
@@ -57,28 +52,23 @@ background: #009688;
 	font: bold 200%/100% Arial, Helvetica, sans-serif;
 	color: #009688;
 	text-decoration: none;
-
 	/*  border-radius: 10px; 
   -moz-border-radius: 10px; /* firefox */
 	/* -webkit-border-radius: 10px; /* safari, chrome */
 }
-
  td{
  padding:"10";
  }
 .active {
 	background-position: right 12px;
 }
-
 #showPhoto{
 position:relative;
-
 bottom:100px;
 left:300px; 
 width:400px; 
 height:300px;
 }
-
 #foo img{
 -moz-border-radius: 280px;
     -webkit-border-radius: 280px;
@@ -107,7 +97,7 @@ height:300px;
 				
 			
 
-		<!-- Left Column -->
+				<!-- Left Column -->
    			 <div class="w3-third">
     		 <div class="w3-white w3-text-grey w3-card-4">
         			<div class="w3-display-container">
@@ -138,7 +128,7 @@ height:300px;
 					<td><input type="file" id="filePicker"></td>
 				</tr>
 				<tr>
-					<td><label>MetaTag  </label></td>
+					<td><label>Meta Tag  </label></td>
 				</tr>
 				<tr>	
 					<td><input type="text" ng-model="ctrl.tag" name="tag"
@@ -156,13 +146,15 @@ height:300px;
 					</td>
 					</tr>
 					<tr>
-					<td><label>PassPhrase </label></td>
+					<td><label>Passphrase </label></td>
 					</tr>
 					<tr>
 					<td><input type="password" ng-model="ctrl.passPhrase"
 						name="passPhrase" class="passPhraseform-control input-sm"
 						placeholder="Write your passPhrase" required ng-minlength="3" />
 					</td>
+				</tr>
+				<tr>
 				</tr>
 				<tr>
 					<td colspan="4">
@@ -179,14 +171,13 @@ height:300px;
        
           <br>
           
-         <p class="w3-large w3-text-theme"><b><i class="fa fa-globe fa-fw w3-margin-right w3-text-teal"></i>Access's Rules</b></p>
-          <p><ul>
+         <p class="w3-large w3-text-theme"><b><i class="fa fa-globe fa-fw w3-margin-right w3-text-teal"></i>Visibility of your photo</b></p>
+          <p><ul style="margin-left:23px;">
 					
-					<li >1: only friends</li>
-					<li>2: friends of friends</li>
-					<li>3: friends of friends of friends</li>
-					<li>ecc..</li>
-					<li>up to the degree of relation 7</li>
+					<li >1: Only friends</li>
+					<li>2: Friends of friends</li>
+					<li>3: ....</li>
+					<li>7: Up to relation 7</li>
 				</ul></p>
           </div> 
           <br>
@@ -262,23 +253,31 @@ height:300px;
 
 
       <div class="w3-container w3-card-2 w3-white">
-        <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Gallery Photo</h2>
+        <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Photo Gallery</h2>
         <div class="w3-container">
          
           <hr>
         </div>
         <div class="w3-container">
-          <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>2013 - 2015</h6>
-          <div id="gallery">
-		
-				
-					<br><br>
-					<h2>List of metatag:</h2>
+        <div id="menu_gallery" style="overflow-y: scroll;float:left; display:block; width:300px; height:490px; background-color:#009688;">
+        	<h3 style="color: white; text-align: center; font-style: oblique;">List of Meta tag</h3>
+						<br><br>
+	
 					<br>
-				<div class="clear"></div>
+			<div id="gallery">	
+			
+				
 			</div>
-			<div id="showPhoto"></div>
-          <hr>
+        
+        </div>
+        <div id="container_photo" style="float:left; display:block; width:500px; height:490px; background-color:#FFFFFF;">
+      
+        <div id="showPhoto" style="position:relative;top:50px;left:50px;">
+			<img id="img" src=""></img>
+			</div>
+        </div>
+        
+      
         </div>
         <div class="w3-container">
          

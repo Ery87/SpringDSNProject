@@ -4,7 +4,7 @@
 <html>
 <head>
 
-<title>Welcome to DSNProject</title>
+<title>Generate a PassPhrase</title>
 <style>
 .username.ng-valid {
 	background-color: lightgreen;
@@ -40,38 +40,42 @@
 
 
 </head>
-<body ng-app="myApp" class="ng-cloak">
+<body ng-app="myApp" class="ng-cloak"  style="position:fixed;top:20%;left:17%;width:60%;height:70%;" >
 
-	<div class="generic-container"
-		ng-controller="GenerateController as ctrl">
-		<h1 style="text-align: center;">Welcome to DSNProject!</h1>
+	<div class="generic-container" ng-controller="GenerateController as ctrl">
+		<h1 style="text-align: center;">Generates the keys</h1>
+		
 		<div class="panel panel-default">
-			<div class="panel-heading">
-				<span class="lead">To generate the key pairs to enter your
-					Passphrase </span>
-			</div>
-			<form name="myForm" class="form-horizontal">
+			<div class="formcontainer" >
+				<form ng-submit="ctrl.submit()" name="myForm"
+					class="form-horizontal">
+	
+		
+		
 				<div class="row">
-					<br>
-				</div>
-				<div class="row">
-					<div style="padding-left: 70px;" class="form-group col-md-12">
-						<label class="col-md-2 control-lable" for="Passphrase">Passphrase</label>
-						<div class="col-md-7">
-							<p>
-								<input data-ng-model='user.password' type="password"
-									name='password' placeholder='insert passPhrase' required>
-							</p>
+						<div class="form-group col-md-12" >
+					<div class="col-md-7"style="position:relative;top:50%; left:25%;" >
+								
+						<label class="col-md-2 control-lable" for="Passphrase" style="width:300px;"><h4>Passphrase*</h4></label>
+								<br>
+			
+						
+								<input data-ng-model='user.password' type="password" style="width:200px;"
+									name='password' placeholder='insert your passPhrase' required>
+				
 							<div ng-show="form.password.$error.required">Field required</div>
 						</div>
 					</div>
+					</div>
 					<div class="row">
-						<div style="padding-left: 70px;" class="form-group col-md-12">
-							<label class="col-md-2 control-lable" for="Passphrase">Confirm
-								Passphrase</label>
-							<div class="col-md-7">
-								<p>
-									<input ng-model='user.password_verify' type="password"
+							<div class="form-group col-md-12" >
+					<div class="col-md-7"style="position:relative;top:50%; left:25%;" >
+								
+						<label class="col-md-2 control-lable" for="Passphrase" style="width:300px;"><h4> Confirm Passphrase</h4></label>
+								<br>
+			
+				
+									<input ng-model='user.password_verify' type="password" style="width:200px;"
 										name='confirm_password' placeholder='confirm passPhrase'
 										required data-password-verify="user.password">
 								</p>
@@ -83,7 +87,7 @@
 						</div>
 						<div class="row">
 							<div style="padding-right: 70px;" class="form-actions floatRight">
-								<input id="generateKey" type="submit" ng-click="ctrl.generateKey()"
+								<input id="generateKey" type="submit" ng-click="ctrl.generateKey()" value="generate"
 									class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid">
 								<button type="button" ng-click="ctrl.reset()"
 									class="btn btn-warning btn-sm" ng-disabled="myForm.$pristine">Reset
@@ -95,7 +99,7 @@
 			</form>
 		</div>
 
-
+ <p><h5>* insert a Passphrase (it must be an alphanumeric string). The Passphrase will be use by the system to encrypt and decrypt your photo.</h5></div>
 	</div>
 	<script
 		src="<c:url value='/static/js/libraries/excluded/jquery-2.1.3.min.js' />"></script>

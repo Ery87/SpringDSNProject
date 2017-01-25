@@ -5,8 +5,8 @@ App.controller('LoginController',['$scope','$window','LoginService',function($sc
 	self.user={id:null,birth_day:'',city:'',email:'',firstname:'',lastname:'',photo:'',pw:''};
 	var message;
 
-	  var url='http://193.206.170.142/OSN';
-	  //    var url='http://localhost:8080/OSN';
+	   var url='http://193.206.170.142/OSN';
+	   //   var url='http://localhost:8080/OSN';
 
 
 

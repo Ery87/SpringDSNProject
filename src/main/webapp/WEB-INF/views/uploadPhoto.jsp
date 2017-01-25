@@ -38,7 +38,7 @@
 	<div class="generic-container" ng-controller="UploadController as ctrl">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<span class="lead">Upload Photo </span>
+				<span class="lead">Upload your profile's photo </span>
 			</div>
 			<div class="formcontainer">
 				<form name="myForm" class="form-horizontal"
@@ -47,11 +47,11 @@
 
 
 					<div class="row">
-						<div class="form-group col-md-12">
-							<label for="filePicker">Choose or drag a photo:</label><br>
-							<div class="col-md-7">
-
-								<input type="file" id="filePicker">
+					<div class="col-md-7">
+						<div class="form-group col-md-12"><h4>Select a file to upload:</h4></label><br>
+							
+								
+								<input type="file" id="filePicker" value="choose file">
 							</div>
 							<br>
 							<!-- <div class="row">

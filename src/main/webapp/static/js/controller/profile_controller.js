@@ -10,8 +10,8 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 	var message;
 	var tagImage;
 	var metaTag;
-		var url='http://193.206.170.142/OSN';
-		// var url='http://localhost:8080/OSN';
+	 var url='http://193.206.170.142/OSN';
+	 //	var url='http://localhost:8080/OSN';
 
 
 	angular.element(document).ready(function () {
@@ -243,7 +243,6 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 
 	
 	self.reset=function(){
-		
 		self.friend='';
 		self.title='';
 		self.users='';
@@ -492,7 +491,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 
 					}else{
 						var h2=document.createElement("h2");
-						var text=document.createTextNode("There are not friend requests....");
+						var text=document.createTextNode("There are not friendship request....");
 						h2.appendChild(text);
 						document.getElementById("panel").appendChild(h2);
 
@@ -593,13 +592,15 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 
 	// SHOW YOUR ALBUM
 	self.download=function(filename){
+	var image= document.getElementById('img');
+		image.parentNode.removeChild(image);
 		ProfileService.checkSession(Lockr.get("id")) 
 		.then(
 				function(data){
 					if(data.session=0){
 						$window.location.href=url;
 					}else{
-	
+		
 		ProfileService.getUserViewPhoto(Lockr.get("id"),filename)
 		.then(
 				function(data){
@@ -636,80 +637,82 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 														var iv=data.iv;
 														var passPhrase="";
 														bootbox.prompt({
-														    title: "Insert your passPhrase (needed to decrypt resources)!",
+														    title: "Enter your Passphrase (needed to decrypt resources)!",
 														    inputType: 'password',
 														    callback:function (result) {
 														      
 														       Lockr.set("passPhrase",result);
-														       
+														   	
+																var keySize = 128;
+																var iterationCount = 1000;
+																var aesUtil=new AesUtil(keySize,iterationCount);	
+																var priv_key=aesUtil.decrypt(salt,iv,Lockr.get('passPhrase'),data.private_key);
+
+																var rsa=new RSAKey();
+																priv_key=priv_key.toString(CryptoJS.enc.utf8);
+																rsa.setPrivate(data.modulus_public,data.exponent_public, priv_key); 
+
+																var decryptAes=rsa.decrypt(AESParams);
+																decryptAes=JSON.parse(decryptAes);
+
+																var decryptedMessageFromRMS=aesUtil.decrypt(decryptAes.salt,decryptAes.iv,decryptAes.passphrase,encrypted_msg_client);
+																decryptedMessageFromRMS=JSON.parse(decryptedMessageFromRMS);
+
+																var secretOwner=decryptedMessageFromRMS.secret_owner;
+																var msgFromKMS=decryptedMessageFromRMS.msgFromKMS;
+																msgFromKMS=rsa.decrypt(msgFromKMS);
+
+																msgFromKMS=JSON.parse(msgFromKMS);
+
+																var token=msgFromKMS.token;
+
+																var url=msgFromKMS.url_encryptedrsc;
+
+																var secret=secretOwner+token;
+
+
+																var req = new XMLHttpRequest();
+
+																req.open('GET',url, false);
+																req.send(null);
+
+																if(req.status == 200) {
+																	var photo=req.responseText;
+																}
+																try{
+																	photo=aesUtil.decrypt(secretOwner,token,secret,photo);
+																	var binary = '';
+																	var buf = new ArrayBuffer(photo.length); // 2 bytes for each char
+
+																	var bytes = new Uint8Array(buf);
+																	var len = bytes.byteLength;
+																	for (var i = 0; i < len; i++) {
+																		binary += String.fromCharCode( bytes[ i ] );
+																	}
+																	var base64Image=window.btoa( binary );
+
+																	var tag="data:image/JPEG;base64,";
+																	var imageDecoded=tag+photo;//base64Image;
+
+
+																	var img = document.createElement("img");
+																	img.id="img";
+																	img.src = imageDecoded;
+																	img.width="300";
+																	img.height="200";
+																	document.getElementById("showPhoto").appendChild(img);
+																	return;
+									
+																
+																}catch(e){
+																	$window.alert("You don't have permission to access the requested object!");
+																	$window.location.reload(false); 
+																}
+															
+															
 														    }
 														});
-														
-														var keySize = 128;
-														var iterationCount = 1000;
-														var aesUtil=new AesUtil(keySize,iterationCount);	
-														var priv_key=aesUtil.decrypt(salt,iv,Lockr.get('passPhrase'),data.private_key);
-
-														var rsa=new RSAKey();
-														priv_key=priv_key.toString(CryptoJS.enc.utf8);
-														rsa.setPrivate(data.modulus_public,data.exponent_public, priv_key); 
-
-														var decryptAes=rsa.decrypt(AESParams);
-														decryptAes=JSON.parse(decryptAes);
-
-														var decryptedMessageFromRMS=aesUtil.decrypt(decryptAes.salt,decryptAes.iv,decryptAes.passphrase,encrypted_msg_client);
-														decryptedMessageFromRMS=JSON.parse(decryptedMessageFromRMS);
-
-														var secretOwner=decryptedMessageFromRMS.secret_owner;
-														var msgFromKMS=decryptedMessageFromRMS.msgFromKMS;
-														msgFromKMS=rsa.decrypt(msgFromKMS);
-
-														msgFromKMS=JSON.parse(msgFromKMS);
-
-														var token=msgFromKMS.token;
-
-														var url=msgFromKMS.url_encryptedrsc;
-
-														var secret=secretOwner+token;
-
-
-														var req = new XMLHttpRequest();
-
-														req.open('GET',url, false);
-														req.send(null);
-
-														if(req.status == 200) {
-															var photo=req.responseText;
-														}
-														try{
-															photo=aesUtil.decrypt(secretOwner,token,secret,photo);
-														}catch(e){
-															$window.alert("You don't have permission to access the requested object!");
-															$window.location.reload(false); 
-														}
-
-														var binary = '';
-														var buf = new ArrayBuffer(photo.length); // 2 bytes for each char
-
-														var bytes = new Uint8Array(buf);
-														var len = bytes.byteLength;
-														for (var i = 0; i < len; i++) {
-															binary += String.fromCharCode( bytes[ i ] );
-														}
-														var base64Image=window.btoa( binary );
-
-														var tag="data:image/JPEG;base64,";
-														var imageDecoded=tag+photo;//base64Image;
-
-
-														var img = document.createElement("img");
-														img.src = imageDecoded;
-														img.width="300";
-														img.height="200";
-														document.getElementById("showPhoto").appendChild(img);
-														
-						
-														return;
+													
 													},function(errResponse){
 														console.error('Error while get pk client...');
 

@@ -42,26 +42,24 @@
 <link href="<c:url value='/static/css/app.css' />" rel="stylesheet"></link>
 
 </head>
-<body ng-app="myApp" class="ng-cloak">
+<body ng-app="myApp" class="ng-cloak" style="position:fixed;top:20%;left:17%;width:60%;height:70%;" >
 
 	<div class="generic-container" ng-controller="LoginController as ctrl">
 		<h1 style="text-align: center;">Welcome to DSNProject!</h1>
 		<div class="panel panel-default">
-			<div class="panel-heading">
-				<span class="lead">Login </span>
-			</div>
-			<div class="formcontainer">
+			
+			<div class="formcontainer" >
 				<form ng-submit="ctrl.submit()" name="myForm"
 					class="form-horizontal">
 					<input type="hidden" ng-model="ctrl.user.id" />
 
 					<div class="row">
-						<div class="form-group col-md-12">
-							<label class="col-md-2 control-lable" for="email">Email</label>
-							<div class="col-md-7">
+						<div class="form-group col-md-12" >
+							
+							<div class="col-md-7"style="position:relative;top:50%; left:25%;" >
 								<input type="email" ng-model="ctrl.user.email" id="email"
 									class="email form-control input-sm"
-									placeholder="Enter your Email" required />
+									placeholder="Enter your Email" style="width:300px;" required />
 								<div class="has-error" ng-show="myForm.$dirty">
 									<span ng-show="myForm.email.$error.required">This is a
 										required field</span> <span ng-show="myForm.email.$invalid">This
@@ -72,10 +70,10 @@
 					</div>
 					<div class="row">
 						<div class="form-group col-md-12">
-							<label class="col-md-2 control-lable" for="pw">Password</label>
-							<div class="col-md-7">
+						
+							<div class="col-md-7" style="position:relative;top:50%; left:25%;" >
 								<input type="password" ng-model="ctrl.user.pw" id="pw"
-									class="pw form-control input-sm" placeholder="Enter your pw"
+									class="pw form-control input-sm" placeholder="Enter your password"style="width:300px;"
 									required ng-minlength="7" />
 								<div class="has-error" ng-show="myForm.$dirty">
 									<span ng-show="myForm.pw.$error.required">This is a
@@ -87,12 +85,14 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="form-actions floatRight">
-							<a ng-href='registration'>Sign In</a> <input type="submit"
-								class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid">
+						<div class="form-actions" style="position:relative;top:50%; left:40%;">
+						<input type="submit" class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid" value="Login" >
 							<button type="button" ng-click="ctrl.reset()"
 								class="btn btn-warning btn-sm" ng-disabled="myForm.$pristine">Reset
 								Form</button>
+								<br><br>
+						Not registered? <a ng-href='registration'>Create an account</a> 
+								
 						</div>
 					</div>
 				</form>

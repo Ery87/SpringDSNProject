@@ -2,19 +2,23 @@
 App.controller('UserController',['UserService','$window','$scope',function (UserService,$window,$scope){
 	var self=this;
 	self.user={id:null,birth_day:'',city:'',email:'',firstName:'',lastName:'',photo:null,pw:''};
-       var url='http://193.206.170.142/OSN';
+	var url='http://193.206.170.142/OSN';
 	    var message='';    
-	    //  	  var url='http://localhost:8080/OSN';
+	    //      	  var url='http://localhost:8080/OSN';
 
 
 
 
 	//CREATE NEW USER
 	self.createUser=function(){
+		var date=$scope.ctrl.year+"/"+$scope.ctrl.months+"/"+$scope.ctrl.day;
+		self.user.birth_day=date;
+		self.user.photo=Lockr.get("photo");
 		var utente=$scope.ctrl.user;
 		var salt=bcrypt.genSaltSync(10);
 		var hash=bcrypt.hashSync(utente.pw,salt)
 		utente.pw=hash;
+		
 		UserService.saveUser(utente)
 		.then(
 				function(d){
@@ -24,7 +28,7 @@ App.controller('UserController',['UserService','$window','$scope',function (User
 					.then(
 							function(data){
 
-								$window.location.href=url+'/uploadPhoto/'+self.user.id;
+								$window.location.href=url+'/generateKey/'+self.user.id;
 							},
 
 							function(errResponse){
@@ -51,6 +55,49 @@ App.controller('UserController',['UserService','$window','$scope',function (User
 		$scope.createUser();
 		$scope.reset();
 	};
+	
+
+	var handleFileSelect = function(evt) {
+
+		var files = evt.target.files;
+		var file = files[0];
+		var str=file.name;
+		str = str.replace(/\s+/g, '');
+		Lockr.set("fileName",str);
+
+		if (files && file) {
+			var reader = new FileReader();
+
+			reader.onload = function(readerEvt) {
+				var binaryString = readerEvt.target.result;
+				var b=btoa(binaryString);
+				
+				Lockr.set("photo",b);
+
+			};
+
+			reader.readAsBinaryString(file);
+		}
+	};
+
+
+
+
+
+	if ($window.File && $window.FileReader && $window.FileList && $window.Blob) {
+		document.getElementById('filePicker').addEventListener('change', handleFileSelect, false);
+
+	} else {
+
+		alert('The File APIs are not fully supported in this browser.');
+
+	}
+
+
+
+
+	
+	
 }]);
 
 App.directive('fileModel', ['$parse', function ($parse) {

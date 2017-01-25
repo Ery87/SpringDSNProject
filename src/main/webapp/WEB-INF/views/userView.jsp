@@ -10,6 +10,8 @@
 <script src="<c:url value='/static/js/libraries/rollups/aes.js' />"></script>
 <script
 	src="<c:url value='/static/js/libraries/components/enc-base64-min.js' />"></script>
+	<script
+		src="<c:url value='/static/js/libraries/excluded/jquery-2.1.3.min.js' />"></script>
 <script
 	src="<c:url value='/static/js/libraries/bootstrap.min.js' />"></script>
 
@@ -31,6 +33,12 @@ bottom:100px;
     -webkit-border-radius: 280px;
     border-radius: 280px;
 }
+
+#gallery {
+float:left;
+margin-left:46px;
+}		
+
 </style>
 
 
@@ -139,24 +147,33 @@ bottom:100px;
 			
 
 
+
       <div class="w3-container w3-card-2 w3-white">
-        <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Gallery Photo</h2>
+        <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Photo Gallery</h2>
         <div class="w3-container">
          
           <hr>
         </div>
         <div class="w3-container">
-          <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>2013 - 2015</h6>
-          <div id="gallery">
-		
-				
-					<br><br>
-					<h2>List of metatag:</h2>
+        <div id="menu_gallery" style="overflow-y: scroll;float:left; display:block; width:300px; height:490px; background-color:#009688;">
+        	<h3 style="color: white; text-align: center; font-style: oblique;">List of Meta tag</h3>
+						<br><br>
+	
 					<br>
-				<div class="clear"></div>
+			<div id="gallery">	
+			
+				
 			</div>
-			<div id="showPhoto"></div>
-          <hr>
+        
+        </div>
+        <div id="container_photo" style="float:left; display:block; width:500px; height:490px; background-color:#FFFFFF;">
+      
+        <div id="showPhoto" style="position:relative;top:50px;left:50px;">
+			<img id="img" src=""></img>
+			</div>
+        </div>
+        
+      
         </div>
         <div class="w3-container">
          
@@ -176,12 +193,16 @@ bottom:100px;
   
 </footer>
 
+
+
+
+
+		
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-route.js"></script>
-	<script
-		src="<c:url value='/static/js/libraries/excluded/jquery-2.1.3.min.js' />"></script>
+	
 	<script src="<c:url value='/static/js/libraries/rollups/aes.js' />"></script>
 	<script src="<c:url value='/static/js/libraries/rollups/pbkdf2.js' />"></script>
 
@@ -192,9 +213,7 @@ bottom:100px;
 	<script src="<c:url value='/static/js/libraries/lockr.min.js'/>"></script>
 	<script src="<c:url value='/static/js/libraries/bootbox.min.js'/>"></script>
 
-  <script src="<c:url value='/static/js/libraries/encoding-indexes.js'/>"></script>
-  <script src="<c:url value='/static/js/libraries/encoding.js'/>"></script>
-
+ 
 	<script src="http://www-cs-students.stanford.edu/~tjw/jsbn/prng4.js"></script>
 	<script src="http://www-cs-students.stanford.edu/~tjw/jsbn/rng.js"></script>
 	<script src="http://www-cs-students.stanford.edu/~tjw/jsbn/jsbn.js"></script>

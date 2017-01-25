@@ -11,7 +11,7 @@
 <script
 	src="<c:url value='/static/js/libraries/components/enc-base64-min.js' />"></script>
 
-<title>Welcome to DSNProject</title>
+<title>Registration form for DSNProject</title>
 <style>
 .username.ng-valid {
 	background-color: lightgreen;
@@ -45,9 +45,9 @@
 	<div class="generic-container" ng-controller="UserController as ctrl">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<span class="lead">Registration form </span>
+				<span class="lead"><h2 align="center">User Registration Form</h2> </span>
 			</div>
-			<div class="formcontainer">
+			<div class="formcontainer" >
 				<form name="myForm" class="form-horizontal"
 					enctype="multipart/form-data">
 
@@ -55,12 +55,13 @@
 
 					<div class="row">
 						<div class="form-group col-md-12">
-							<label class="col-md-2 control-lable" for="firstName">First
-								Name</label>
-							<div class="col-md-7">
+							<div class="col-md-7" style="position:relative;left:35%;">
+							<label class="col-md-2 control-lable" for="firstName" style="width:300px;" ><h5>Firstname</h5></label>
+								<br>
+						
 								<input type="text" ng-model="ctrl.user.firstName"
-									name="firstName" class="firstName form-control input-sm"
-									placeholder="Enter your firstName" required ng-minlength="3" />
+									name="firstName" class="firstName form-control input-sm" style="width:300px;"
+									placeholder="Enter your First Name" required ng-minlength="3" />
 								<div class="has-error" ng-show="myForm.$dirty">
 									<span ng-show="myForm.firstName.$error.required">This is
 										a required field</span> <span
@@ -73,12 +74,12 @@
 					</div>
 					<div class="row">
 						<div class="form-group col-md-12">
-							<label class="col-md-2 control-lable" for="lastName">Last
-								Name</label>
-							<div class="col-md-7">
-								<input type="text" ng-model="ctrl.user.lastName" name="lastName"
+						<div class="col-md-7" style="position:relative;left:35%;">
+							<label class="col-md-2 control-lable" for="lastName" style="width:300px;"><h5>Surname</h5></label>
+							<br>
+								<input type="text" ng-model="ctrl.user.lastName" name="lastName" style="width:300px;"
 									class="lastName form-control input-sm"
-									placeholder="Enter your lastName" required ng-minlength="3" />
+									placeholder="Enter your Last Name" required ng-minlength="3" />
 								<div class="has-error" ng-show="myForm.$dirty">
 									<span ng-show="myForm.lastName.$error.required">This is
 										a required field</span> <span
@@ -92,9 +93,10 @@
 
 					<div class="row">
 						<div class="form-group col-md-12">
-							<label class="col-md-2 control-lable" for="email">Email</label>
-							<div class="col-md-7">
-								<input type="email" ng-model="ctrl.user.email" id="email"
+							<div class="col-md-7" style="position:relative;left:35%;">
+							<label class="col-md-2 control-lable" for="email" style="width:300px;"><h5>Email</h5></label>
+						<br>
+								<input type="email" ng-model="ctrl.user.email" id="email" style="width:300px;"
 									class="email form-control input-sm"
 									placeholder="Enter your Email" required />
 								<div class="has-error" ng-show="myForm.$dirty">
@@ -108,24 +110,54 @@
 
 					<div class="row">
 						<div class="form-group col-md-12">
-							<label class="col-md-2 control-lable" for="birth_day">Birth
-								day</label>
-							<div class="col-md-7">
-								<input type="text" ng-model="ctrl.user.birth_day"
+						<div class="col-md-7" style="position:relative;left:35%;">
+							
+			<label class="col-md-2 control-lable" for="birth_day"  style="width:300px;"><h5>Birth
+								day</h5></label><br>
+  <table style="position:absolute;left:15px;top:30px;">
+  <tr>
+  <td><input type="text" ng-model="ctrl.day" style="width:60px;height:25px;"class="form-control input-sm" placeholder="GG" required /> </td>
+	<td width="15%"></td>								
+  <td><fieldset ng-model="ctrl.months" >
+  
+  <select name="months" ng-model="ctrl.months">
+   <option value="01" selected="selected">JAN</option>
+   <option value="02">FEB</option>
+   <option value="03">MAR </option>
+      <option value="04">APR</option>
+   
+      <option value="05">MAY</option>
+      <option value="06">JUN</option>
+      <option value="07">JUL </option>
+      <option value="08">AUG</option>
+      <option value="09">SEP</option>
+      <option value="10">OCT</option>
+      <option value="11">NOV</option>
+      <option value="12">DEC</option>
+  
+  </select>
+ </fieldset></td>
+ 	<td width="15%"></td>								
+ 
+  <td>		<input type="text" ng-model="ctrl.year" style="width:60px;height:25px;"
+									class="form-control input-sm" placeholder="AA" required />
+			</td></tr></table>
+							<!--  	<input type="text" ng-model="ctrl.user.birth_day" style="width:300px;"
 									class="form-control input-sm" placeholder="yyyy-MM-dd" required />
 								<div class="has-error" ng-show="myForm.$dirty">
 									<span ng-show="myForm.birth_day.$error.required">This is
 										a required field</span>
-								</div>
+								</div>-->
 							</div>
 						</div>
 					</div>
 					<div class="row">
 						<div class="form-group col-md-12">
-							<label class="col-md-2 control-lable" for="city">City</label>
-							<div class="col-md-7">
+						<div class="col-md-7" style="position:relative;left:35%;">
+							<label class="col-md-2 control-lable" for="city" style="width:300px;"><h5>City</h5></label>
+							<br>
 								<input type="text" ng-model="ctrl.user.city"
-									class="form-control input-sm"
+									class="form-control input-sm" style="width:300px;"
 									placeholder="Enter your city. [This field is validation free]" />
 							</div>
 						</div>
@@ -133,10 +165,11 @@
 
 					<div class="row">
 						<div class="form-group col-md-12">
-							<label class="col-md-2 control-lable" for="pw">Password</label>
-							<div class="col-md-7">
-								<input type="password" ng-model="ctrl.user.pw" id="pw"
-									class="pw form-control input-sm" placeholder="Enter your pw"
+						<div class="col-md-7" style="position:relative;left:35%;">
+							<label class="col-md-2 control-lable" for="pw" style="width:300px;"><h5>Password</h5></label>
+							<br>
+								<input type="password" ng-model="ctrl.user.pw" id="pw" style="width:300px;"
+									class="pw form-control input-sm" placeholder="Enter your password"
 									required ng-minlength="7" />
 								<div class="has-error" ng-show="myForm.$dirty">
 									<span ng-show="myForm.pw.$error.required">This is a
@@ -147,11 +180,22 @@
 							</div>
 						</div>
 					</div>
+				<div class="row">
+						<div class="form-group col-md-12">
+				<label class="col-md-2 control-lable"  style="width:300px;left:390px;"><h5>Select a file to upload:</h5></label>
+						
+						<div class="col-md-7" style="position:relative;right:-90px;top:50px;">
+					
+							<input type="file" id="filePicker" style="position:relative;top:35%;"/>
+								
+							</div>
+						</div>
+					</div>
 
 					<div class="row">
 						<div class="form-actions floatRight">
 							<input type="submit" ng-click="ctrl.createUser()"
-								class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid">
+								class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid" value="Sign up">
 
 							<button type="button" ng-click="ctrl.reset()"
 								class="btn btn-warning btn-sm" ng-disabled="myForm.$pristine">Reset
