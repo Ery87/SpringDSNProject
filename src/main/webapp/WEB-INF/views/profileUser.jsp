@@ -14,8 +14,14 @@
 	src="<c:url value='/static/js/libraries/excluded/jquery-2.1.3.min.js' />"></script>
 <script
 	src="<c:url value='/static/js/libraries/bootstrap.min.js' />"></script>
+	
+
 
 <title>Welcome to DSNProject</title>
+
+
+
+
 <style>
 html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
 a:focus {
@@ -74,6 +80,11 @@ height:300px;
     -webkit-border-radius: 280px;
     border-radius: 280px;
 }
+
+#img:hover {
+	transform:scale(2,2);
+	transform-origin:top center;
+}
 </style>
 
 <link href="<c:url value='/static/css/app.css' />" rel="stylesheet"></link>
@@ -84,6 +95,8 @@ height:300px;
 <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
 <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
 
 <body class="w3-light-grey" ng-app="myApp" >
 
@@ -171,7 +184,7 @@ height:300px;
        
           <br>
           
-         <p class="w3-large w3-text-theme"><b><i class="fa fa-globe fa-fw w3-margin-right w3-text-teal"></i>Visibility of your photo</b></p>
+         <p class="w3-large w3-text-theme"><b><i class="fa fa-globe fa-fw w3-margin-right w3-text-teal"></i>Photo Visibility</b></p>
           <p><ul style="margin-left:23px;">
 					
 					<li >1: Only friends</li>
@@ -273,8 +286,16 @@ height:300px;
         <div id="container_photo" style="float:left; display:block; width:500px; height:490px; background-color:#FFFFFF;">
       
         <div id="showPhoto" style="position:relative;top:50px;left:50px;">
+       
 			<img id="img" src=""></img>
-			</div>
+			
+			
+			
+				</div>
+				
+
+
+
         </div>
         
       
@@ -322,6 +343,7 @@ height:300px;
 
 
 	
+
 
 	<script src="http://www-cs-students.stanford.edu/~tjw/jsbn/prng4.js"></script>
 	<script src="http://www-cs-students.stanford.edu/~tjw/jsbn/rng.js"></script>

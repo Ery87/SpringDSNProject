@@ -217,7 +217,7 @@ App.controller('UserViewsController',['$scope','$window','UserViewsService',func
 														var iv=data.iv;
 														
 														bootbox.prompt({
-														    title: "Enter your Passphrase (needed to decrypt resources).",
+														    title: "Enter your Passphrase..",
 														    inputType: 'password',
 														    callback:function (result) {
 														      
@@ -280,14 +280,20 @@ App.controller('UserViewsController',['$scope','$window','UserViewsService',func
 															var tag="data:image/JPEG;base64,";
 															var imageDecoded=tag+photo;//base64Image;
 
-
+														
+															
+															
 															var img = document.createElement("img");
+															var a=document.createElement("a");
+															a.href="#";
 															img.id="img";
 															img.src = imageDecoded;
 															img.width="300";
 															img.height="200";
-															document.getElementById("showPhoto").appendChild(img);
+															a.appendChild(img);
 															
+															document.getElementById("showPhoto").appendChild(a);
+														
 							
 																return;
 														    }
@@ -320,7 +326,6 @@ App.controller('UserViewsController',['$scope','$window','UserViewsService',func
 					});	
 
 	},
-
 
 
 	self.readIDSessionUser=function(){

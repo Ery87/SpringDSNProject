@@ -43,7 +43,7 @@
 <body ng-app="myApp" class="ng-cloak"  style="position:fixed;top:20%;left:17%;width:60%;height:70%;" >
 
 	<div class="generic-container" ng-controller="GenerateController as ctrl">
-		<h1 style="text-align: center;">Generates the keys</h1>
+		<h1 style="text-align: center;">Users key generation</h1>
 		
 		<div class="panel panel-default">
 			<div class="formcontainer" >
@@ -99,7 +99,7 @@
 			</form>
 		</div>
 
- <p><h5>* insert a Passphrase (it must be an alphanumeric string). The Passphrase will be use by the system to encrypt and decrypt your photo.</h5></div>
+ <p><h5>* insert a Passphrase (it must be an alphanumeric string). The Passphrase will be use by the system to retrieve user's private key.</h5></div>
 	</div>
 	<script
 		src="<c:url value='/static/js/libraries/excluded/jquery-2.1.3.min.js' />"></script>

@@ -491,7 +491,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 
 					}else{
 						var h2=document.createElement("h2");
-						var text=document.createTextNode("There are not friendship request....");
+						var text=document.createTextNode("The list of friendship request is empty....");
 						h2.appendChild(text);
 						document.getElementById("panel").appendChild(h2);
 
@@ -637,7 +637,7 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 														var iv=data.iv;
 														var passPhrase="";
 														bootbox.prompt({
-														    title: "Enter your Passphrase (needed to decrypt resources)!",
+														    title: "Enter your Passphrase..",
 														    inputType: 'password',
 														    callback:function (result) {
 														      
@@ -694,13 +694,17 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 																	var tag="data:image/JPEG;base64,";
 																	var imageDecoded=tag+photo;//base64Image;
 
-
+																	var a=document.createElement("a");
+																	a.href="#";
 																	var img = document.createElement("img");
 																	img.id="img";
+																
 																	img.src = imageDecoded;
 																	img.width="300";
 																	img.height="200";
-																	document.getElementById("showPhoto").appendChild(img);
+																	a.appendChild(img);
+																	
+																	document.getElementById("showPhoto").appendChild(a);
 																	return;
 									
 																
