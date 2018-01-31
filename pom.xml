@@ -152,13 +152,13 @@
                 <version>2.2</version>
 					<configuration>
 						<warSourceDirectory>src/main/webapp</warSourceDirectory>
-						<warName>Spring4MVCAngularJSExample</warName>
+						<warName>OSN</warName>
 						<failOnMissingWebXml>false</failOnMissingWebXml>
 					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>
 
-		<finalName>Spring4MVCAngularJSExample</finalName>
+		<finalName>OSN</finalName>
 	</build>
 </project>

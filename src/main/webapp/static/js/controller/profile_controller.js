@@ -653,17 +653,23 @@ App.controller('ProfileController',['$scope','$window','ProfileService',function
 																rsa.setPrivate(data.modulus_public,data.exponent_public, priv_key); 
 
 																var decryptAes=rsa.decrypt(AESParams);
+																
+																
 																decryptAes=JSON.parse(decryptAes);
+																
+																
 
 																var decryptedMessageFromRMS=aesUtil.decrypt(decryptAes.salt,decryptAes.iv,decryptAes.passphrase,encrypted_msg_client);
 																decryptedMessageFromRMS=JSON.parse(decryptedMessageFromRMS);
-
+																
+																
+																
 																var secretOwner=decryptedMessageFromRMS.secret_owner;
 																var msgFromKMS=decryptedMessageFromRMS.msgFromKMS;
-																msgFromKMS=rsa.decrypt(msgFromKMS);
-
+															//	msgFromKMS=rsa.decrypt(msgFromKMS);
+															
 																msgFromKMS=JSON.parse(msgFromKMS);
-
+																
 																var token=msgFromKMS.token;
 
 																var url=msgFromKMS.url_encryptedrsc;
